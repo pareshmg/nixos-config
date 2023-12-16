@@ -1,0 +1,5 @@
+#name : Begin srch
+# --
+#+begin_src haskell :comments yes :tangle (org-get-tangle-path "Clustering/${1:A}.hs")
+$0
+#+end_src

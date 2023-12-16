@@ -1,0 +1,9 @@
+# name: Multi-line Math
+# key: math
+# expand-env: ((yas-indent-line 'fixed))
+# --
+.. math::
+
+    \begin{align*}
+        $0
+    \end{align*}

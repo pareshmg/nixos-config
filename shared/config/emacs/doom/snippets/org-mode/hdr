@@ -1,0 +1,20 @@
+#name : #+begin_latex
+# --
+
+#+INFOJS_OPT: view:content toc:nil path:./org-info.js
+
+#+TITLE: ${1:Title}
+
+#+MATHJAX: align:"center" mathml:t path:"./MathJax/MathJax.js?config=TeX-AMS-MML_HTMLorMML"
+#+OPTIONS: LaTeX:t
+#+AUTHOR: Paresh Malalur and Tommi Jaakkola
+#+LATEX_HEADER: \usepackage{savesym}
+#+LATEX_HEADER: \savesymbol{iint}
+#+LATEX_HEADER: \savesymbol{iiint}
+#+LATEX_HEADER: \usepackage{amsmath, amsthm, amssymb}
+#+LATEX_HEADER: \usepackage{tensor}
+#+LATEX_HEADER: \usepackage{mathtools}
+#+LATEX_HEADER: \usepackage[normalem]{ulem}
+
+ $0
+

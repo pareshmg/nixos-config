@@ -1,0 +1,3 @@
+#name : \lim_{... \rightarrow ...}
+# --
+\lim_{${1:n} \rightarrow ${2:\infty}}

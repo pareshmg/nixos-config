@@ -1,0 +1,4 @@
+# name: \mathcal{...}
+# binding: H-c
+# --
+\mathcal{$1}$0

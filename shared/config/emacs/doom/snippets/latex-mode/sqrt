@@ -1,0 +1,4 @@
+#name : sqrt
+#binding: H-s
+# --
+\sqrt{${1}}

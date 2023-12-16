@@ -1,0 +1,40 @@
+[user]
+  name = {{name}}
+  email = {{email}}
+[push]
+  default = current
+[alias]
+  lg1 = log --graph --all --format=format:'%C(bold blue)%h%C(reset) - %C(bold green)(%ar)%C(reset) %C(white)%s%C(reset) %C(bold white)— %an%C(reset)%C(bold yellow)%d%C(reset)' --abbrev-commit --date=relative --simplify-by-decoration
+  lg2 = log --graph --all --format=format:'%C(bold blue)%h%C(reset) - %C(bold cyan)%aD%C(reset) %C(bold green)(%ar)%C(reset)%C(bold yellow)%d%C(reset)%n''          %C(white)%s%C(reset) %C(bold white)— %an%C(reset)' --abbrev-commit --simplify-by-decoration
+  lg3 = log --graph --all --format=format:'%C(bold blue)%h%C(reset) - %C(bold cyan)%aD%C(reset) %C(bold green)(%ar)%C(reset)%C(bold yellow)%d%C(reset)%n''          %C(white)%s%C(reset) %C(bold white)— %an%C(reset)' --abbrev-commit --simplify-by-decoration
+  lg4 = log --graph --format=format:'%C(bold blue)%h%C(reset) - %C(bold cyan)%aD%C(reset) %C(bold green)(%ar)%C(reset)%C(bold yellow)%d%C(reset)%n''          %C(white)%s%C(reset) %C(bold white)— %an%C(reset)' --abbrev-commit --simplify-by-decoration
+  lg = !"git lg3"
+  lgl = !"git lg4"
+  lgme = !"git lg3 --author Paresh"
+  lglme = !"git lg4 --author Paresh"
+  conflicts = !bash -c \"git diff --name-only --diff-filter=U | cat\"
+  done = !bash -c \"git commit -a -m \\\"update commit by `git config user.email` at `date`.\\nStatus:  `git status -s | grep -v \\\"^?\\\"` \\\" && git push\"
+  lgall = log --graph --all --simplify-by-decoration --format=format:'%C(bold blue)%h%C(reset) - %C(bold cyan)%aD%C(reset) %C(bold green)(%ar)%C(reset)%C(bold yellow)%d%C(reset)%n''          %C(white)%s%C(reset) %C(bold white)— %an%C(reset)' --abbrev-commit
+
+
+[color]
+  diff = auto
+  branch = auto
+  interactive = auto
+  status = auto
+  grep = auto
+[submodule]
+  recurse = true
+[pull]
+  rebase = false
+[filter "lfs"]
+  clean = git-lfs clean -- %f
+  smudge = git-lfs smudge -- %f
+  process = git-lfs filter-process
+  required = true
+
+[filter "lfs"]
+  clean = git-lfs clean -- %f
+  smudge = git-lfs smudge -- %f
+  process = git-lfs filter-process
+  required = true

@@ -1,0 +1,200 @@
+#name : template
+# --
+
+
+\documentclass[11pt]{article}
+%\usepackage[top=1in, left=1.25in,
+%right=1.25in,bottom=0.0in]{geometry}
+\usepackage{fancyhdr}
+\usepackage[margin=1in, top=1.5in]{geometry}
+%\headheight=22.6pt
+\usepackage{amsmath,amssymb,bbm}
+\usepackage{graphicx}
+%\usepackage{listings}
+\usepackage{tikz}
+\usetikzlibrary{%
+  arrows,%
+  %calc,%
+  %fit,%
+  %patterns,%
+  %plotmarks,%
+  %shapes.geometric,%
+  %shapes.misc,%
+  %shapes.symbols,%
+  %shapes.arrows,%
+  %shapes.callouts,%
+  %shapes.multipart,%
+  %shapes.gates.logic.US,%
+  %shapes.gates.logic.IEC,%
+  %er,%
+  automata,%
+  %backgrounds,%
+  %chains,%
+  %topaths,%
+  %trees,%
+  %petri,%
+  %mindmap,%
+  %matrix,%
+  %calendar,%
+  %folding,%
+  %fadings,%
+  %through,%
+  positioning,%
+  %scopes,%
+  %decorations.fractals,%
+  %decorations.shapes,%
+  %decorations.text,%
+  %decorations.pathmorphing,%
+  %decorations.pathreplacing,%
+  %decorations.footprints,%
+  %decorations.markings,%
+  shadows}
+
+
+\usepackage{subfigure}
+\pagestyle{fancy}
+\lhead{Name: `me-my-name` }
+\chead{\bf Title \\\\Problem Set $N$}
+\rhead{\today}
+
+%% conditional independence symbol
+\newcommand{\indep}{\perp \! \! \! \perp}
+
+%% empty double page !!! Requires twoside in documentclass to work !!!
+\newcommand{\clearemptydoublepage}{
+  \phantom{empty}
+  \newpage
+  \thispagestyle{empty}
+  \cleardoublepage
+  \thispagestyle{fancy}
+}
+
+
+%\usepackage[usenames,dvipsnames]{color}
+%\usepackage[normalem]{ulem} %% For \sout
+
+%\newcommand{\removed}[1]{\textcolor{Red}{\sout{#1}}}
+%\newcommand{\edited}[1]{\textcolor{ForestGreen}{#1}}
+
+
+
+%%%%%%%%%% Start TeXmacs macros
+\newcommand{\tmem}[1]{{\em #1\/}}
+\newcommand{\tmop}[1]{\ensuremath{\operatorname{#1}}}
+\newcommand{\tmstrong}[1]{\textbf{#1}}
+\newcommand{\nin}{\not\in}
+\newenvironment{proof}{\noindent\textbf{Proof\ }}{\hspace*{\fill}$\Box$\medskip}
+\newtheorem{lemma}{Lemma}
+%%%%%%%%%% End TeXmacs macros
+
+\newcommand{\problem}[1]{
+  \clearemptydoublepage
+  \rhead{Problem #1 \\
+   Collaborators: }
+  \section*{Problem #1}
+}
+
+\newcommand{\problemN}[1]{
+  \rhead{Problem #1 \\
+   Collaborators: }
+  \section*{Problem #1}
+}
+
+
+% \newcommand{\problem}[2]{
+%   \clearemptydoublepage
+%   \rhead{Problem #1 \\
+%    Collaborators: #2}
+%   \section*{Problem #1}
+% }
+
+% \newcommand{\problemN}[2]{
+%   \rhead{Problem #1 \\
+%    Collaborators: #2}
+%   \section*{Problem #1}
+% }
+
+
+%%\begin{document}
+%% Remove indentation in article mode
+\setlength{\parindent}{0.25in}
+
+%% draw empty box
+%\phantom{\fbox{\begin{minipage}{5in} \hspace{1in} \vspace{3in} \end{minipage}}}
+
+
+%% Paragraph spacing in article mode
+%\setlength{\parskip}{10pt}
+
+%% \begin{figure}[h]
+%% \begin{center}
+%% \begin{tikzpicture}[shorten >=1pt,node distance=2cm,on grid,auto]
+%% \tikzstyle{state}=[shape=circle,draw=blue!50,thick,fill=blue!20]
+
+%% \node[state]  (x1)  {$x_1$};
+%% \node[state]  (x2)  [right=of x1] {$x_2$};
+%% \node[state]  (x3)  [right=of x2] {$x_3$};
+%% \node[state]  (x4)  [above right=of x1] {$x_4$};
+%% \node[state]  (x5)  [above left=of x3] {$x_5$};
+
+
+%% Tikz example graph
+%% \path[-,thick,every node/.style={font=\scriptsize}]
+%% (x4) edge (x1)
+%% (x4) edge (x2)
+%% (x5) edge (x2)
+%% (x5) edge (x3)
+%% (x1) edge (x2)
+%% (x3) edge (x2)
+%% ;
+%% \end{tikzpicture}
+%% \caption{Undirected Graphical Model}
+%% \end{center}
+%% \end{figure}
+\newcommand{\assign}{:=}
+\usepackage[hang,small,bf]{caption}
+
+
+%%% adding annotations to a pdf file:
+
+% \documentclass[a4paper]{article}
+
+\newcommand{\multistamp}[1]{%
+  \loop\unless\ifnum\value{page}>#1
+    \dowhatsonthispage
+  \repeat}
+
+\newcommand{\dowhatsonthispage}{%
+  \null\csname onthispage\thepage\endcsname\newpage}
+
+\newcommand{\putonpage}[2]{%
+  \expandafter\def\csname onthispage#1\endcsname{#2}}
+
+
+\DeclareMathOperator*{\argmin}{arg\,min}
+\DeclareMathOperator*{\argmax}{arg\,max}
+
+% \begin{document}
+
+% \putonpage{1}{Hello world}
+% \putonpage{3}{\vspace*{\fill}Hello world\par\vspace{\fill}}
+
+% \multistamp{4}
+
+% \end{document}
+
+
+\graphicspath{{figs/}}
+
+\title{ \textbf{Title} \\ \large Subtitle}
+\date{}
+\author{`me-my-name`}
+
+
+\begin{document}
+
+$0
+
+
+
+\end{document}

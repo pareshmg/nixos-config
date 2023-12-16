@@ -1,0 +1,63 @@
+#!/bin/sh -e
+
+SCRIPT_DIR=$(dirname "$0")
+. $SCRIPT_DIR/common
+
+install_nix() {
+    if ! [ -x "$(command -v nix)" ]; then
+       echo "${GREEN}Nix not installed. Installing${CLEAR}";
+       if [ "$(uname)" == "Darwin" ]; then
+          # Mac
+          bash -c "sh <(curl -L https://nixos.org/nix/install)"
+       elif [[ "$(uname -a)" == *"NixOS"* ]]; then
+          # nixos
+          echo "${RED}Error! nix executable not found on NixOS system${CLEAR}"
+       elif [ "$(uname)" == "Linux" ]; then
+          # other linux distro
+          bash -c "sh <(curl -L https://nixos.org/nix/install) --daemon"
+       else
+          echo "${RED}Unknown platform${CLEAR}"
+       fi
+    fi
+}
+
+setup_secrets() {
+    echo "Secrets directory not found! Creating a base template"
+    mkdir $SECRETS
+    cur_dir=$(pwd)
+    cd $SECRETS_DIR
+    writestr=$(cat <<EOF
+{
+  description = "My Personal Secrets";
+  inputs = {};
+  outputs = {self, ...} @inputs:
+    let
+      user = "yourname";
+      name = "Your Name";
+    in
+      {
+        profile= {
+          work = {
+            inherit user name;
+            email = "yourname@email.com";
+            identityPaths = [ ];
+          };
+        };
+      };
+}
+EOF
+)
+    echo $writestr | sed "s/yourname/$(whoami)/g" | sed "s/Your Name/$(whoami)/g" > $SECRETS_DIR/flake.nix
+    git init .
+    git add .
+
+
+}
+
+
+if [ ! -d $SECRETS_DIR ]; then
+    # going to create a template directory
+  setup_secrets
+fi
+
+install_nix

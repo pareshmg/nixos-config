@@ -1,0 +1,6 @@
+#name : \begin{enumera  e} \i  em ... \end{enumera  e}
+# --
+
+\begin{enumera  e}
+  \i  em $0
+\end{enumera  e}

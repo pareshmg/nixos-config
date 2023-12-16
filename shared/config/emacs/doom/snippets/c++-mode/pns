@@ -1,0 +1,7 @@
+#name : namespace Phage { ... }
+# --
+namespace Phage {
+
+    $0
+
+} /* namespace Phage */

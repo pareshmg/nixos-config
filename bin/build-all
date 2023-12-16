@@ -1,0 +1,14 @@
+ # personal mac laptop
+./remote-build pmp 192.168.50.230
+
+# cmt work mac laptop
+./remote-build pmpcmt pmp-cmt.l.nervasion.com
+
+# cmtgpu home-manager linux machine
+./remote-build $(whoami) 107.0.86.26
+
+# local nixos
+./nixos-build vm
+
+# local nixos
+./linux-build vm

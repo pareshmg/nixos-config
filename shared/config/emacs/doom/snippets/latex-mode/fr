@@ -1,0 +1,4 @@
+#name : frac
+#binding: H-f
+# --
+\frac{${1}}{${2}}

@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+set -e
+set -x
+
+./bin/remote-build pmp 192.168.50.230
+./bin/remote-build pmpcmt pmp-cmt.l.nervasion.com
+./bin/nixos-build vm

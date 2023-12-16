@@ -1,0 +1,5 @@
+#name : \begin{equa  ion}\label{eq:...} ... \end{equa  ion}
+# --
+\begin{equa  ion}\label{eq:${1}}
+  $0
+\end{equa  ion}

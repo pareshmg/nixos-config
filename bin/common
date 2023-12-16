@@ -1,0 +1,14 @@
+#!/bin/sh -e
+if [ -f /etc/profile.d/nix.sh ]; then
+  . /etc/profile.d/nix.sh
+elif [ -f ~/.nix-profile/etc/profile.d/nix.sh ]; then
+  . ~/.nix-profile/etc/profile.d/nix.sh
+fi
+
+export SECRETS_DIR="$HOME/.nix-secrets"
+
+export VERSION=1.0
+export GREEN='\033[1;32m'
+export RED='\033[1;31m'
+export CLEAR='\033[0m'
+export NIXPKGS_ALLOW_UNFREE=1

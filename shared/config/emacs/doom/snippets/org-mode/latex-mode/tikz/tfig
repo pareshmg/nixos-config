@@ -1,0 +1,14 @@
+#name : tfig
+# --
+\begin{figure}[!h]
+  \centering
+  \begin{tikzpicture}%[shorten >=1pt,node distance=2cm,on grid,auto]
+%%       \tikzstyle{state}=[shape=circle,draw=blue!50,thick,fill=blue!20]
+
+    $0     
+  \end{tikzpicture}
+  \caption{${1:Figure}}
+  \label{fig:${2:f1}}
+\end{figure}
+
+

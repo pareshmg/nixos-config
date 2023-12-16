@@ -1,0 +1,34 @@
+#!/bin/sh -e
+
+set -e
+set -x
+
+SCRIPT_DIR=$(dirname "$0")
+. $SCRIPT_DIR/common
+
+#PATH=$PATH:~/.nix-profile/bin
+
+
+FLAKE="$1"
+shift # remove flake
+SYSTEM="homeConfigurations.$FLAKE.activationPackage"
+
+
+
+# Navigate to the directory of this script
+cd $(dirname $(readlink -f $0))
+cd ..
+
+echo "${GREEN}Starting build ${FLAKE}...${CLEAR}"
+
+#nix --experimental-features 'nix-command flakes' build --debugger .#$SYSTEM $@ --override-input secrets "git+file://${SECRETS_DIR}"
+nix --experimental-features 'nix-command flakes' build .#$SYSTEM $@ --override-input secrets "git+file://${SECRETS_DIR}"
+
+
+echo "${GREEN}Switching to new generation...${CLEAR}"
+./result/activate
+
+echo "${GREEN}Cleaning up...${CLEAR}"
+#unlink ./result
+
+echo "${GREEN}Done${CLEAR}"

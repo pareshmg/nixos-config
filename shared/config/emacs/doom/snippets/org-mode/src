@@ -1,0 +1,6 @@
+#name : Begin src
+# --
+
+ #+begin_src ${1:python} :comments yes
+ $0
+ #+end_src

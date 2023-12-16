@@ -1,0 +1,11 @@
+#name : org-babel header
+# --
+
+
+#+srcname: ${1:codeBlock}
+#+begin_src python :results output :session ${2:defaultPySession}
+$0       
+#+end_src
+
+#+resname: $1
+

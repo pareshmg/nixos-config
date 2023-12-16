@@ -1,0 +1,40 @@
+#!/bin/sh -e
+SCRIPT_DIR=$(dirname "$0")
+. $SCRIPT_DIR/common
+
+set -e
+set -x
+
+FLAKE="$1"
+TARGET="$2"
+
+
+shift # remove flake
+shift # remove IP
+
+export args=$@
+
+echo "Running flake ${FLAKE} on target ${TARGET} with additional args ${args}"
+
+
+# Navigate to the directory of this script
+cd $(dirname $(readlink -f $0))
+cd ..
+
+# copy the config over
+#rsync --exclude 'flake.lock' -az $PWD/ ${TARGET}:~/nixos-config
+rsync -az $PWD/ ${TARGET}:~/nixos-config
+
+# copy the secrets over
+if [ -d ${SECRETS_DIR} ]; then
+    rsync -az ${SECRETS_DIR}/ ${TARGET}:~/.nix-secrets
+fi
+
+# ssh in and run the build
+ssh -t ${TARGET} "cd ~/nixos-config; ./bin/setup && ./bin/build $FLAKE $@"
+
+# remove secrets
+ssh -t ${TARGET} "rm -rf ~/.nix-secrets"
+
+set +e
+set +x

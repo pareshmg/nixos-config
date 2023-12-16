@@ -1,0 +1,33 @@
+#!/bin/sh -e
+
+SCRIPT_DIR=$(dirname "$0")
+. $SCRIPT_DIR/common
+
+
+
+FLAKE="$1"
+shift # remove flake
+SYSTEM="darwinConfigurations.$FLAKE.system"
+
+
+# Navigate to the directory of this script
+cd $(dirname $(readlink -f $0))
+cd ..
+
+echo "${GREEN}Requesting sudo to set homebrew tap permissions...${CLEAR}"
+
+# This is reset by nix-homebrew, we need write permission to this dir to manage homebrew taps
+sudo mkdir -p /opt/homebrew/Library/Taps/homebrew/
+sudo /bin/chmod +a "${USER} allow list,add_file,search,delete,add_subdirectory,delete_child,readattr,writeattr,readextattr,writeextattr,readsecurity,writesecurity,chown" /opt/homebrew/Library/Taps/homebrew/
+
+echo "${GREEN}Starting build ${FLAKE}...${CLEAR}"
+
+nix --experimental-features 'nix-command flakes' build .#$SYSTEM $@ --override-input secrets "git+file://${SECRETS_DIR}"
+
+echo "${GREEN}Switching to new generation...${CLEAR}"
+./result/sw/bin/darwin-rebuild switch --flake .#$FLAKE $@ --override-input secrets "git+file://${SECRETS_DIR}"
+
+echo "${GREEN}Cleaning up...${CLEAR}"
+unlink ./result
+
+echo "${GREEN}Done${CLEAR}"

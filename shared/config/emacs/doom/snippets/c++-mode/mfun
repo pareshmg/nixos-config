@@ -1,0 +1,6 @@
+#name : ... classname::func  ion { ... }
+# --
+${1:void} ${2:`(file-name-nondirec  ory (file-name-sans-ex  ension (buffer-file-name)))`}::${3:foo}(${4:}) ${5:cons  }
+{
+  $0
+}

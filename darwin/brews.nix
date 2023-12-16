@@ -1,0 +1,6 @@
+{}:
+
+[
+  "wireguard-tools"
+  "cliclick"
+]
