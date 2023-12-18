@@ -22,10 +22,10 @@ sudo /bin/chmod +a "${USER} allow list,add_file,search,delete,add_subdirectory,d
 
 echo "${GREEN}Starting build ${FLAKE}...${CLEAR}"
 
-nix --experimental-features 'nix-command flakes' build .#$SYSTEM $@ --override-input secrets "git+file://${SECRETS_DIR}"
+nix --experimental-features 'nix-command flakes' build .#$SYSTEM $@ --override-input secrets "git+file://${SECRETS_DIR}" --override-input cmtnix "git+file://${HOME}/cmt/cmtnix"
 
 echo "${GREEN}Switching to new generation...${CLEAR}"
-./result/sw/bin/darwin-rebuild switch --flake .#$FLAKE $@ --override-input secrets "git+file://${SECRETS_DIR}"
+./result/sw/bin/darwin-rebuild switch --flake .#$FLAKE $@ --override-input secrets "git+file://${SECRETS_DIR}" --override-input cmtnix "git+file://${HOME}/cmt/cmtnix"
 
 echo "${GREEN}Cleaning up...${CLEAR}"
 unlink ./result

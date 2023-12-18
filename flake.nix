@@ -81,11 +81,14 @@
       secrets = { # manage secrets
         url = "git+file:///OVERRIDE_ME_PLEASE"; #  override with
       };
+      cmtnix = {
+        url = "git+file:///OVERRIDE_ME_PLEASE";
+      };
 
     };
 
   outputs = { self, nixpkgs, nixpkgs-unstable, home-manager, darwin,
-              agenix, secrets, ... } @ inputs:   # Function that tells my flake which to use and what do what to do with the dependencies.
+              agenix, secrets, cmtnix, ... } @ inputs:   # Function that tells my flake which to use and what do what to do with the dependencies.
     let                                                                     # Variables that can be used in the config files.
       location = "$HOME/nixos-config";
       linuxSystems = [ "x86_64-linux" "aarch64-linux" ];
@@ -134,6 +137,7 @@
           modules = [                                             # Modules that are used
             agenix.darwinModules.default
             home-manager.darwinModules.home-manager
+            cmtnix.darwinModules.cmt
             ./shared/configuration.nix
             ./darwin/configuration-per.nix
             ./darwin/configuration.nix
@@ -142,10 +146,11 @@
         };
         pmpcmt = darwin.lib.darwinSystem {
           system = "aarch64-darwin";
-          specialArgs =  { inherit inputs agenix secrets home-manager location; } // {hostname = "pmp-cmt"; profile=secrets.profile.work;};
+          specialArgs =  { inherit inputs agenix secrets home-manager cmtnix location; } // {hostname = "pmp-cmt"; profile=secrets.profile.work;};
           modules = [                                             # Modules that are used
             agenix.darwinModules.default
             home-manager.darwinModules.home-manager
+            cmtnix.darwinModules.cmt
             ./shared/configuration.nix
             ./darwin/configuration.nix
             ./darwin/configuration-cmt.nix

@@ -92,8 +92,8 @@ with pkgs; [
   kubetail
 
   # Python packages
-  python310
-  python310Packages.virtualenv
-  python310Packages.pip
-  python310Packages.setuptools
+  python311
+  python311Packages.virtualenv
+  python311Packages.pip
+  python311Packages.setuptools
 ]

@@ -10,8 +10,8 @@
   lg4 = log --graph --format=format:'%C(bold blue)%h%C(reset) - %C(bold cyan)%aD%C(reset) %C(bold green)(%ar)%C(reset)%C(bold yellow)%d%C(reset)%n''          %C(white)%s%C(reset) %C(bold white)— %an%C(reset)' --abbrev-commit --simplify-by-decoration
   lg = !"git lg3"
   lgl = !"git lg4"
-  lgme = !"git lg3 --author Paresh"
-  lglme = !"git lg4 --author Paresh"
+  lgme = !"git lg3 --author {{name}}"
+  lglme = !"git lg4 --author {{name}}"
   conflicts = !bash -c \"git diff --name-only --diff-filter=U | cat\"
   done = !bash -c \"git commit -a -m \\\"update commit by `git config user.email` at `date`.\\nStatus:  `git status -s | grep -v \\\"^?\\\"` \\\" && git push\"
   lgall = log --graph --all --simplify-by-decoration --format=format:'%C(bold blue)%h%C(reset) - %C(bold cyan)%aD%C(reset) %C(bold green)(%ar)%C(reset)%C(bold yellow)%d%C(reset)%n''          %C(white)%s%C(reset) %C(bold white)— %an%C(reset)' --abbrev-commit
@@ -38,3 +38,6 @@
   smudge = git-lfs smudge -- %f
   process = git-lfs filter-process
   required = true
+
+[init]
+  defaultBranch = "main"
