@@ -82,7 +82,7 @@
         url = "git+file:///OVERRIDE_ME_PLEASE"; #  override with
       };
       cmtnix = {
-        url = "git+file:///OVERRIDE_ME_PLEASE";
+        url = "git+file:///OVERRIDE_ME_PLEASE"; # hiding because publishing this publically. Otherwise just put in the github repo
       };
 
     };
@@ -133,7 +133,7 @@
       darwinConfigurations = {                                              # Darwin Configurations
         pmp = darwin.lib.darwinSystem {
           system = "x86_64-darwin";
-          specialArgs =  { inherit inputs agenix secrets home-manager location; } // {hostname = "pmp"; profile=secrets.profile.per;};
+          specialArgs =  { inherit inputs agenix secrets home-manager cmtnix location; } // {hostname = "pmp"; profile=secrets.profile.per;};
           modules = [                                             # Modules that are used
             agenix.darwinModules.default
             home-manager.darwinModules.home-manager

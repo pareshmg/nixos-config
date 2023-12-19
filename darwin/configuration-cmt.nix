@@ -18,12 +18,7 @@ let
   user = profile.user;
 in
 {
-  cmt = {
-    localuser = secrets.profile.work.user;
-    cmtuser = secrets.profile.work.email;
-    roles = secrets.profile.work.cmtnix_roles;
-    cmtgroup = secrets.profile.work.cmtgroup;
-  };
+  cmt = secrets.profile.work.cmt;
 
   age = {
     secrets = {
@@ -48,7 +43,7 @@ in
 
   # Enable home-manager
   home-manager = {
-    extraSpecialArgs = {cmtcfg = config.cmt;};
+    extraSpecialArgs = {inherit secrets;} // {cmtcfg = config.cmt;};
     users.${user}.imports = [
       cmtnix.homeManagerModules.cmtaws
       ./home-cmt.nix

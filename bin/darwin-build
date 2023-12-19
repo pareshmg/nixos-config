@@ -9,6 +9,9 @@ FLAKE="$1"
 shift # remove flake
 SYSTEM="darwinConfigurations.$FLAKE.system"
 
+CMTNIX="git+file://${HOME}/cmt/CMTNix"
+#CMTNIX="git+ssh://git@github.com/Censio/CMTNix.git"
+
 
 # Navigate to the directory of this script
 cd $(dirname $(readlink -f $0))
@@ -22,10 +25,10 @@ sudo /bin/chmod +a "${USER} allow list,add_file,search,delete,add_subdirectory,d
 
 echo "${GREEN}Starting build ${FLAKE}...${CLEAR}"
 
-nix --experimental-features 'nix-command flakes' build .#$SYSTEM $@ --override-input secrets "git+file://${SECRETS_DIR}" --override-input cmtnix "git+file://${HOME}/cmt/cmtnix"
+nix --experimental-features 'nix-command flakes' build .#$SYSTEM $@ --override-input secrets "git+file://${SECRETS_DIR}" --override-input cmtnix $CMTNIX
 
 echo "${GREEN}Switching to new generation...${CLEAR}"
-./result/sw/bin/darwin-rebuild switch --flake .#$FLAKE $@ --override-input secrets "git+file://${SECRETS_DIR}" --override-input cmtnix "git+file://${HOME}/cmt/cmtnix"
+./result/sw/bin/darwin-rebuild switch --flake .#$FLAKE $@ --override-input secrets "git+file://${SECRETS_DIR}" --override-input cmtnix $CMTNIX
 
 echo "${GREEN}Cleaning up...${CLEAR}"
 unlink ./result

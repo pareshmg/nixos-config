@@ -92,7 +92,15 @@ with pkgs; [
   kubetail
 
   # Python packages
-  python311
+  (let
+    my-python-packages = ps: with ps; [
+      pandas
+      requests
+      ipython
+      # other python packages
+    ];
+  in
+    python311.withPackages my-python-packages)
   python311Packages.virtualenv
   python311Packages.pip
   python311Packages.setuptools

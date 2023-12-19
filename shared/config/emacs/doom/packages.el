@@ -54,3 +54,4 @@
 (package! pbcopy)
 (package! dockerfile-mode)
 (package! kotlin-mode)
+(package! terraform-mode)
