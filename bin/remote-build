@@ -27,7 +27,7 @@ rsync -az $PWD/ ${TARGET}:~/nixos-config
 
 
 
-#rsync -az ~/cmt/cmtnix/ ${TARGET}:~/cmt/cmtnix
+ rsync -az ~/cmt/CMTNix/ ${TARGET}:~/cmt/CMTNix
 
 # copy the secrets over
 if [ -d ${SECRETS_DIR} ]; then

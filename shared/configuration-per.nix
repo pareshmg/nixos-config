@@ -18,7 +18,7 @@ let
 in
 {
 
-  age = {
+  age = builtins.trace "secrets has home dir ${config.users.users.${profile.user}.home}" {
     secrets = {
       per_ssh_config = {
         file = secrets.per.ssh_config;

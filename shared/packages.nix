@@ -87,6 +87,7 @@ with pkgs; [
   unzip
   zsh-powerlevel10k
   zstd
+  direnv
 
   # k8s
   kubetail

@@ -121,6 +121,7 @@
             home-manager.nixosModules.home-manager
             ./shared/configuration.nix
             ./hosts/configuration.nix
+            ./shared/configuration-per.nix
             ./hosts/vm
           ];
         };
@@ -139,7 +140,7 @@
             home-manager.darwinModules.home-manager
             cmtnix.darwinModules.cmt
             ./shared/configuration.nix
-            ./darwin/configuration-per.nix
+            ./shared/configuration-per.nix
             ./darwin/configuration.nix
             ./darwin/configuration-cmt.nix
           ];

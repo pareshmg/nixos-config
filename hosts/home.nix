@@ -14,9 +14,9 @@
 { config, lib, pkgs, profile, ... }:
 
 {
-  imports =                                   # Home Manager Modules
-    (import ../modules/programs) ++
-    (import ../modules/services);
+  #imports =                                   # Home Manager Modules
+  #(import ../modules/programs) ++
+  #(import ../modules/services);
 
   home = {
     username = "${profile.user}";
@@ -24,12 +24,12 @@
 
     packages = with pkgs; [
       # Terminal
-      btop              # Resource Manager
-      ranger            # File Manager
-      tldr              # Helper
+      #btop              # Resource Manager
+      #ranger            # File Manager
+      #tldr              # Helper
 
       # emacs
-      sqlite
+      #sqlite
 
       # dev
       ansible

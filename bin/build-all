@@ -1,14 +1,12 @@
- # personal mac laptop
-./remote-build pmp 192.168.50.230
-
+# RUN FROM THE ROOT OF THE PROJECT DIR as ./bin/build-all
 # cmt work mac laptop
-./remote-build pmpcmt pmp-cmt.l.nervasion.com
+./bin/remote-build pmpcmt pmp-cmt.l.nervasion.com
+
+ # personal mac laptop
+./bin/remote-build pmp pmp.l.nervasion.com
 
 # cmtgpu home-manager linux machine
-./remote-build $(whoami) 107.0.86.26
+./bin/remote-build $(whoami) cmtgpu.l.nervasion.com
 
 # local nixos
-./nixos-build vm
-
-# local nixos
-./linux-build vm
+./bin/nixos-build vm

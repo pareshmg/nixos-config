@@ -27,7 +27,7 @@ in
     onChange = let
       scmd = if builtins.hasAttr "system" config then "source ${config.system.build.setEnvironment}" else "";
     in
-      builtins.trace scmd ''
+      ''
       ${scmd}
       if [ -f ${config.home.profileDirectory}/etc/profile.d/nix.sh ]; then
           source ${config.home.profileDirectory}/etc/profile.d/nix.sh

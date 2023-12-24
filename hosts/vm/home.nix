@@ -11,7 +11,7 @@
 #               └─ home.nix
 #
 
-{ pkgs, config, lib, location, ... }:
+{ pkgs, config, lib, profile, ... }:
 
 let
   # Define the content of your file as a derivation
@@ -26,9 +26,16 @@ in
       #../../modules/desktop/bspwm/home.nix  #Window Manager
     ];
 
-  home = {                                  # Specific packages for desktop
+  home = {
+    username = "${profile.user}";
+    homeDirectory = "/home/${profile.user}";
+
+    # Specific packages for desktop
     packages = (pkgs.callPackage ./packages.nix {}) ++  (pkgs.callPackage ../../shared/packages.nix {});
     file =  lib.mkMerge [
     ];
+
+    stateVersion = "23.05";
+
   };
 }

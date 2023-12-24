@@ -42,6 +42,7 @@
 (custom-set-faces!
   '(vertico-group-title :inherit org-clock-overlay))
 
+
 ;; doom-acario-dark
 ;; doom-monokai-classic
 ;; doom-dracula
@@ -286,8 +287,14 @@
 ;;; save session every hour
 ;; (run-at-time 3600 t #'doom-save-session)
 
-;; runs after 5 min of idle time
-(run-with-idle-timer 300 t #'doom-save-session)
+;; runs after 5 min of idle time. But block the annoying string output that causes
+;; the minibuffer to expand
+(defun doom-save-session-no-message ()
+  (let ((fname (concat (doom-session-file) "-timer")))
+    (let ((inhibit-message t)) (doom-save-session fname))
+    (message (concat "autosaved workspace to " fname))))
+
+(run-with-idle-timer 300 t #'doom-save-session-no-message)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Done

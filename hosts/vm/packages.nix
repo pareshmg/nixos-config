@@ -2,5 +2,8 @@
 
 with pkgs;
 [
-  # dockutil
+  ansible
+  sshpass # for ansible
+  terraform
+  git-lfs
 ]

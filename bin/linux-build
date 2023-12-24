@@ -13,6 +13,11 @@ FLAKE="$1"
 shift # remove flake
 SYSTEM="homeConfigurations.$FLAKE.activationPackage"
 
+if [ -e "$HOME/cmt/CMTNix" ]; then
+    CMTNIX="git+file://${HOME}/cmt/CMTNix"
+else
+    CMTNIX="git+ssh://git@github.com/Censio/CMTNix.git"
+fi
 
 
 # Navigate to the directory of this script
@@ -22,7 +27,7 @@ cd ..
 echo "${GREEN}Starting build ${FLAKE}...${CLEAR}"
 
 #nix --experimental-features 'nix-command flakes' build --debugger .#$SYSTEM $@ --override-input secrets "git+file://${SECRETS_DIR}"
-nix --experimental-features 'nix-command flakes' build .#$SYSTEM $@ --override-input secrets "git+file://${SECRETS_DIR}"
+nix --experimental-features 'nix-command flakes' build .#$SYSTEM $@ --override-input secrets "git+file://${SECRETS_DIR}" --override-input cmtnix $CMTNIX
 
 
 echo "${GREEN}Switching to new generation...${CLEAR}"

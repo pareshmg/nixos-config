@@ -111,7 +111,7 @@
                                             # generating a key:
                                             #   - $ ssh-keygen   |  ssh-copy-id <ip/domain>  |  ssh-add
                                             #   - if ssh-add does not work: $ eval `ssh-agent -s`
-      allowSFTP = true;                     # SFTP: secure file transfer protocol (send file to server)
+      allowSFTP = false;                     # SFTP: secure file transfer protocol (send file to server)
                                             # connect: $ sftp <user>@<ip/domain>
                                             #   or with file browser: sftp://<ip address>
                                             # commands:
@@ -146,9 +146,8 @@
     useGlobalPkgs = true;
     useUserPackages = true;
     extraSpecialArgs = { inherit profile ; };
-    users.${profile.user}.imports = [
+    users.${profile.user}.imports = builtins.trace "activating the home nix" [
       ../shared/home.nix
-      ./home.nix
       ./vm/home.nix
     ];
 
