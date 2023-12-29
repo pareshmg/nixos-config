@@ -2,4 +2,6 @@
 
 [
   "nextcloud"
+  "cryptomator"
+  "keepassxc"
 ]

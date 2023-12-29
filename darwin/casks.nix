@@ -26,8 +26,6 @@
   #"syncthing"
   "rectangle"
   "karabiner-elements"
-  "cryptomator"
-  "keepassxc"
 
   # Entertainment Tools
   #"steam"
