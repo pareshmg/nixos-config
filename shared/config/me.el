@@ -6,5 +6,5 @@
 (defvar me-my-name "{{name}}" "Users name.")
 (defvar me-my-email-text "{{user}}" "Web safe email.")
 
-(provide '.me)
+(provide 'me)
 ;;; .me.el ends here

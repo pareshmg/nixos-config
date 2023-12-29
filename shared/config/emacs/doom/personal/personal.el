@@ -37,11 +37,10 @@
 ;;; emacs load path
 ;; ;(add-to-list 'load-path "~/.emacs.d")
 ;; (add-to-list 'load-path "~/.emacs.d/elisp")
-(add-to-list 'load-path "~/.emacs.d/personal")
 ;; (add-to-list 'load-path "~/.emacs.d/themes")
 ;; (add-to-list 'load-path "~/.emacs.d/elpa")
 ;; (add-to-list 'load-path "~/.emacs.d/elisp/haskell")
-(add-to-list 'load-path "~/")
+(add-to-list 'load-path "~/.config/doom/personal")
 ;; ;;(add-to-list 'load-path "~/.emacs.d/elpa/org-mode")
 ;; ;;(add-to-list 'load-path "~/.emacs.d/elpa/org-mode/lisp")
 
@@ -54,8 +53,6 @@
 ;; (add-to-list 'package-archives '("org" . "http://orgmode.org/elpa/") t)
 
 
-(add-to-list 'load-path "~/.emacs.d/spacemacs/elpa")
-(add-to-list 'load-path "~/.emacs.d/spacemacs/elpa/auctex-11.90.0")
 ;(add-to-list 'load-path "~/.emacs.d/spacemacs/elpa/lsp-mode-20190828.1641")
 ;(add-to-list 'load-path "~/.emacs.d/spacemacs/elpa/lsp-ui-20190823.541")
 ;(load "auctex.el" nil t t)
@@ -91,7 +88,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (setq-default fill-column 85)
-(require '.me)
+(require 'me)
 
 ;; (setq bell-volume nil)
 ;; (setq visible-bell nil)

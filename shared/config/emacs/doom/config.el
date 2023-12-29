@@ -219,24 +219,23 @@
 (global-subword-mode 1) ; 1 for on, 0 for off
 
 ;; load paths
-;;(add-to-list 'load-path "~/.emacs.d/personal")
-(add-to-list 'load-path "~/")
-
-(require '.me)
-
 (defvar me-emacs-dir "~/.config/doom/personal")
+(add-to-list 'load-path me-emacs-dir)
+(require 'me)
+
 (load (concat (file-name-as-directory me-emacs-dir) "myFuns.el"))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Org-mode
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(use-package org
-  :mode (("\\.org$" . org-mode))
-  :ensure org-plus-contrib
-  :config
+;; (use-package org
+;;   :mode (("\\.org$" . org-mode))
+;;   :ensure org-plus-contrib
+;;   :config
+;;   (load (concat (file-name-as-directory me-emacs-dir) "org-config.el")))
+(after! org
   (load (concat (file-name-as-directory me-emacs-dir) "org-config.el")))
-
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

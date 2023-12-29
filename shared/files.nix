@@ -14,12 +14,13 @@ in
   ".aliases" = {
     source = ./config/aliases;
   };
-  ".me.el" = {
-    text = subst ./config/me.el;
-  };
   ".gitconfig" = {
     text = subst ./config/gitconfig;
   };
+  ".config/doom/personal/me.el" = {
+    text = subst ./config/me.el;
+  };
+
   # emacs recursive copy in dir
   ".config/doom" = {
     source = ./config/emacs/doom;

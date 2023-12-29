@@ -76,7 +76,7 @@ unsetopt  cdablevars
 ##################################################
 ### Required paths
 ##################################################
-PATH=/usr/lobal/bin:$PATH:/usr/texbin:/usr/X11/bin:/usr/bin:/bin:/usr/local/sbin:/usr/sbin:/sbin:/usr/local/git/bin:/opt/bin:/opt/local/bin:~/.cabal/bin:~/.configs/bin
+PATH=/usr/lobal/bin:$PATH:/usr/texbin:/usr/X11/bin:/usr/bin:/bin:/usr/local/sbin:/usr/sbin:/sbin:/usr/local/git/bin:/opt/bin:/opt/local/bin:~/.cabal/bin:~/.configs/bin:~/.config/emacs/bin
 
 if [ -d ~/.local/bin ]; then
    PATH=$PATH:~/.local/bin
@@ -140,6 +140,7 @@ export ALTERNATE_EDITOR="emacs -nw"
 ### colors
 ##################################################
 export COLORTERM="truecolor"
+export LESSCOLORIZER='pygmentize -O style=monokai'
 
 ##################################################
 ### Reporting (needs to be after aliases)

@@ -160,7 +160,7 @@
 (setq org-yank-adjusted-subtree t)
 
                                         ; Hide leading stars
-(setq org-hide-leading-stars t)
+(setq org-hide-leading-stars nil)
 
                                         ; Which applications open which links
 (setq org-file-apps
@@ -329,7 +329,29 @@
         ("A" "Archived log view"
          ((agenda ""
                   ((org-agenda-files (append org-archive-files org-agenda-files))))))
+
+        ("L" "Logbook Entries" agenda ""
+         ((org-agenda-start-with-log-mode t)
+          (org-agenda-log-mode-items '(note state clock closed done refile))))
+
         ))
+
+
+
+;; FIXME: debug - remove
+(org-agenda-list
+ '(
+   (org-agenda-start-with-log-mode t)
+   )
+ (format-time-string "%Y-%m-%d" (time-subtract (current-time) (days-to-time 5)))
+ 7
+ '(org-agenda-log-mode-items '(note state clock closed done reschedule))
+ )
+
+(setq org-agenda-log-mode-items '(note state clock closed done))
+(setq org-agenda-start-with-log-mode t)
+
+;; end debug
 
 ;;
 ;; **** Columns and effort
@@ -622,13 +644,15 @@ org-completing-read to complete."
 
 ;; added "created" type
 (setq org-log-note-headings
-      '((done .  "CLOSING NOTE %t")
-        (state . "State %-12s from %-12S %t")
-        (note .  "Note taken on %t")
-        (reschedule .  "Rescheduled from %S on %t")
-        (redeadline .  "New deadline from %S on %t")
-        (created .  "CREATED %t")
-        (clock-out . "")))
+  '((done .  "CLOSING NOTE %t")
+    (state . "State %-12s from %-12S %t")
+    (note .  "Note taken on %t")
+    (reschedule .  "Rescheduled from %S on %t")
+    (delschedule .  "Not scheduled, was %S on %t")
+    (redeadline .  "New deadline from %S on %t")
+    (deldeadline .  "Removed deadline, was %S on %t")
+    (refile . "Refiled on %t")
+    (clock-out . "")))
 
 ;; for TODOs created in the buffer
 (defun pah/insert-creation-date ()
