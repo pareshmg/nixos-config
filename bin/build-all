@@ -10,3 +10,6 @@
 
 # local nixos
 ./bin/nixos-build vm
+
+# create a vm:
+../bin/vm-build testvm

@@ -78,12 +78,9 @@
       #   inputs.nixpkgs.follows = "nixpkgs";
       # };
 
-      secrets = { # manage secrets
-        url = "git+file:///OVERRIDE_ME_PLEASE"; #  override with
-      };
-      cmtnix = {
-        url = "git+file:///OVERRIDE_ME_PLEASE"; # hiding because publishing this publically. Otherwise just put in the github repo
-      };
+      secrets.url = "git+file:///OVERRIDE_ME_PLEASE"; #  override with
+      cmtnix.url = "git+file:///OVERRIDE_ME_PLEASE"; # hiding because publishing this publically. Otherwise just put in the github repo
+
 
     };
 
@@ -125,6 +122,14 @@
             ./hosts/vm
           ];
         };
+        testvm = nixpkgs.lib.nixosSystem {
+          system = "x86_64-linux";                                  # System architecture
+          specialArgs =  { inherit inputs home-manager; } // {hostname = "testvm"; profile=secrets.profile.test; vmid="111";};
+          modules = [                                             # Modules that are used
+            home-manager.nixosModules.home-manager
+            ./hosts/guivm
+          ];
+        };
         # import ./hosts {                                                    # Imports ./hosts/default.nix
         #   inherit (nixpkgs) lib;
         #   inherit inputs nixpkgs nixpkgs-unstable home-manager location agenix;   # Also inherit home-manager so it does not need to be defined here.
@@ -143,6 +148,7 @@
             ./shared/configuration-per.nix
             ./darwin/configuration.nix
             ./darwin/configuration-cmt.nix
+            ./darwin/configuration-per.nix
           ];
         };
         pmpcmt = darwin.lib.darwinSystem {

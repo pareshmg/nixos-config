@@ -12,10 +12,10 @@
 #               └─ bspwm.nix
 #
 
-{ config, pkgs, user, ... }:
+{ config, pkgs, profile, vmid, ... }:
 
 let
-  vmid="111";
+  user = profile.user;
 in
 {
   imports =
@@ -40,7 +40,7 @@ in
       #x11vnc
       wacomtablet
       #clinfo
-    ];
+    ] ++ (profile.additionalPackages {inherit pkgs;});
     #variables = {
     #  LIBVA_DRIVER_NAME = "i965";
     #};

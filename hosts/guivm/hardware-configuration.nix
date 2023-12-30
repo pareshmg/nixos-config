@@ -12,10 +12,10 @@
 # to /etc/nixos/configuration.nix instead.
 #
 
-{ config, lib, pkgs, vmid, modulesPath, ... }:
+{ config, lib, pkgs, profile, vmid, modulesPath, ... }:
 
 let
-  vmid="111";
+  hostname = profile.hostname;
 in
 {
   imports =
@@ -68,7 +68,7 @@ in
     useDHCP = false;                        # Deprecated
     defaultGateway = "10.28.1.1";
     nameservers = [ "10.28.1.1" ];
-    hostName = "nix";
+    hostName = hostname;
     hostId = "e3d5170f";
     interfaces = {
       ens18 = {
