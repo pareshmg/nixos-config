@@ -19,12 +19,11 @@ let
 in
 {
   imports =
+    [(import ../../modules/profiles/hardened.nix)] ++
     [(import ./hardware-configuration.nix)] ++                # Current system hardware config
     [(import ../../modules/desktop/kde/default.nix)];  # window manager
 
   boot = {                                      # Boot options
-    kernelPackages = pkgs.linuxPackages_latest;
-
     loader = {                                  # For legacy boot
       grub = {
         enable = true;
@@ -77,7 +76,7 @@ in
     extraGroups = [ "wheel" "video" "audio" "camera" "networkmanager" "lp" "scanner" "kvm" "libvirtd" "docker" "podman" ];
     shell = pkgs.zsh;
     uid = 1001;
-    hashedPassword = "$6$fCX3BAFxKwT3RTpn$UOiEyAdVkKTbjvjHO6mhPp/aklM2Xgt857Blfq1sNZAU1xzczzwViqgzG5PlvGVRrC0hRtdGG4nFo0wvIBjCP/";
+    hashedPassword = profile.hashedPassword;
   };
   security.sudo.wheelNeedsPassword = true; # User does not need to give password when using sudo.
 

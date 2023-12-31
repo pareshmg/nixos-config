@@ -121,11 +121,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1703887437,
-        "narHash": "sha256-awkp9jyXf8aV9eDWhLdKUqUdg9HfZKe0NdQebSiC0VA=",
+        "lastModified": 1703990467,
+        "narHash": "sha256-LItEeQVwDfLnavNskwdfRnonbEdq8DYiJlWRtF+bwng=",
         "owner": "lnl7",
         "repo": "nix-darwin",
-        "rev": "0a3afdc60042d8e1c2deb63bdfa017acc424a397",
+        "rev": "1a41453cba42a3a1af2fff003be455ddbd75386c",
         "type": "github"
       },
       "original": {
@@ -142,11 +142,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1703887437,
-        "narHash": "sha256-awkp9jyXf8aV9eDWhLdKUqUdg9HfZKe0NdQebSiC0VA=",
+        "lastModified": 1703990467,
+        "narHash": "sha256-LItEeQVwDfLnavNskwdfRnonbEdq8DYiJlWRtF+bwng=",
         "owner": "lnl7",
         "repo": "nix-darwin",
-        "rev": "0a3afdc60042d8e1c2deb63bdfa017acc424a397",
+        "rev": "1a41453cba42a3a1af2fff003be455ddbd75386c",
         "type": "github"
       },
       "original": {
@@ -325,7 +325,7 @@
         "dirtyRev": "74eda4d3e4af6fae6c318ea7bdf1f3d1dc0f9eb3-dirty",
         "dirtyShortRev": "74eda4d-dirty",
         "lastModified": 1703376219,
-        "narHash": "sha256-ahaOqZKtVksAe6nlC+r/jIN/5qfIBeBhaq64bf8pSoE=",
+        "narHash": "sha256-74dzjIdwR5+IXT+K+ypqqo7Bjm7e8Yw15kgQ5ybPWFg=",
         "type": "git",
         "url": "file:///home/pareshmg/.nix-secrets"
       },

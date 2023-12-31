@@ -60,10 +60,11 @@ echo "${GREEN}Installing VM...${CLEAR}"
 VMID=111
 VMPATH=$(echo $cmdout | tail -n 1)
 VMFILE=$(basename ${VMPATH})
+VMFILEDEST="vzdump-qemu-nixos-${FLAKE}-${VMID}.vma.zst"
 
-scp ${VMPATH} root@pve:/var/lib/vz/dump/${VMFILE}
+scp ${VMPATH} root@pve:/var/lib/vz/dump/${VMFILEDEST}
 
-${SCRIPT_DIR}/vm-reset ${VMID} ${VMFILE}
+${SCRIPT_DIR}/vm-reset ${VMID} ${VMFILEDEST}
 
 
 echo "${GREEN}Done${CLEAR}"
