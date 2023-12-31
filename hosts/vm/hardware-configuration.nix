@@ -12,8 +12,10 @@
 # to /etc/nixos/configuration.nix instead.
 #
 
-{ config, lib, pkgs, modulesPath, ... }:
-
+{ config, lib, pkgs, modulesPath, profile, ... }:
+let
+  user = profile.user;
+in
 {
   imports =
     [ (modulesPath + "/profiles/qemu-guest.nix")
@@ -73,6 +75,13 @@
     fsType = "nfs";
     options = [ "x-systemd.automount" "noauto" ];
   };
+  fileSystems."/home/${user}/.org" = {
+    device = "nfs.l.nervasion.com:/mnt/nas/nextcloud/localstorage/Org";
+    fsType = "nfs";
+    options = [ "x-systemd.automount" "user" "noauto" ];
+    #options = [ "x-systemd.automount" "user,noauto,soft,intr,rsize=8192,wsize=8192,timeo=900,retrans=3,proto=tcp,all_squash,anonuid=0,anongid=0" ];
+    #options = [ "x-systemd.automount" "user,noauto"];
+  };
 
 
   # services.davfs2.enable = true;
@@ -84,11 +93,11 @@
   #   in [ "conf=${davfs2Conf}" "x-systemd.automount" "user,uid=1000,gid=1000,noauto"];
   # };
 
-  fileSystems."/media/org" = {
-    device = "nfs.l.nervasion.com:/mnt/nas/nextcloud/data/pareshmg/files/Documents/Org";
-    fsType = "nfs";
-    options = [ "x-systemd.automount" "noauto" "user" ];
-  };
+  # fileSystems."/media/org" = {
+  #   device = "nfs.l.nervasion.com:/mnt/nas/nextcloud/data/pareshmg/files/Documents/Org";
+  #   fsType = "nfs";
+  #   options = [ "x-systemd.automount" "noauto" "user" ];
+  # };
 
 
   swapDevices = [ ];

@@ -48,8 +48,12 @@
     ];
     plasma5 = {
       excludePackages = with pkgs.libsForQt5; [
+        ark
         elisa
+        gwenview
+        okular
         khelpcenter
+        print-manager
         konsole
         oxygen
       ];

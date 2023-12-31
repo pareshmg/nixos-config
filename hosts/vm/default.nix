@@ -34,7 +34,7 @@
 
   users.users.${profile.user} = {                   # System User
     isNormalUser = true;
-    extraGroups = [ "wheel" "video" "audio" "camera" "networkmanager" "lp" "scanner" "kvm" "libvirtd" "docker" "podman" ];
+    extraGroups = [ "wheel" "video" "audio" "camera" "networkmanager" "lp" "scanner" "kvm" "libvirtd" "docker" "podman" "users" ];
     shell = pkgs.zsh;                       # Default shell
     uid = 1000;
   };
