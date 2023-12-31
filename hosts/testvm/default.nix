@@ -20,7 +20,7 @@ in
 {
   imports =
     [(import ./hardware-configuration.nix)] ++                # Current system hardware config
-    [(import ../../modules/desktop/kde/default.nix)];  # window manager
+    [];
 
   boot = {                                      # Boot options
     kernelPackages = pkgs.linuxPackages_latest;
@@ -38,14 +38,15 @@ in
       #plex
       #simple-scan
       #x11vnc
-      wacomtablet
+      #wacomtablet
       #clinfo
-    ] ++ (profile.additionalPackages { pkgs = pkgs;});
+    ]; #++ (profile.additionalPackages { pkgs = pkgs;});
     #variables = {
     #  LIBVA_DRIVER_NAME = "i965";
     #};
   };
   system.stateVersion = "23.11";
+  programs.zsh.enable = true;
 
   #config.system.nixos.label="guivm";
   proxmox = {
@@ -54,7 +55,7 @@ in
       boot = "order=virtio0";
       scsihw = "virtio-scsi-pci";
       virtio0 = "local-lvm:vm-${vmid}-disk-0";
-      net0 = "virtio=66:f8:21:f9:08:d3,bridge=vmbr0,firewall=1";
+      net0 = "virtio=66:f8:21:f9:08:d4,bridge=vmbr0,firewall=1";
       ostype = "l26";
       cores = 4;
       memory = 8192;
@@ -81,18 +82,5 @@ in
   };
   security.sudo.wheelNeedsPassword = true; # User does not need to give password when using sudo.
 
-  hardware = {
-    opengl = {
-      enable = true;
-      extraPackages = with pkgs; [
-        #intel-media-driver                     # iGPU
-        #vaapiIntel
-        #rocm-opencl-icd                         # AMD
-        #rocm-opencl-runtime
-      ];
-      driSupport = true;
-      driSupport32Bit = true;
-    };
-  };
 
 }

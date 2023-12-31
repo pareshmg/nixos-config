@@ -78,8 +78,8 @@
       #   inputs.nixpkgs.follows = "nixpkgs";
       # };
 
-      secrets.url = "git+file:///OVERRIDE_ME_PLEASE"; #  override with
-      cmtnix.url = "git+file:///OVERRIDE_ME_PLEASE"; # hiding because publishing this publically. Otherwise just put in the github repo
+      secrets.url = "git+file:///home/pareshmg/.nix-secrets"; #  override with
+      cmtnix.url = "git+file:///home/pareshmg/cmt/CMTNix"; # hiding because publishing this publically. Otherwise just put in the github repo
 
 
     };
@@ -128,6 +128,14 @@
           modules = [                                             # Modules that are used
             home-manager.nixosModules.home-manager
             ./hosts/guivm
+          ];
+        };
+        testvm2 = nixpkgs.lib.nixosSystem {
+          system = "x86_64-linux";                                  # System architecture
+          specialArgs =  { inherit inputs home-manager; } // {hostname = "testvm2"; profile=secrets.profile.test; vmid="111";};
+          modules = [                                             # Modules that are used
+            home-manager.nixosModules.home-manager
+            ./hosts/testvm
           ];
         };
         # import ./hosts {                                                    # Imports ./hosts/default.nix

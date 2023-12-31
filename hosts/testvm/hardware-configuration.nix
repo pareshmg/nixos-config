@@ -69,7 +69,7 @@ in
     defaultGateway = "10.28.1.1";
     nameservers = [ "10.28.1.1" ];
     hostName = hostname;
-    hostId = "e3d5170f";
+    #hostId = "e3d5170f";
     interfaces = {
       ens18 = {
         ipv4.addresses = [ {

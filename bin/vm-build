@@ -1,0 +1,69 @@
+#!/bin/sh -e
+
+set -e
+set -x
+
+SCRIPT_DIR=$(dirname "$0")
+. $SCRIPT_DIR/common
+
+#PATH=$PATH:~/.nix-profile/bin
+
+
+FLAKE="$1"
+shift # remove flake
+SYSTEM="homeConfigurations.$FLAKE.activationPackage"
+
+# mkdir /tmp/OVERRIDE_ME_PLEASE || true
+# echo "{ outputs = {...} : {};}" > /tmp/OVERRIDE_ME_PLEASE/flake.nix
+# git init /tmp/OVERRIDE_ME_PLEASE
+# git -C /tmp/OVERRIDE_ME_PLEASE add flake.nix
+
+SECRETS_DIR="$HOME/.nix-secrets"
+if [ -e "$HOME/cmt/CMTNix" ]; then
+    CMTNIX="git+file://${HOME}/cmt/CMTNix"
+else
+    CMTNIX="git+ssh://git@github.com/Censio/CMTNix.git"
+fi
+
+
+# Navigate to the directory of this script
+cd $(dirname $(readlink -f $0))
+cd ..
+
+echo "${GREEN}Starting build ${FLAKE}...${CLEAR}"
+
+mv -f flake.nix.orig flake.nix || true
+
+mv flake.lock flake.lock.orig || true
+cat flake.nix | \
+    sed "s|secrets.url = \"git+file:///OVERRIDE_ME_PLEASE\";|secrets.url = \"git+file://${SECRETS_DIR}\";|g" | \
+    sed "s|cmtnix.url = \"git+file:///OVERRIDE_ME_PLEASE\";|cmtnix.url = \"${CMTNIX}\";|g" > flake2.nix
+
+mv flake.nix flake.nix.orig
+mv flake2.nix flake.nix
+
+#nix --experimental-features 'nix-command flakes' build --debugger .#$SYSTEM $@ --override-input secrets "git+file://${SECRETS_DIR}"
+
+cmdout=$(nix --experimental-features 'nix-command flakes' run  -- github:nix-community/nixos-generators --format proxmox -c ./flake2.nix --flake .#${FLAKE})
+
+
+echo "${GREEN}Cleaning up...${CLEAR}"
+#unlink ./result
+
+mv flake.lock.orig flake.lock
+
+
+
+echo "${GREEN}Installing VM...${CLEAR}"
+#./result/activate
+
+VMID=111
+VMPATH=$(echo $cmdout | tail -n 1)
+VMFILE=$(basename ${VMPATH})
+
+scp ${VMPATH} root@pve:/var/lib/vz/dump/${VMFILE}
+
+${SCRIPT_DIR}/vm-reset ${VMID} ${VMFILE}
+
+
+echo "${GREEN}Done${CLEAR}"
