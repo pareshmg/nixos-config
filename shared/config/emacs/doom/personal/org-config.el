@@ -446,6 +446,14 @@
               "* TODO %?\n  %i")
              ("oo" "Other" entry (file+olp+datetree ,org-orya-file "Todo" "Other")
               "* TODO %?\n  %i")
+             ("oj" "Journal" entry (file+olp+datetree ,org-orya-file "Journal")
+              "* %?\n  %i")
+             )
+         )
+       (if org-orya-file
+           '(
+             ("j" "Oryande Journal shortcut" entry (file+olp+datetree ,org-orya-file "Journal")
+              "* %?\n  %i")
              )
          )
        ))
@@ -579,6 +587,60 @@ org-completing-read to complete."
 ;;
 ;; **** Org-Mode Hook
 ;;
+
+
+
+(defun goto-previous-non-whitespace-char ()
+  "Move the cursor to the previous non-whitespace character."
+  (interactive)
+  (skip-chars-backward " \t\n\r"))
+
+(defun my/goto-or-create-heading-in-file (file heading-path)
+  "Open FILE and go to the end of a hierarchical HEADING-PATH, or create it within its parent heading if it doesn't exist."
+  (interactive "fEnter file path: \nsEnter hierarchical heading path: ")
+  (find-file file) ; Open the file
+  (org-mode) ; Ensure Org mode is activated
+  (let ((headings (split-string heading-path "/")))
+    (goto-char (point-min)) ; Start from the beginning of the buffer
+    (dolist (heading headings)
+      (let ((level (length (member heading (reverse headings)))))
+        ;; Set the boundary for the current subtree
+        (let ((start (point))
+              (end (if (org-before-first-heading-p)
+                       (point-max)
+                     (save-excursion (org-end-of-subtree t t))))
+              (re (concat "^" (make-string level ?*) " " (regexp-quote heading)))
+              )
+          ;; Search for the heading within the current subtree
+          (if (re-search-forward re end t)
+              (org-end-of-line)  ;Found, search in this
+            (progn
+              ;; Not found, create the heading at the end of this subtree
+              (goto-char end)
+              (goto-previous-non-whitespace-char)
+              (if (not (bolp)) (insert "\n"))
+              (unless (bolp) (org-beginning-of-line))
+              (insert (make-string level ?*) " " heading "\n")
+              (backward-char)
+              ))) ; Navigate to the end of the new subtree
+        (org-end-of-line))))
+  (org-end-of-subtree)); Move the cursor to the end of the heading
+
+
+
+(defun my/add-journal-entry ()
+  (interactive)
+  (let ((year  (format-time-string "%Y"))
+        (month (format-time-string "%Y-%m %B"))
+        (day   (format-time-string "%Y-%m-%d %A"))
+        )
+    (my/goto-or-create-heading-in-file
+     "~/.org/orya.org"
+     (concat "Journal/" year "/" month "/" day)
+  )))
+
+(global-set-key (kbd "M-m j") 'my/add-journal-entry)
+
 
 ;; (defun my-org-mode-hook ()
 ;;              ; RET should be newline-and-indent

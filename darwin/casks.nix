@@ -26,6 +26,7 @@
   #"syncthing"
   "rectangle"
   "karabiner-elements"
+  "google-drive"
 
   # Entertainment Tools
   #"steam"

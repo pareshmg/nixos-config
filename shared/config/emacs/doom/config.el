@@ -251,6 +251,8 @@
 ;;; don't continue comments on newline
 (setq +default-want-RET-continue-comments nil)
 
+;;; use +vertico/project-search instead of +default/project-search to get preview
+(map! :map 'override "M-m s p" #'+vertico/project-search)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; fringe

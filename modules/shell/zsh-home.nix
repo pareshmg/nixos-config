@@ -5,6 +5,8 @@
   # syntaxHighlighting.enable = true;
   enableCompletion = false;
   initExtra = ''                            # Zsh theme
+    export PATHORIG=$PATH
+
     if [ -f ~/.profile_personal ]; then
         source ~/.profile_personal
     fi

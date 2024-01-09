@@ -28,4 +28,16 @@ in
     ];
   };
 
+  age = {
+    secrets = {
+      keepassxc_ini = {
+        file = secrets.per.keepassxc_ini;
+        path = "${config.users.users.${user}.home}/Library/Application Support/KeepassXC/keepassxc.ini";
+        owner = "${user}";
+        mode = "660";
+        symlink = false;
+      };
+    };
+  };
+
 }

@@ -56,7 +56,6 @@ fi
 
 # Customize to your needs...
 
-
 ##################################################
 ### zsh completion
 autoload -U compinit
@@ -76,7 +75,7 @@ unsetopt  cdablevars
 ##################################################
 ### Required paths
 ##################################################
-PATH=/usr/lobal/bin:$PATH:/usr/texbin:/usr/X11/bin:/usr/bin:/bin:/usr/local/sbin:/usr/sbin:/sbin:/usr/local/git/bin:/opt/bin:/opt/local/bin:~/.cabal/bin:~/.configs/bin:~/.config/emacs/bin
+PATH=$PATH:/bin:/usr/local/sbin:/usr/sbin:/sbin:/usr/local/git/bin:/opt/bin:/opt/local/bin:~/.config/emacs/bin
 
 if [ -d ~/.local/bin ]; then
    PATH=$PATH:~/.local/bin

@@ -27,7 +27,7 @@ rsync -az $PWD/ ${TARGET}:~/nixos-config
 
 
 
- rsync -az ~/cmt/CMTNix/ ${TARGET}:~/cmt/CMTNix
+rsync -az ~/cmt/CMTNix/ ${TARGET}:~/cmt/CMTNix
 
 # copy the secrets over
 if [ -d ${SECRETS_DIR} ]; then
@@ -38,7 +38,7 @@ fi
 ssh -t ${TARGET} "cd ~/nixos-config; ./bin/setup && ./bin/build $FLAKE $@"
 
 # remove secrets
-ssh -t ${TARGET} "rm -rf ~/.nix-secrets"
+#ssh -t ${TARGET} "rm -rf ~/.nix-secrets"
 
 set +e
 set +x
