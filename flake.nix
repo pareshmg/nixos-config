@@ -181,14 +181,15 @@
             config.allowUnfree = true;
           };
           profile = secrets.profile.ubuntu;
+          cmtcfg = if builtins.hasAttr "cmt" secrets.profile then secrets.profile.cmt else null;
         in
           home-manager.lib.homeManagerConfiguration {
             inherit pkgs;
-            extraSpecialArgs = { inherit inputs system pkgs agenix secrets home-manager profile location; };
+            extraSpecialArgs = { inherit inputs system pkgs agenix secrets home-manager profile location cmtcfg; };
             modules = [
               agenix.homeManagerModules.default
               ./linux/minimal-home.nix
-            ];
+            ] ++ (if cmtcfg != null then [cmtnix.homeManagerModules.cmtaws] else []);
           };
 
         ${secrets.profile.per.user} = let
