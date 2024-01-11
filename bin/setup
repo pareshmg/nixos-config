@@ -26,7 +26,7 @@ install_nix() {
 
 setup_secrets() {
     echo "Secrets directory not found! Creating a base template"
-    mkdir $SECRETS
+    mkdir $SECRETS_DIR
     cur_dir=$(pwd)
     cd $SECRETS_DIR
     writestr=$(cat <<EOF
