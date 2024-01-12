@@ -2,5 +2,5 @@
 
 with pkgs;
 [
-  # dockutil
+  scrcpy
 ]

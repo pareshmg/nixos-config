@@ -42,6 +42,11 @@
         url = "github:numtide/flake-utils";
       };
 
+      u = {
+        url = "path:./utils";
+        inputs.nixpkgs.follows = "nixpkgs";
+      };
+
       # nur = {                                                               # NUR Packages
       #   url = "github:nix-community/NUR";                                   # Add "nur.nixosModules.nur" to the host modules
       # };
@@ -78,14 +83,12 @@
       #   inputs.nixpkgs.follows = "nixpkgs";
       # };
 
-      secrets.url = "git+file:///home/pareshmg/.nix-secrets"; #  override with
-      cmtnix.url = "git+file:///home/pareshmg/cmt/CMTNix"; # hiding because publishing this publically. Otherwise just put in the github repo
-
-
+      secrets.url = "path:./secrets_example"; #  NOTE: OVERRIDE THIS!!!
+      cmtnix.url = "github:Censio/CMTNix"; # NOTE: OVERRIDE THIS!!
     };
 
   outputs = { self, nixpkgs, nixpkgs-unstable, home-manager, darwin,
-              agenix, secrets, cmtnix, ... } @ inputs:   # Function that tells my flake which to use and what do what to do with the dependencies.
+              agenix, secrets, cmtnix, u, ... } @ inputs:   # Function that tells my flake which to use and what do what to do with the dependencies.
     let                                                                     # Variables that can be used in the config files.
       location = "$HOME/nixos-config";
       linuxSystems = [ "x86_64-linux" "aarch64-linux" ];
@@ -112,7 +115,7 @@
       nixosConfigurations = {
         vm = nixpkgs.lib.nixosSystem {
           system = "x86_64-linux";                                  # System architecture
-          specialArgs =  { inherit inputs agenix secrets home-manager location; } // {hostname = "nix"; profile=secrets.profile.per;};
+          specialArgs =  { inherit inputs agenix secrets home-manager u location; } // {hostname = "nix"; profile=u.recursiveMerge [secrets.profile.per secrets.profile.nervasion secrets.profile.vm];};
           modules = [                                             # Modules that are used
             agenix.nixosModules.default
             home-manager.nixosModules.home-manager

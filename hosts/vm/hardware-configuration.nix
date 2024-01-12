@@ -12,13 +12,14 @@
 # to /etc/nixos/configuration.nix instead.
 #
 
-{ config, lib, pkgs, modulesPath, profile, ... }:
+{ config, lib, pkgs, modulesPath, profile, u, ... }:
 let
   user = profile.user;
 in
 {
   imports =
-    [ (modulesPath + "/profiles/qemu-guest.nix")
+    [
+      (modulesPath + "/profiles/qemu-guest.nix")
     ];
 
   boot.initrd.availableKernelModules = [ "ata_piix" "uhci_hcd" "virtio_pci" "virtio_scsi" "sd_mod" "sr_mod" ];
@@ -104,20 +105,21 @@ in
 
 
   #networking.useDHCP = lib.mkDefault true;
-  networking = {
-    useDHCP = false;                        # Deprecated
-    defaultGateway = "10.28.1.1";
-    nameservers = [ "10.28.1.1" ];
-    hostId = "e3d5170f";
-    interfaces = {
-      ens18 = {
-        ipv4.addresses = [ {
-          address = "10.28.1.60";
-          prefixLength = 16;
-        } ];
+  networking = u.recursiveMerge [
+    {
+      useDHCP = false;                        # Deprecated
+      hostId = profile.macAddress;
+      interfaces = {
+          ens18 = {
+            ipv4.addresses = [ {
+              address = profile.ip;
+              prefixLength = 16;
+            } ];
+          };
       };
-    };
-  };
+    }
+    (u.getOrDefault profile "networking" {})
+  ];
 
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
   #hardware.cpu.intel.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
