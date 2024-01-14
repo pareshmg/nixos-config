@@ -66,7 +66,7 @@ function tssh {
   if [ -z $TARGET_USER ]; then
     TARGET_USER=$(whoami)
   fi
-  echo "$TARGET_INSTANCE_USER@$TARGET_HOST"
+  echo "$TARGET_USER@$TARGET_HOST"
   TMUX_ADDITIONAL_CMD=""
   if [ ! -z "$SSH_TMUX_PREFIX" ]; then
   TMUX_ADDITIONAL_CMD="\\; unbind-key \"C-b\" \\; bind-key ${SSH_TMUX_PREFIX} send-prefix \\; set -g prefix ${SSH_TMUX_PREFIX}"
@@ -159,7 +159,7 @@ alias reset_tunnel='sudo ipfw -q -f flush'
 
 ## color ssh
 ssh_color () {
-    ssh_color.py $*  # I put script in /usr/local/bin/
+    ssh_color_py $*
     trap 'echo -e "\033]6;1;bg;*;default\a"' INT EXIT
     ssh $*
 }

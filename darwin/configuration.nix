@@ -11,6 +11,7 @@
 
 let
   user=profile.user;
+  color_ssh_py = pkgs.writeScriptBin "ssh_color_py" (builtins.readFile ../shared/scripts/ssh_color.py);
 in
 {
   imports = [
@@ -41,6 +42,7 @@ in
       # Terminal
       #ansible
       #ranger
+      color_ssh_py
     ];
   };
 
@@ -193,7 +195,7 @@ in
         TrackpadRightClick = true;
       };
     };
-    activationScripts.postActivation.text = ''sudo chsh -s ${pkgs.zsh}/bin/zsh''; # Since it's not possible to declare default shell, run this command after build
+    activationScripts.postActivation.text = ''sudo chsh -s ${pkgs.zsh}/bin/zsh || true''; # Since it's not possible to declare default shell, run this command after build
     stateVersion = 4;
 
     # defaults = {

@@ -10,7 +10,7 @@
 #           └─ ./alacritty.nix
 #
 
-{ lib, config, pkgs, specialArgs, ... }:
+{ lib, config, pkgs, profile, specialArgs, ... }:
 
 let
   # Define the content of your file as a derivation
@@ -25,5 +25,13 @@ in
     packages = (pkgs.callPackage ./packages.nix {})
                ++  (pkgs.callPackage ../shared/packages.nix {})
                ++ (pkgs.callPackage ./packages-per.nix {});
+
+
+    activation = builtins.trace "setting up home activations" {
+      configActivationAction = lib.hm.dag.entryAfter ["writeBoundary"] ''
+        $DRY_RUN_CMD cat "$HOME/Library/Application Support/KeepassXC/keepassxc.ini.orig" > "$HOME/Library/Application Support/KeepassXC/keepassxc.ini"
+      '';
+    };
+
   };
 }

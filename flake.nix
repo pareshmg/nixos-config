@@ -154,11 +154,11 @@
           modules = [                                             # Modules that are used
             agenix.darwinModules.default
             home-manager.darwinModules.home-manager
-            cmtnix.darwinModules.cmt
+            #cmtnix.darwinModules.cmt
             ./shared/configuration.nix
             ./shared/configuration-per.nix
             ./darwin/configuration.nix
-            ./darwin/configuration-cmt.nix
+            #./darwin/configuration-cmt.nix
             ./darwin/configuration-per.nix
           ];
         };
@@ -184,7 +184,7 @@
             config.allowUnfree = true;
           };
           profile = secrets.profile.ubuntu;
-          cmtcfg = if builtins.hasAttr "cmt" secrets.profile then secrets.profile.cmt else null;
+          cmtcfg = u.getOrDefault profile "cmt" null;
         in
           home-manager.lib.homeManagerConfiguration {
             inherit pkgs;
