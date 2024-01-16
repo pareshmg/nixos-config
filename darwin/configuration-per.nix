@@ -7,7 +7,7 @@
 #       └─ ./configuration.nix *
 #
 
-{ lib, home-manager, agenix, secrets, config, pkgs, profile, cmtnix, ... }:
+{ lib, home-manager, agenix, secrets, u, config, pkgs, profile, cmtnix, ... }:
 
 let
   # Define the content of your file as a derivation
@@ -16,8 +16,10 @@ let
   #   emacsclient -c -n &
   # '';
   user = profile.user;
+  mm = u.getOrDefault secrets "utils.mm" "";
 in
 {
+  environment.systemPackages = [ mm ];
   homebrew = {                            # Declare Homebrew using Nix-Darwin
     casks = (pkgs.callPackage ./casks.nix {}) ++ (pkgs.callPackage ./casks-per.nix {});
   };
