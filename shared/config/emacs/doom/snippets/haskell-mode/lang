@@ -1,0 +1,5 @@
+# contributor: pareshmg
+# key: lang
+# --
+{-# LANGUAGE $1 #-}
+$0

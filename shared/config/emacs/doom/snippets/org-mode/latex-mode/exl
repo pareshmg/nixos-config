@@ -1,0 +1,6 @@
+#name : \begin{example} \i  em ... \end{example}
+# --
+
+\begin{example}[${1:}]
+  $0
+\end{example}

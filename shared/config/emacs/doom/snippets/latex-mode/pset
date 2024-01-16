@@ -1,0 +1,10 @@
+#name : default start
+# --
+
+\input{/Users/pareshmg/Documents/configs/pareshGlobal.tex}
+
+\chead{\textbf{${1:class} \\\\ ${2:Problem Set} ${3:#}}}
+
+\begin{document}
+$0
+\end{document}

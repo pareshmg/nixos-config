@@ -1,0 +1,4 @@
+#name : leftarrow
+#binding: H-<
+# --
+\leftarrow $0

@@ -1,0 +1,18 @@
+# -*- mode: snippet -*-
+# name: tikz-figure
+# binding: C-c y z
+# contributor: Rafael Villarroel <rvf0068@gmail.com>
+# key: tkz
+# --
+#+caption: $1
+#+label: ${4:$2}
+#+attr_html: :alt $1 :width ${3:50}%
+#+attr_latex: :width 0.$3\textwidth
+#+headers: :imagemagick yes :iminoptions -density 300 -resize 400
+#+headers: :packages '(("" "tikz")) :border 1pt
+#+begin_src latex :file ${2:`(tablet-generate-file-name-with-index (tablet-get-next-index tablet-image-ctr))`}
+  \begin{tikzpicture}
+    ${0}
+  \end{tikzpicture}
+#+end_src
+[[./$2]]

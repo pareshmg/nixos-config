@@ -1,0 +1,5 @@
+#name : path
+# --
+\path[-,thick,every node/.style={font=\scriptsize}]
+$0
+;

@@ -1,0 +1,6 @@
+#name : \begin{Defini  ion}[...] \i  em ... \end{  heorem}
+# --
+
+\begin{defini  ion}[${1:}]
+  $0
+\end{defini  ion}

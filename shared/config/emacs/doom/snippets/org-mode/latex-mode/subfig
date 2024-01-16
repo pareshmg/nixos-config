@@ -1,0 +1,7 @@
+#name : Subfigure
+# --
+\subfigure[${1:cap  ion}] {
+  \includegraphics[wid  h=0.5\  ex  wid  h]{${3:$2}}
+  \label{fig:${2:name}}
+}
+$0

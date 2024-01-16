@@ -1,0 +1,9 @@
+#name : Begin a figure con  aining a pspic  ure
+# --
+\begin{figure}[h]
+  \cen  ering
+  \begin{pspic  ure}(${1:0},${2:0})(${3:1},${4:1})
+    $0
+  \end{pspic  ure}
+  \cap  ion{${5:cap  ion} \label{fig:${6:name}}}
+\end{figure}

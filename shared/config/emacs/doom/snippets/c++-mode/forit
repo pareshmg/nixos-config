@@ -1,0 +1,5 @@
+#name : for (...::iterator _ = _.begin(); _ != _.end(); ++_) { ... }
+# --
+for (${1:type}::iterator ${2:i} = ${3:name.}begin(); $2 != $3end(); ++$2) {
+    $0
+}

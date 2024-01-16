@@ -1,0 +1,5 @@
+#name : %%%...% \subsubsection*{ ... }
+# --
+%%%%
+\subsubsection*{${1:name}}
+$0

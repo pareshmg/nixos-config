@@ -1,0 +1,9 @@
+#name : \begin{  able}[h]\cen  ring\begin{  abular} ... \end{  abular}\end{  able}
+# --
+
+\begin{  able}[h]
+  \cen  ering
+  \begin{  abular}{${1:forma  }}
+$0
+  \end{  abular}
+\end{  able}

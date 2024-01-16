@@ -1,0 +1,7 @@
+#name : \begin{cases} ... & ... \\ ... & ...\end{cases}
+# --
+
+\begin{cases}
+  ${1:} & ${2:}\\\\
+  ${3:} & ${4:}
+\end{cases}

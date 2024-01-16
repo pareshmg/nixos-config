@@ -1,0 +1,6 @@
+#name : \begin{  heorem} \i  em ... \end{  heorem}
+# --
+
+\begin{  heorem}[${1:}]
+  $0
+\end{  heorem}

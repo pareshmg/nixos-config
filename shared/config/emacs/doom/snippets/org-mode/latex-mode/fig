@@ -1,0 +1,8 @@
+#name : Begin a figure including a graphic
+# --
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=0.5\textwidth]{${3:$2}}
+  \caption{${1:caption}}
+  \label{fig:${2:name}}
+\end{figure}

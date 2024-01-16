@@ -1,0 +1,3 @@
+# contributor: Paresh Malalur
+# --
+foldl (\c (i, x) -> $0) ${2:undefined} (zip [0..] ${1:l})

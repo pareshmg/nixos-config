@@ -1,0 +1,4 @@
+#name : expindex
+#binding: H-^
+# --
+^{($0)}

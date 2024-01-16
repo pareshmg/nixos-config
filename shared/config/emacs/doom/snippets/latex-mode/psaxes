@@ -1,0 +1,3 @@
+#name : \psaxes[...]{->}(origin)(sw)(ne)
+# --
+\psaxes[${1:labels=none, ticks=none}]{${2:->}}(${3:0},${4:0})(${5:-1},${6:-1})(${7:1},${8:1})

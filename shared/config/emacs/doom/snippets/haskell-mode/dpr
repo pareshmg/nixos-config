@@ -1,0 +1,5 @@
+# contributor: pareshmg
+# key: dpr
+# --
+{-# DEPRICATED "Use ${1:new version} instead" #-}
+$0

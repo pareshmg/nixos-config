@@ -1,0 +1,6 @@
+# -*- coding: utf-8 -*-
+# name: cmt
+# contributor: Paresh Malalur
+# key: cmt
+# --
+${1:feat}: ${0:fixed it} [${2:RES-156}]

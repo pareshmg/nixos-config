@@ -1,0 +1,3 @@
+#name : \mathcal{...}
+# --
+\mathcal{${1:}}$0

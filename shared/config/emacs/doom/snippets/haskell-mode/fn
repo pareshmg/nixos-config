@@ -1,0 +1,6 @@
+# name : function
+# expand-env: ((yas/indent-line 'fixed) (yas/wrap-around-region 'nil))
+# --
+{- | Function $1
+-}
+${1:fn} :: $0

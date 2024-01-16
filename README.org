@@ -1,0 +1,137 @@
+#+title: Paresh's NixOS & Nix-Darwin System Configuration Flake
+#+description: My flakes setup
+#+author: Paresh Malalur
+
+
+
+
+* Installation Guide
+
+There are *3* main steps:
+
+
+1. Create your secrets
+2. Install nix + dependencies
+3. Build and install flake
+
+** Creating secrets
+1. Make sure ~$HOME/.nix-secrets~ is a git repo
+2. In the file ~$HOME/.nix-secrets/flake.nix~ insert the blob below
+3. Make sure that ~flake.nix~ is added to the git repo otherwise nix won't see it
+
+#+begin_src nix
+{
+  description = "My Personal Secrets";
+  inputs = {};
+  outputs = {self, ...} @inputs:
+    let
+      user = "yourname";
+      name = "Your Name";
+    in
+      {
+        profile= {
+          work = {
+            inherit user name;
+            email = "yourname@email.com";
+            identityPaths = [ ];
+          };
+        };
+      };
+}
+#+end_src
+
+
+
+** Install nix + dependencies
+
+- For NixOS: you're already set!
+- For all other OS
+  - Install [[https://nixos.org/download][Nix package manager]]
+- For MacOS only
+  - Install [[https://nixos.org/download][Nix package manager]]
+  - Install [[https://brew.sh/][homebrew]]
+
+
+** Build and install flake
+
+1. Checkout this repo to ~$HOME/nixos-config~
+2. Edit your ~flake.nix~ to set the profiles as you have defined in your secrets
+3. In this directory, run the appropriate build as defined in ~flake.nix~
+
+
+This flake currently has *3* host types
+ 1. linux / NixOS ~bin/nixos-build $FLAKE~
+ 2. linux / Other ~bin/linux-build $USER~
+ 3. darwin / MacOS ~bin/darwin-build $FLAKE~
+
+In addition, this build allows you to host one base machine and remote build from
+there. The main use case here is building on a work machine where you may not want to
+copy over your personal git keys. For this, on your base machine, run
+
+#+begin_src bash
+bin/remote-build $FLAKE $TARGET_HOST
+#+end_src
+
+** Additional config
+
+*** Using secrets
+If you are going to use agenix secrets, add to your ~$HOME/.nix-secrets/flake.nix~ identity paths under the corresponding profiles to the ssh key path you want
+
+ #+begin_src nix :comments yes
+{
+  profile.per.identityPaths = [
+  "/home/${user}/.ssh/id_ed25519"
+  "/Users/${user}/.ssh/id_ed25519"
+  "/Users/${user}/.ssh/age_id_ed25519"
+  ];
+}
+ #+end_src
+
+In addition, you can add secrets to the flake that can be accessed externally
+
+In your secrets ~flake.nix~ you can have
+ #+begin_src nix :comments yes
+{
+  mysecrets.secret1 = ./secret1.age
+}
+ #+end_src
+
+And this can be accessed in your nixos-config as ~secrets.mysecrets.secret1~
+
+
+
+
+* Sources of inspiration
+
+[[https://github.com/matthiasbenaets/nixos-config][Matthias’ NixOS & Nix-Darwin System Configuration Flake]]
+
+[[https://github.com/dustinlyons/nixos-config#2-optional-setup-secrets][dustinlyons]]
+* System Structure
+Compontents relevant to all hosts:
+| *Shell*   | Zsh        |
+| *Editors* | Doom Emacs |
+| *Tools*   | tmux, jq   |
+| *Secrets* | agenix     |
+
+For headless machines:
+
+
+For desktop machines:
+| *Password Manager* | KeePass variant |
+|                    |                 |
+
+
+For home-manager only machines:
+- Packages are installed in user space only
+- use flake as defined in your secrets as ~secrets.profile.per.user~
+
+
+** My machines
+
+| *FLAKE* | *OS*   | *DESKTOP* | *ARCH*  | *Comments*               |
+|---------+--------+-----------+---------+--------------------------|
+| pmp     | darwin | Y         | x86-64  | 2020 macbook pro         |
+| pmpcmt  | darwin | Y         | aarch64 | 2023 macbook pro         |
+| vm      | NixOS  | N         | x86-64  | headless virtual machine |
+| guivm   | NixOS  | Y         | x86-64  | virtual machine with KDE |
+| $user   | N/A    | N         | x86-64  | Home-manager only        |

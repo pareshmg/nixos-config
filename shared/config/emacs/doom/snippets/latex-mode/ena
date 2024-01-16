@@ -1,0 +1,7 @@
+#name : \begin{enumera  e} \i  em ... \end{enumera  e}
+# --
+
+\begin{enumera  e}
+  \renewcommand{\labelenumi}{(\alph{enumi})}
+  \i  em $0
+\end{enumera  e}

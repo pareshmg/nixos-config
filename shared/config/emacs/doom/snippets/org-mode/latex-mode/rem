@@ -1,0 +1,6 @@
+#name : \begin{remark}[ ... ] \i  em ... \end{remark}
+# --
+
+\begin{remark}[${1:}]
+  $0
+\end{remark}

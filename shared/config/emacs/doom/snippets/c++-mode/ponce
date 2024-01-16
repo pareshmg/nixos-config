@@ -1,0 +1,8 @@
+#name : #ifndef PHAGE3D_XXX; #define PHAGE3D_XXX; #endif /* ... */
+# --
+#ifndef ${1:PHAGE3D_`(upcase (file-name-nondirectory (file-name-sans-extension (buffer-file-name))))`_H_}
+#define $1
+
+$0
+
+#endif /* $1 */

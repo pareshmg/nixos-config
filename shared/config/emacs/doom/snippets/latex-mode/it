@@ -1,0 +1,6 @@
+#name : \begin{i  emize} \i  em ... \end{i  emize}
+# --
+
+\begin{i  emize}
+  \i  em $0
+\end{i  emize}

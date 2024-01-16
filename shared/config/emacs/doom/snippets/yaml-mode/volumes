@@ -1,0 +1,40 @@
+# -*- coding: utf-8 -*-
+# name: volumes
+# key: volumes
+# expand-env: ((yas/indent-line 'fixed))
+# --
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: ${1:app}-${2:sub}-pv-nfs   # < name of the persisant volume ("pv") in kubenetes
+  namespace: $1     # < namespace where place the pv
+spec:
+  storageClassName: ""
+  capacity:
+    storage: 100Mi          # < max. size we reserve for the pv
+  accessModes:
+    - ReadWriteMany       # < Multiple pods can write to storage
+  persistentVolumeReclaimPolicy: Delete   # < The persistant volume can reclaimed
+  mountOptions:           # < Mount options specific for nfs 4.1, remove if version < 4.1 nfs server is used
+    - hard
+    - nfsvers=4.1
+  nfs:
+    server: nfs.l.nervasion.com         # < IP number of your NFS server
+    path: "/mnt/nas/k8s/$1/$2"       # < Name of your NFS share with subfolder
+    readOnly: false
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: $1-$2-pvc
+spec:
+  storageClassName: ""
+  volumeName: $1-$2-pv-nfs
+  volumeMode: Filesystem
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 100Mi
+status: {}
+$0

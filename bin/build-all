@@ -1,0 +1,15 @@
+# RUN FROM THE ROOT OF THE PROJECT DIR as ./bin/build-all
+# cmt work mac laptop
+./bin/remote-build pmpcmt pmp-cmt.l.nervasion.com
+
+ # personal mac laptop
+./bin/remote-build pmp pmp.l.nervasion.com
+
+# cmtgpu home-manager linux machine
+./bin/remote-build $(whoami) cmtgpu.l.nervasion.com
+
+# local nixos
+./bin/nixos-build vm
+
+# create a vm:
+../bin/vm-build testvm

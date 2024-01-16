@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+
+set -e
+set -x
+
+
+echo "${GREEN}Installing VM...${CLEAR}"
+#./result/activate
+
+VMID=$1
+VMFILE=$2
+
+ssh root@pve "qm destroy ${VMID} --destroy-unreferenced-disks 1 --purge 1; qmrestore /var/lib/vz/dump/${VMFILE} ${VMID} --unique true"
+
+echo "${GREEN}VM installed${CLEAR}"

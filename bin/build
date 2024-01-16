@@ -1,0 +1,56 @@
+#!/usr/bin/env bash
+
+set -e
+set -x
+
+GREEN='\033[1;32m'
+RED='\033[1;31m'
+CLEAR='\033[0m'
+
+
+VERSION=1.0
+export args=$@
+
+# Navigate to the directory of this script
+cd $(dirname $(readlink -f $0))
+cd ..
+
+
+FLAKE="$1"
+shift
+
+
+install_nix() {
+    if ! [ -x "$(command -v nix)" ]; then
+       echo "${GREEN}Nix not installed. Installing${CLEAR}";
+       if [ "$(uname)" == "Darwin" ]; then
+          # Mac
+          sh <(curl -L https://nixos.org/nix/install)
+       elif [[ "$(uname -a)" == *"NixOS"* ]]; then
+          # nixos
+          echo "${RED}Error! nix executable not found on NixOS system${CLEAR}"
+       elif [ "$(uname)" == "Linux" ]; then
+          # other linux distro
+          sh <(curl -L https://nixos.org/nix/install) --daemon
+       else
+          echo "${RED}Unknown platform${CLEAR}"
+       fi
+    fi
+}
+
+build() {
+    if [ "$(uname)" == "Darwin" ]; then
+       # Mac
+       ./bin/darwin-build $args
+    elif [[ "$(uname -a)" == *"NixOS"* ]]; then
+       # nixos
+       ./bin/nixos-build $args
+    elif [ "$(uname)" == "Linux" ]; then
+       # other linux distro
+       ./bin/linux-build $args
+    else
+       echo "${RED}Unknown platform${CLEAR}"
+    fi
+}
+
+build

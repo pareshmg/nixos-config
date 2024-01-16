@@ -1,0 +1,7 @@
+# name: Multi-line code block
+# key: cb
+# expand-env: ((yas-indent-line 'fixed))
+# --
+.. code-block::
+
+    $0

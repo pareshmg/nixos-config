@@ -1,0 +1,8 @@
+# name: Todo admonition
+# key: todo
+# expand-env: ((yas-indent-line 'fixed))
+# --
+.. admonition:: TODO
+   :class: warning
+
+   $0

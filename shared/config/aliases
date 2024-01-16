@@ -1,0 +1,199 @@
+alias cp='cp -i'
+alias h=history
+alias mv='mv -i'
+alias psg='ps ax | grep'
+#alias rm='del'
+#alias rm='rm -i'
+alias scpresume='rsync --partial --progress --rsh=ssh'
+alias lesslast='less `flast`'
+alias catlast='cat `flast`'
+alias openlast='open `flast`'
+alias gg='git commit -a -m'
+alias ggui='git gui citool'
+function git_branch_clean {
+    for x in `git branch -l`
+    do
+        git branch -d $x  2> /dev/null
+    done
+    rnum=$(dd if=/dev/urandom count=1 2> /dev/null | cksum | cut -f1 -d" ")
+    echo "Cleaning git repo ..."
+    if (( $rnum % 10 == 0 )); then
+      git remote prune origin
+      git gc
+    fi
+}
+function ggp() { git commit -a -m $@ && git push && git_branch_clean }
+
+alias run='open -a'
+
+if [ `uname` = "Darwin" ]; then
+  #alias ls='ls -G -h'
+  alias ls='ls --color -h'
+else
+  alias ls='ls --color -h'
+fi
+
+
+if [ `uname` = "Darwin" ]; then
+   alias em='open -a /Applications/Emacs.app'
+fi
+
+
+#alias docker='nerdctl'
+#alias docker-compose='nerdctl compose'
+
+alias l='ls -l'
+alias la='ls -la'
+alias ld='lt | grep "^d"'
+alias ll='ls -l'
+alias lt='ls -ltr'
+alias sl='ls'
+alias getlast='ls -t | head -n1'
+
+# emacs aliases
+alias ec='emacsclient -c -nw -a "emacs -nw"'
+alias e='ec'
+
+
+function tessh {
+    title $@ && ssh_color -Y -L 8097:localhost:8097  -L 8202:localhost:8202 -L 8098:localhost:8098 -L 8099:localhost:8099 -t $@ 'echo $1 > /tmp/sshname; source ~/.aliases; tmux attach -dt ${USER} || tmux new-session -s ${USER}'
+}
+
+## ssh with tmux
+function tssh {
+  TARGET_HOST=$(echo $1 | awk -F"@" '{print $NF}')
+  TARGET_USER=$(echo $1 | grep "@" | awk -F"@" '{print $1}')
+  if [ -z $TARGET_USER ]; then
+    TARGET_USER=$(whoami)
+  fi
+  echo "$TARGET_USER@$TARGET_HOST"
+  TMUX_ADDITIONAL_CMD=""
+  if [ ! -z "$SSH_TMUX_PREFIX" ]; then
+  TMUX_ADDITIONAL_CMD="\\; unbind-key \"C-b\" \\; bind-key ${SSH_TMUX_PREFIX} send-prefix \\; set -g prefix ${SSH_TMUX_PREFIX}"
+  fi
+  TUSER=$(whoami)
+  cmd="tmux -f ~/.tmux.conf.${TUSER} attach -dt ${USER} || tmux -f ~/.tmux.conf.${TUSER} new-session -s ${USER} ${TMUX_ADDITIONAL_CMD} || tmux -f ~/.tmux.conf.${TUSER} -t ${USER} ${TMUX_ADDITIONAL_CMD}"
+
+  if [ -z ${SSH_NO_TMUX} ]; then
+    if [ ! -d ~/.ssh/ctl ]; then
+        mkdir ~/.ssh/ctl
+    fi
+    ctl="$HOME/.ssh/ctl/%L-%r@%h:%p"
+    ssh -nNf -o ControlMaster=yes -o ControlPath=$ctl ${TARGET_USER}@${TARGET_HOST}
+    rsync -e "ssh -o 'ControlPath=${ctl}'" --perms --chmod=u+rw,g+rw,o+r -L ~/.tmux.conf ${TARGET_USER}@${TARGET_HOST}:\~/.tmux.conf.${TUSER}
+    title "${1}.${reg}" && ssh_color ${TARGET_USER}@${TARGET_HOST} -o ControlPath=${ctl} -t -A ${@:2} ${cmd}
+    ssh -O exit -o ControlPath ${TARGET_USER}@${TARGET_HOST}
+  else
+    ssh_color ${TARGET_USER}@${TARGET_HOST} -t -A ${@:2}
+  fi
+}
+compdef tessh=ssh
+compdef tssh=ssh
+
+
+# unregister broken GHC packages. Run this a few times to resolve dependency rot in installed packages.
+# ghc-pkg-clean -f cabal/dev/packages*.conf also works.
+function ghc-pkg-clean() {
+for p in `ghc-pkg check $* 2>&1 | grep problems | awk '{print $6}' | sed -e 's/:$//'`
+do
+echo unregistering $p; ghc-pkg $* unregister $p
+done
+}
+
+# remove all installed GHC/cabal packages, leaving ~/.cabal binaries and docs in place.
+# When all else fails, use this to get out of dependency hell and start over.
+function ghc-pkg-reset() {
+read -p 'erasing all your user ghc and cabal packages - are you sure (y/n) ? ' ans
+test x$ans == xy && ( \
+echo 'erasing directories under ~/.ghc'; rm -rf `find ~/.ghc -maxdepth 1 -type d`; \
+echo 'erasing ~/.cabal/lib'; rm -rf ~/.cabal/lib; \
+# echo 'erasing ~/.cabal/packages'; rm -rf ~/.cabal/packages; \
+# echo 'erasing ~/.cabal/share'; rm -rf ~/.cabal/share; \
+)
+}
+
+alias cabalupgrades="cabal list --installed | egrep -iv '(synopsis|homepage|license)'"
+
+function enotify {
+    echo "`hostname` : $1 notification" | mailx -s "[Script Notification] $1" {{email}}
+}
+function get_host {
+ echo $HOST
+}
+export TMUX_HOSTNAME=$(get_host)
+function e {
+    if [ "$TMUX" ]; then
+        tmux detach
+    else
+        echo $@
+    fi
+
+}
+
+
+# used to refresh ssh connection for tmux
+# http://justinchouinard.com/blog/2010/04/10/fix-stale-ssh-environment-variables-in-gnu-screen-and-tmux/
+function refreshSSH() {
+  if [[ -n $TMUX ]]; then
+    NEW_SSH_AUTH_SOCK=`tmux showenv|grep ^SSH_AUTH_SOCK|cut -d = -f 2`
+    if [[ -n $NEW_SSH_AUTH_SOCK ]] && [[ -S $NEW_SSH_AUTH_SOCK ]]; then
+      SSH_AUTH_SOCK=$NEW_SSH_AUTH_SOCK
+    fi
+  fi
+}
+
+
+function fixssh {
+  for key in SSH_AUTH_SOCK SSH_CONNECTION SSH_CLIENT; do
+    if (tmux show-environment | grep "^${key}" > /dev/null); then
+      value=`tmux show-environment | grep "^${key}" | sed -e "s/^[A-Z_]*=//"`
+      export ${key}="${value}"
+    fi
+  done
+}
+
+
+alias tunnel='sshuttle --dns -r pareshmg@login.csail.mit.edu 0/0 '
+alias tunneln='sshuttle --dns -r pareshmg@nervasion.com 0/0 '
+alias reset_tunnel='sudo ipfw -q -f flush'
+
+## color ssh
+ssh_color () {
+    ssh_color_py $*
+    trap 'echo -e "\033]6;1;bg;*;default\a"' INT EXIT
+    ssh $*
+}
+
+
+#alias ssh=ssh_color
+
+alias tsave='rm -rf lily3; cp -r lily2 lily3; gsed -i "s/lily2/lily3/gI" lily3/desc.lua; rm -rf lily2; cp -r lily lily2; gsed -i "s/lily/lily2/gI" lily2/desc.lua'
+alias trestore='rm -rf lily; cp -r lily2 lily; gsed -i "s/lily2/lily/gI" lily/desc.lua'
+
+
+
+function kubepodn {
+    kubectl get pods -n $1 -o json | jq -r ".items[].metadata.name" | grep -i $2 --color=never
+}
+function kubepod {
+    kubectl get pods -n $1 -o json | jq -r ".items[0].metadata.name"
+}
+function kubebash {
+    kubectl -n $1 exec -it $(kubepod $1) -- bash
+}
+function kubebashn {
+    kubectl -n $1 exec -it $(kubepodn $1 $2) -- bash
+}
+
+#alias docker=podman
+#alias docker-compose=podman-compose
+
+function flushdns {
+    sudo dscacheutil -flushcache
+    sudo killall -HUP mDNSResponder
+}
+
+alias k='kubectl'
+alias kc="kubectl config set-context --current --namespace"
+alias kb='kubebash'
+alias kbn='kubebashn'

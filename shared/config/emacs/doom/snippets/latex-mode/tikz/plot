@@ -1,0 +1,33 @@
+#name : plot
+# --
+\begin{tikzpicture}
+  \def \xmax {${1:6}}
+  \def \ymax {${2:5}}
+  \def \xmin {${3:0}}
+  \def \ymin {${4:0}}
+  \def \incrx {1}
+  \def \incry {0.25}    
+  \def \margD {0.1}
+  \draw[->] (\xmin-\margD,0) -- (\xmax+\margD,0) node[right] {$${5:x}$};
+  \draw[->] (0,\ymin-\margD) -- (0,\ymax+\margD) node[above] {$${6:y}$};
+
+  \draw[thick, color=red, domain=\xmin:\xmax] plot (\x,{1/(1+(exp(-\x)))});
+
+
+  %ticks
+  \pgfmathparse{\xmin+\incrx}
+  \foreach \x in {\xmin,\pgfmathresult,...,\xmax}
+  {
+    \draw[yscale=0.33] (\x,0) +(0,-0.1) -- +(0,0.1) node[below]{$\x$};
+  }
+  
+  \pgfmathparse{\ymin+\incry}
+  \foreach \x in {\ymin,\pgfmathresult,...,\ymax}
+  {
+    \draw[rotate=90] (\x,0) +(0,0.1) -- +(0,-0.1) node[left]{$\x$};
+  }
+    
+
+
+
+\end{tikzpicture}

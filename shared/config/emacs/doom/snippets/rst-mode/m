@@ -1,0 +1,4 @@
+# name: inline math
+# key: m
+# --
+:math:\`$0\`

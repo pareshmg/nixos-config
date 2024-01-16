@@ -1,0 +1,9 @@
+#name : Begin src session
+# --
+
+ #+srcname: ${1:name}
+ #+begin_src python :results output :session ${2:tmp} :comments yes
+ $0
+ #+end_src
+
+ 
