@@ -1,7 +1,0 @@
-alias c='cmtaws'
-alias ce='cmtaws ec2'
-alias ca='cmtaws ami'
-alias ci='cmtaws info'
-alias cs='cmtaws sqs'
-alias ck='cmtaws kinesis'
-alias cc='cmtaws codeartifact'

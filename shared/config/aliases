@@ -115,7 +115,7 @@ echo 'erasing ~/.cabal/lib'; rm -rf ~/.cabal/lib; \
 alias cabalupgrades="cabal list --installed | egrep -iv '(synopsis|homepage|license)'"
 
 function enotify {
-    echo "`hostname` : $1 notification" | mailx -s "[Script Notification] $1" paresh.mg@gmail.com.com
+    echo "`hostname` : $1 notification" | mailx -s "[Script Notification] $1" {{email}}
 }
 function get_host {
  echo $HOST

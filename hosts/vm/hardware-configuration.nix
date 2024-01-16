@@ -85,21 +85,6 @@ in
   };
 
 
-  # services.davfs2.enable = true;
-  # fileSystems."/media/nextcloud" = {
-  #   device = "https://nextcloud.l.nervasion.com/remote.php/dav/files/pareshmg/Documents/Org/";
-  #   fsType = "davfs";
-  #   options = let
-  #     davfs2Conf = (pkgs.writeText "davfs2.conf" "secrets ${config.age.secrets.per.nextcloud_davfs.path}");
-  #   in [ "conf=${davfs2Conf}" "x-systemd.automount" "user,uid=1000,gid=1000,noauto"];
-  # };
-
-  # fileSystems."/media/org" = {
-  #   device = "nfs.l.nervasion.com:/mnt/nas/nextcloud/data/pareshmg/files/Documents/Org";
-  #   fsType = "nfs";
-  #   options = [ "x-systemd.automount" "noauto" "user" ];
-  # };
-
 
   swapDevices = [ ];
 

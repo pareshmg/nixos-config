@@ -25,37 +25,7 @@
          exec-path)))
 
 ;;; emacs exec path
-(add-to-list 'exec-path "~/")
-;; (add-to-list 'exec-path "~/.cabal/bin")
-;; (add-to-list 'exec-path "/usr/local/bin")
-;; (add-to-list 'exec-path "/usr/bin")
-;; (add-to-list 'exec-path "/usr/texbin")
-;; (add-to-list 'exec-path "~/.emacs.d/elisp/haskell")
-;; (add-to-list 'exec-path "/Library/TeX/Distributions/.DefaultTeX/Contents/Programs/texbin")
-;; ;;(setenv "PATH" (concat "~/.cabal/bin:" (getenv "PATH")))
-
-;;; emacs load path
-;; ;(add-to-list 'load-path "~/.emacs.d")
-;; (add-to-list 'load-path "~/.emacs.d/elisp")
-;; (add-to-list 'load-path "~/.emacs.d/themes")
-;; (add-to-list 'load-path "~/.emacs.d/elpa")
-;; (add-to-list 'load-path "~/.emacs.d/elisp/haskell")
 (add-to-list 'load-path "~/.config/doom/personal")
-;; ;;(add-to-list 'load-path "~/.emacs.d/elpa/org-mode")
-;; ;;(add-to-list 'load-path "~/.emacs.d/elpa/org-mode/lisp")
-
-;; (add-to-list 'load-path "/Users/pareshmg/.emacs.d/themes/solarized-theme-20130619.2056")
-;; (add-to-list 'custom-theme-load-path "/Users/pareshmg/.emacs.d/themes/solarized-theme-20130619.2056")
-
-;; (let ((default-directory "/usr/local/share/emacs/site-lisp/"))
-;;   (normal-top-level-add-subdirs-to-load-path))
-;; (require 'package)
-;; (add-to-list 'package-archives '("org" . "http://orgmode.org/elpa/") t)
-
-
-;(add-to-list 'load-path "~/.emacs.d/spacemacs/elpa/lsp-mode-20190828.1641")
-;(add-to-list 'load-path "~/.emacs.d/spacemacs/elpa/lsp-ui-20190823.541")
-;(load "auctex.el" nil t t)
 
 ;; ;; Require Common Lisp. (cl in <=24.2, cl-lib in >=24.3.)
 ;; (if (require 'cl-lib nil t)
@@ -71,7 +41,6 @@
 ;;; Benchmark startup time load
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;; (add-to-list 'load-path "/Users/pareshmg/.emacs.d/elpa/benchmark-init-20150905.238/")
 ;; (require 'benchmark-init)
 ;; (benchmark-init/activate)
 

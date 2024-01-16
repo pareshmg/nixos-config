@@ -22,7 +22,7 @@
   home = {                                  # Specific packages for desktop
     packages = with pkgs; [
       #firefox
-      python39
+      python311
       htop
     ];
   };

@@ -192,14 +192,6 @@
 ;;; myFuns.el ends here
 
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;; open ssh version
-
-(defun open-in-tml ()
-  (interactive)
-  (start-process "eOpenSSH" nil "~/bin/eOpenSSH.sh" (buffer-file-name))
-  (suspend-frame))
-
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; auctex dnd mode

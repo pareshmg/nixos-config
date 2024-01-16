@@ -43,5 +43,6 @@
   # AI
   #"diffusionbee"
 
+  "zoom"
 
 ]

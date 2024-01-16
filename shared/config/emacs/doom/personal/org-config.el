@@ -428,14 +428,6 @@
              ("c" "CMT Templates")
              ("cp" "CMT Me" entry (file+olp ,org-cmt-file "Todo" "Paresh")
               "* TODO %?\n  %i")
-             ("co" "CMT Onkar" entry (file+olp ,org-cmt-file "Todo" "Onkar")
-              "* TODO [Onkar] %?  :@manager: \n  %i")
-             ("cO" "CMT Olga" entry (file+olp ,org-cmt-file "Todo" "Olga")
-              "* TODO [Olga] %? :@manager: \n  %i")
-             ("cs" "CMT Sandeep" entry (file+olp ,org-cmt-file "Todo" "Sandeep")
-              "* TODO [Sandeep] %? :@manager: \n  %i")
-             ("cd" "CMT Dheeptha" entry (file+olp ,org-cmt-file "Todo" "Dheeptha")
-              "* TODO [Dheeptha] %? :@manager: \n  %i")
              ))
        (if org-orya-file
            '(

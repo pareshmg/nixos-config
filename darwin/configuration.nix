@@ -144,33 +144,33 @@ in
     # };
   };
 
-  # Fully declarative dock using the latest from Nix Store
+  # # Fully declarative dock using the latest from Nix Store
   # local.dock.enable = true;
   # local.dock.entries = [
-    #{ path = "/Applications/Slack.app/"; }
-    #{ path = "/System/Applications/Messages.app/"; }
-    #{ path = "/System/Applications/Facetime.app/"; }
-    #{ path = "${pkgs.alacritty}/Applications/Alacritty.app/"; }
-    #{ path = "/System/Applications/Music.app/"; }
-    #{ path = "/System/Applications/News.app/"; }
-    #{ path = "/System/Applications/TV.app/"; }
-    #{ path = "/Applications/Asana.app/"; }
-    #{ path = "/Applications/Drafts.app/"; }
-    #{ path = "/System/Applications/Home.app/"; }
-    # {
-    #   path = toString myEmacsLauncher;
-    #   section = "others";
-    # }
-    # {
-    #   path = "${config.users.users.${user}.home}/.local/share/";
-    #   section = "others";
-    #   options = "--sort name --view grid --display folder";
-    # }
-    # {
-    #   path = "${config.users.users.${user}.home}/.local/share/downloads";
-    #   section = "others";
-    #   options = "--sort name --view grid --display stack";
-    # }
+  #   { path = "/Applications/Firefox.app/"; }
+  #   #{ path = "/System/Applications/Messages.app/"; }
+  #   #{ path = "/System/Applications/Facetime.app/"; }
+  #   #{ path = "${pkgs.alacritty}/Applications/Alacritty.app/"; }
+  #   #{ path = "/System/Applications/Music.app/"; }
+  #   #{ path = "/System/Applications/News.app/"; }
+  #   #{ path = "/System/Applications/TV.app/"; }
+  #   #{ path = "/Applications/Asana.app/"; }
+  #   #{ path = "/Applications/Drafts.app/"; }
+  #   #{ path = "/System/Applications/Home.app/"; }
+  #   # {
+  #   #   path = toString myEmacsLauncher;
+  #   #   section = "others";
+  #   # }
+  #   # {
+  #   #   path = "${config.users.users.${user}.home}/.local/share/";
+  #   #   section = "others";
+  #   #   options = "--sort name --view grid --display folder";
+  #   # }
+  #   {
+  #     path = "${config.users.users.${user}.home}/Downloads";
+  #     section = "others";
+  #     options = "--sort name --view grid --display stack";
+  #   }
   # ];
 
   system = {
@@ -185,10 +185,12 @@ in
         autohide = true;
         orientation = "bottom";
         showhidden = true;
+        mineffect = "scale";
         tilesize = 40;
       };
       finder = {                          # Finder settings
         QuitMenuItem = false;             # I believe this probably will need to be true if using spacebar
+        FXPreferredViewStyle = "clmv";
       };  
       trackpad = {                        # Trackpad settings
         Clicking = true;

@@ -11,7 +11,7 @@
 #            └─ ./home.nix
 #
 
-{ lib, inputs, nixpkgs, nixpkgs-unstable, home-manager, location, agenix, ... }:
+{ lib, inputs, nixpkgs, nixpkgs-unstable, home-manager, profile, location, agenix, ... }:
 
 let
   system = "x86_64-linux";                                  # System architecture
@@ -154,44 +154,9 @@ in
   #     ];
   #   });
 
-  # vm = (let
-  #   user="pareshmg";
-  # in
-  #   lib.nixosSystem {                                    # VM profile
-  #     system = "x86_64-linux";                                  # System architecture
-  #     #inherit system;
-  #     specialArgs = {
-  #       inherit  user inputs location agenix;
-  #       host = {
-  #         hostName = "vm";
-  #         #mainMonitor = "Virtual-1";
-  #         #secondMonitor = "Virtual-2";
-  #       };
-  #     };
-  #     modules = [
-  #       agenix.nixosModules.default
-  #       home-manager.nixosModules.home-manager {
-  #         home-manager.useGlobalPkgs = true;
-  #         home-manager.useUserPackages = true;
-  #         home-manager.extraSpecialArgs = {
-  #           inherit  user;
-  #           host = {
-  #             hostName = "vm";
-  #             #mainMonitor = "Virtual-1";
-  #             #secondMonitor = "Virtual-2";
-  #           };
-  #         };
-  #         home-manager.users.${user} = {
-  #           imports = [(import ./home.nix)] ++ [(import ./vm/home.nix)];
-  #         };
-  #       }
-  #       ./vm
-  #       ./configuration.nix
-  #     ];
-  #   });
 
   guivm = (let
-    user="pareshmg";
+    user=profile.user;
   in
     lib.nixosSystem {                                    # VM profile
       inherit system;

@@ -1,7 +1,5 @@
-{ pkgs, config, profile, ... }:
+{ pkgs, config, profile, u, ... }:
 let
-  templateSubstitute = import ../utils/template_substitute.nix;
-  subst = fname: templateSubstitute {subst_dict=profile; text=builtins.readFile fname;};
 in
 {
   # tmux
@@ -12,13 +10,13 @@ in
     source = ./config/profile_personal;
   };
   ".aliases" = {
-    source = ./config/aliases;
+    text = u.substProfile ./config/aliases;
   };
   ".gitconfig" = {
-    text = subst ./config/gitconfig;
+    text = u.substProfile ./config/gitconfig;
   };
   ".config/doom/personal/me.el" = {
-    text = subst ./config/me.el;
+    text = u.substProfile ./config/me.el;
   };
 
   # emacs recursive copy in dir

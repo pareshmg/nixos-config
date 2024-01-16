@@ -16,7 +16,7 @@ SYSTEM="homeConfigurations.$FLAKE.activationPackage"
 if [ -e "$HOME/cmt/CMTNix" ]; then
     CMTNIX="git+file://${HOME}/cmt/CMTNix"
 else
-    CMTNIX="git+ssh://git@github.com/Censio/CMTNix.git"
+    CMTNIX="github:Censio/CMTNix.git"
 fi
 
 

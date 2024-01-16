@@ -12,7 +12,7 @@
 # to /etc/nixos/configuration.nix instead.
 #
 
-{ config, lib, pkgs, modulesPath, ... }:
+{ config, lib, profile, u, pkgs, modulesPath, ... }:
 
 let
   vmid="111";
@@ -39,22 +39,22 @@ in
   swapDevices = [ ];
 
 
-  #networking.useDHCP = lib.mkDefault true;
-  networking = {
-    useDHCP = false;                        # Deprecated
-    defaultGateway = "10.28.1.1";
-    nameservers = [ "10.28.1.1" ];
-    hostName = "web";
-    hostId = "e3d5170f";
-    interfaces = {
-      ens18 = {
-        ipv4.addresses = [ {
-          address = "10.28.2.${vmid}";
-          prefixLength = 16;
-        } ];
+
+  networking = u.recursiveMerge [
+    {
+      useDHCP = false;                        # Deprecated
+      hostId = profile.macAddress;
+      interfaces = {
+          ens18 = {
+            ipv4.addresses = [ {
+              address = profile.ip;
+              prefixLength = 16;
+            } ];
+          };
       };
-    };
-  };
+    }
+    (u.getOrDefault profile "networking" {})
+  ];
 
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
   #hardware.cpu.intel.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;

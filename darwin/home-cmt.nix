@@ -8,12 +8,12 @@
 #   │   └─ ./home-cmt.nix *
 #
 
-{ lib, secrets, ... }:
+{ lib, secrets, u, ... }:
 
 {
   home = {                                        # Specific packages for macbook
     file =  lib.mkMerge [
-      { ".cmt".source = secrets.cmt.aliases; }
+      { ".cmt".source = u.getOrDefault secrets "cmt.aliases" ""; }
     ];
   };
 

@@ -22,7 +22,7 @@ SECRETS_DIR="$HOME/.nix-secrets"
 if [ -e "$HOME/cmt/CMTNix" ]; then
     CMTNIX="git+file://${HOME}/cmt/CMTNix"
 else
-    CMTNIX="git+ssh://git@github.com/Censio/CMTNix.git"
+    CMTNIX="github:Censio/CMTNix.git"
 fi
 
 
@@ -36,8 +36,8 @@ mv -f flake.nix.orig flake.nix || true
 
 mv flake.lock flake.lock.orig || true
 cat flake.nix | \
-    sed "s|secrets.url = \"git+file:///OVERRIDE_ME_PLEASE\";|secrets.url = \"git+file://${SECRETS_DIR}\";|g" | \
-    sed "s|cmtnix.url = \"git+file:///OVERRIDE_ME_PLEASE\";|cmtnix.url = \"${CMTNIX}\";|g" > flake2.nix
+    sed "s|secrets.url = .*|secrets.url = \"git+file://${SECRETS_DIR}\";|g" | \
+    sed "s|cmtnix.url = .*|cmtnix.url = \"${CMTNIX}\";|g" > flake2.nix
 
 mv flake.nix flake.nix.orig
 mv flake2.nix flake.nix

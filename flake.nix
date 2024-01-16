@@ -150,7 +150,7 @@
       darwinConfigurations = {                                              # Darwin Configurations
         pmp = darwin.lib.darwinSystem {
           system = "x86_64-darwin";
-          specialArgs =  { inherit inputs agenix secrets home-manager cmtnix location; } // {hostname = "pmp"; profile=secrets.profile.per;};
+          specialArgs =  { inherit inputs agenix secrets home-manager cmtnix u location; } // {hostname = "pmp"; profile=secrets.profile.per;};
           modules = [                                             # Modules that are used
             agenix.darwinModules.default
             home-manager.darwinModules.home-manager
@@ -164,7 +164,7 @@
         };
         pmpcmt = darwin.lib.darwinSystem {
           system = "aarch64-darwin";
-          specialArgs =  { inherit inputs agenix secrets home-manager cmtnix location; } // {hostname = "pmp-cmt"; profile=secrets.profile.work;};
+          specialArgs =  { inherit inputs agenix secrets home-manager cmtnix u location; } // {hostname = "pmp-cmt"; profile=secrets.profile.work;};
           modules = [                                             # Modules that are used
             agenix.darwinModules.default
             home-manager.darwinModules.home-manager
