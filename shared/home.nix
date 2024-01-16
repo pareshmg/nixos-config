@@ -1,8 +1,8 @@
 { config, lib, pkgs, specialArgs, ... }:
 
 let
-  inherit (specialArgs) profile;
-  sharedFiles = import ../shared/files.nix { inherit config pkgs profile; };
+  inherit (specialArgs) profile u;
+  sharedFiles = import ../shared/files.nix { inherit config pkgs profile u; };
 in
 {
   programs = {

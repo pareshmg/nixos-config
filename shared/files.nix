@@ -10,13 +10,13 @@ in
     source = ./config/profile_personal;
   };
   ".aliases" = {
-    text = u.substProfile ./config/aliases;
+    text = u.substProfile profile ./config/aliases;
   };
   ".gitconfig" = {
-    text = u.substProfile ./config/gitconfig;
+    text = u.substProfile profile ./config/gitconfig;
   };
   ".config/doom/personal/me.el" = {
-    text = u.substProfile ./config/me.el;
+    text = u.substProfile profile ./config/me.el;
   };
 
   # emacs recursive copy in dir
