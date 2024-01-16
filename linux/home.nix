@@ -13,13 +13,8 @@
 { lib, config, pkgs, agenix, home-manager, secrets, specialArgs, location, ... }:
 
 let
-  # Define the content of your file as a derivation
-  # myEmacsLauncher = pkgs.writeScript "emacs-launcher.command" ''
-  #   #!/bin/sh
-  #   emacsclient -c -n &
-  # '';
-  inherit (specialArgs) profile;
-  sharedFiles = import ../shared/files.nix { inherit config pkgs profile; };
+  inherit (specialArgs) profile u;
+  sharedFiles = import ../shared/files.nix { inherit config pkgs profile u; };
 in
 {
 

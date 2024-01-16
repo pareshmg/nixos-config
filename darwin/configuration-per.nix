@@ -16,7 +16,7 @@ let
   #   emacsclient -c -n &
   # '';
   user = profile.user;
-  mm = u.getOrDefault secrets "utils.mm" "";
+  mm = (u.getOrDefault secrets "utils.mm" (_: "")) pkgs;
 in
 {
   environment.systemPackages = [ mm ];
@@ -24,7 +24,7 @@ in
     casks = (pkgs.callPackage ./casks.nix {}) ++ (pkgs.callPackage ./casks-per.nix {});
   };
   home-manager = {
-    extraSpecialArgs = {inherit secrets;} ;
+    extraSpecialArgs = {inherit secrets u;} ;
     users.${user}.imports = [
       ./home-per.nix
     ];
