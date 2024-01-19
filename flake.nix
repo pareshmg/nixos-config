@@ -84,7 +84,7 @@
       # };
 
       secrets.url = "path:./secrets_example"; #  NOTE: OVERRIDE THIS!!!
-      cmtnix.url = "github:Censio/CMTNix"; # NOTE: OVERRIDE THIS!!
+      cmtnix.url = "git+ssh://git@github.com/Censio/CMTNix/par/cmthome_minimal";
     };
 
   outputs = { self, nixpkgs, nixpkgs-unstable, home-manager, darwin,
@@ -188,7 +188,7 @@
         in
           home-manager.lib.homeManagerConfiguration {
             inherit pkgs;
-            extraSpecialArgs = { inherit inputs system pkgs agenix secrets home-manager profile location cmtcfg; };
+            extraSpecialArgs = { inherit inputs system pkgs agenix secrets home-manager profile u location cmtcfg; };
             modules = [
               agenix.homeManagerModules.default
               ./linux/minimal-home.nix
@@ -205,7 +205,7 @@
         in
           home-manager.lib.homeManagerConfiguration {
             inherit pkgs;
-            extraSpecialArgs = { inherit inputs system pkgs agenix secrets home-manager profile location; };
+            extraSpecialArgs = { inherit inputs system pkgs agenix secrets home-manager profile u location; };
             modules = [
               agenix.homeManagerModules.default
               ./linux/minimal-home.nix
