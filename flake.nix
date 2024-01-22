@@ -127,7 +127,7 @@
         };
         testvm = nixpkgs.lib.nixosSystem {
           system = "x86_64-linux";                                  # System architecture
-          specialArgs =  { inherit inputs home-manager; } // {hostname = "testvm"; profile=secrets.profile.test; vmid="111";};
+          specialArgs =  { inherit inputs home-manager u; } // {hostname = "testvm"; profile=secrets.profile.test; vmid="111";};
           modules = [                                             # Modules that are used
             home-manager.nixosModules.home-manager
             ./hosts/guivm
@@ -135,7 +135,7 @@
         };
         testvm2 = nixpkgs.lib.nixosSystem {
           system = "x86_64-linux";                                  # System architecture
-          specialArgs =  { inherit inputs home-manager; } // {hostname = "testvm2"; profile=secrets.profile.test; vmid="111";};
+          specialArgs =  { inherit inputs home-manager u; } // {hostname = "testvm2"; profile=secrets.profile.test; vmid="111";};
           modules = [                                             # Modules that are used
             home-manager.nixosModules.home-manager
             ./hosts/testvm
