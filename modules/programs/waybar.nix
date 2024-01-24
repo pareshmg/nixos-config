@@ -2,8 +2,10 @@
 # Bar
 #
 
-{ config, lib, pkgs, host, user, ...}:
-
+{ config, lib, pkgs, host, profile, ...}:
+let
+  user = profile.user;
+in
 {
   environment.systemPackages = with pkgs; [
     waybar

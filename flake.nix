@@ -43,7 +43,7 @@
       };
 
       u = {
-        url = "path:./utils";
+        url = "path:utils";
         inputs.nixpkgs.follows = "nixpkgs";
       };
 
@@ -83,8 +83,9 @@
       #   inputs.nixpkgs.follows = "nixpkgs";
       # };
 
-      secrets.url = "path:./secrets_example"; #  NOTE: OVERRIDE THIS!!!
-      cmtnix.url = "github:Censio/CMTNix"; # NOTE: OVERRIDE THIS!!
+      secrets.url = "path:secrets_example"; #  NOTE: OVERRIDE THIS!!!
+      cmtnix.url = "path:secrets_example"; #  NOTE: OVERRIDE THIS!!!
+      #cmtnix.url = "git+ssh://git@github.com/Censio/CMTNix"; # NOTE: OVERRIDE THIS!!
     };
 
   outputs = { self, nixpkgs, nixpkgs-unstable, home-manager, darwin,
@@ -136,6 +137,7 @@
         testvm2 = nixpkgs.lib.nixosSystem {
           system = "x86_64-linux";                                  # System architecture
           specialArgs =  { inherit inputs home-manager u; } // {hostname = "testvm2"; profile=secrets.profile.test; vmid="111";};
+
           modules = [                                             # Modules that are used
             home-manager.nixosModules.home-manager
             ./hosts/testvm

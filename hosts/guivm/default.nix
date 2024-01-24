@@ -21,7 +21,7 @@ in
   imports =
     [(import ../../modules/profiles/hardened.nix)] ++
     [(import ./hardware-configuration.nix)] ++                # Current system hardware config
-    [(import ../../modules/desktop/kde/default.nix)];  # window manager
+    [(import ../../modules/desktop/hyprland/default.nix)];  # window manager
 
   boot = {                                      # Boot options
     loader = {                                  # For legacy boot
@@ -31,12 +31,10 @@ in
       };
     };
   };
+
   environment = {                               # Packages installed system wide
     systemPackages = with pkgs; [               # This is because some options need to be configured.
-      #discord
-      #plex
       #simple-scan
-      #x11vnc
       wacomtablet
       #clinfo
     ] ++ (profile.additionalPackages { pkgs = pkgs;});
@@ -44,6 +42,7 @@ in
     #  LIBVA_DRIVER_NAME = "i965";
     #};
   };
+
   system.stateVersion = "23.11";
 
   #config.system.nixos.label="guivm";
@@ -71,7 +70,7 @@ in
     network.enable = true;
   };
 
-  users.users.guest = {
+  users.users.${user} = {
     isNormalUser = true;
     extraGroups = [ "wheel" "video" "audio" "camera" "networkmanager" "lp" "scanner" "kvm" "libvirtd" "docker" "podman" ];
     shell = pkgs.zsh;
@@ -79,6 +78,13 @@ in
     hashedPassword = profile.hashedPassword;
   };
   security.sudo.wheelNeedsPassword = true; # User does not need to give password when using sudo.
+
+
+  home-manager = {
+    users.${user} = {
+      imports = [(import ./home.nix)];
+    };
+  };
 
   hardware = {
     opengl = {
@@ -93,5 +99,4 @@ in
       driSupport32Bit = true;
     };
   };
-
 }

@@ -24,5 +24,7 @@
       firefox
       htop
     ];
+    stateVersion = "23.11";
   };
+
 }
