@@ -72,7 +72,7 @@ in
 
   users.users.${user} = {
     isNormalUser = true;
-    extraGroups = [ "wheel" "video" "audio" "camera" "networkmanager" "lp" "scanner" "kvm" "libvirtd" "docker" "podman" ];
+    extraGroups = ["video" "audio" "networkmanager" "lp"  "kvm" "libvirtd" ];
     shell = pkgs.zsh;
     uid = 1001;
     hashedPassword = profile.hashedPassword;
