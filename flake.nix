@@ -42,10 +42,10 @@
         url = "github:numtide/flake-utils";
       };
 
-      u = {
-        url = "git+file:.?dir=utils";
-        inputs.nixpkgs.follows = "nixpkgs";
-      };
+      # u = {
+      #   url = "path:" + (builtins.toString ./utils);
+      #   inputs.nixpkgs.follows = "nixpkgs";
+      # };
 
       nixos-generators = {
         url = "github:nix-community/nixos-generators";
@@ -93,8 +93,9 @@
       #cmtnix.url = "git+ssh://git@github.com/Censio/CMTNix"; # NOTE: OVERRIDE THIS!!
     };
 
-  outputs = { self, nixpkgs, flake-utils, nixpkgs-unstable, home-manager, darwin, agenix, secrets, cmtnix, u, nixos-generators, ... } @ inputs:   # Function that tells my flake which to use and what do what to do with the dependencies.
+  outputs = { self, nixpkgs, flake-utils, nixpkgs-unstable, home-manager, darwin, agenix, secrets, cmtnix, nixos-generators, ... } @ inputs:   # Function that tells my flake which to use and what do what to do with the dependencies.
     let                                                                     # Variables that can be used in the config files.
+      u = builtins.getFlake ("path:" + (builtins.toString ./utils));
       location = "$HOME/nixos-config";
       linuxSystems = [ "x86_64-linux" "aarch64-linux" ];
       #darwinSystems = [ "aarch64-darwin" "x86_64-darwin" ];
