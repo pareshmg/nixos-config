@@ -1,17 +1,3 @@
-#
-#  Specific system configuration settings for desktop
-#
-#  flake.nix
-#   ├─ ./hosts
-#   │   └─ ./vm
-#   │       ├─ default.nix *
-#   │       └─ hardware-configuration.nix
-#   └─ ./modules
-#       └─ ./desktop
-#           └─ ./bspwm
-#               └─ bspwm.nix
-#
-
 { config, pkgs, profile, vmid, ... }:
 
 let
@@ -77,8 +63,14 @@ in
     uid = 1001;
     hashedPassword = profile.hashedPassword;
   };
-  security.sudo.wheelNeedsPassword = true; # User does not need to give password when using sudo.
 
+  programs = {
+    zsh = {
+      enable = true;
+    };
+  };
+
+  security.sudo.wheelNeedsPassword = true; # User does not need to give password when using sudo.
 
   home-manager = {
     users.${user} = {

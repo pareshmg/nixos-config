@@ -11,7 +11,7 @@ SCRIPT_DIR=$(dirname "$0")
 
 FLAKE="$1"
 shift # remove flake
-SYSTEM="homeConfigurations.$FLAKE.activationPackage"
+
 
 # mkdir /tmp/OVERRIDE_ME_PLEASE || true
 # echo "{ outputs = {...} : {};}" > /tmp/OVERRIDE_ME_PLEASE/flake.nix
@@ -30,7 +30,7 @@ fi
 cd $(dirname $(readlink -f $0))
 cd ..
 
-echo "${GREEN}Starting build ${FLAKE}...${CLEAR}"
+echo "${GREEN}Starting build vm ${FLAKE}...${CLEAR}"
 
 # mv -f flake.nix.orig flake.nix || true
 
@@ -59,11 +59,10 @@ echo "${GREEN}Installing VM...${CLEAR}"
 #./result/activate
 
 VMID=111
-VMPATH=$(echo $cmdout | tail -n 1)
-VMFILE=$(basename ${VMPATH})
+VMFILE=$(ls --color='never' result/*.zst)
 VMFILEDEST="vzdump-qemu-nixos-${FLAKE}-${VMID}.vma.zst"
 
-scp ${VMPATH} root@pve:/var/lib/vz/dump/${VMFILEDEST}
+scp $VMFILE root@pve:/var/lib/vz/dump/${VMFILEDEST}
 
 ${SCRIPT_DIR}/vm-reset ${VMID} ${VMFILEDEST}
 

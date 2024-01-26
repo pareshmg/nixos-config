@@ -269,14 +269,18 @@
         ]
       },
       "locked": {
-        "lastModified": 1,
-        "narHash": "sha256-j3XUO79Sg4sC4AwgHkH9QiIBUweVHiKSKKZ58KKV/sM=",
-        "path": "utils",
-        "type": "path"
+        "dir": "utils",
+        "dirtyRev": "00a26492de0d79f625ac8d616752a7630135281c-dirty",
+        "dirtyShortRev": "00a2649-dirty",
+        "lastModified": 1706164912,
+        "narHash": "sha256-LW9CyEVjTMe3GbmizwdttOPZJ6o5yfmlQ7LenlCnpw0=",
+        "type": "git",
+        "url": "file:.?dir=utils"
       },
       "original": {
-        "path": "utils",
-        "type": "path"
+        "dir": "utils",
+        "type": "git",
+        "url": "file:.?dir=utils"
       }
     }
   },

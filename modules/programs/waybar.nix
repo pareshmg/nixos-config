@@ -2,9 +2,12 @@
 # Bar
 #
 
-{ config, lib, pkgs, host, profile, ...}:
+{ config, lib, pkgs, hostname, profile, ...}:
 let
   user = profile.user;
+  mainMonitor = "";
+  secondMonitor = "";
+  thirdMonitor = "";
 in
 {
   environment.systemPackages = with pkgs; [
@@ -108,7 +111,7 @@ in
           background-color: rgba(0,0,0,0);
         }
       '';
-      settings = with host; {
+      settings = {
         Main = {
           layer = "top";
           position = "top";
@@ -126,7 +129,7 @@ in
             else [];
 
           modules-right =
-            if hostName == "desktop" then
+            if hostname == "desktop" then
               [ "custom/ds4" "custom/mouse" "custom/kb" "custom/pad" "network" "cpu" "memory" "custom/pad" "pulseaudio" "custom/sink" "custom/pad" "clock" "tray" ]
             else
               [ "cpu" "memory" "custom/pad" "battery" "custom/pad" "backlight" "custom/pad" "pulseaudio" "custom/pad" "clock" "tray" ];
@@ -274,11 +277,11 @@ in
             icon-size = 13;
           };
         };
-        Sec = if hostName == "desktop" || hostName == "work" then {
+        Sec = if hostname == "desktop" || hostname == "work" then {
           layer = "top";
           position = "top";
           height = 16;
-          output = if hostName == "desktop" then [
+          output = if hostname == "desktop" then [
             "${secondMonitor}"
           ] else [
             "${secondMonitor}"
@@ -287,7 +290,7 @@ in
           modules-left = [ "custom/menu" "wlr/workspaces" ];
 
           modules-right =
-            if hostName == "desktop" then
+            if hostname == "desktop" then
               [ "custom/ds4" "custom/mouse" "custom/kb" "custom/pad" "pulseaudio" "custom/sink" "custom/pad" "clock"]
             else
               [ "cpu" "memory" "custom/pad" "battery" "custom/pad" "backlight" "custom/pad" "pulseaudio" "custom/pad" "clock" ];

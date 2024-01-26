@@ -11,13 +11,13 @@
 #               └─ default.nix *
 #
 
-{ config, lib, pkgs, host, system, hyprland, ... }:
+{ config, lib, pkgs, hostname, system, ... }:
 let
   # exec = with host; if hostName == "work" then "exec nvidia-offload Hyprland" else "exec Hyprland"; # Starting Hyprland with nvidia (bit laggy so disabling)
   exec = "exec Hyprland";
 in
 {
-  imports = [ ../../programs/waybar.nix ];
+  #imports = [ ../../programs/waybar.nix ];
 
   environment = {
     loginShellInit = ''
@@ -33,7 +33,7 @@ in
       XDG_SESSION_TYPE="wayland";
       XDG_SESSION_DESKTOP="Hyprland";
     };
-    sessionVariables = with host; if hostName == "work" then {
+    sessionVariables = if hostname == "work" then {
       #GBM_BACKEND = "nvidia-drm";
       #__GL_GSYNC_ALLOWED = "0";
       #__GL_VRR_ALLOWED = "0";
@@ -75,7 +75,7 @@ in
   programs = {
     hyprland = {
       enable = true;
-      #nvidiaPatches = with host; if hostName == "work" then true else false;
+      #nvidiaPatches = with host; if hostname == "work" then true else false;
     };
   };
 
@@ -84,9 +84,9 @@ in
     extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
   };
 
-  nixpkgs.overlays = [    # Waybar with experimental features
-    (final: prev: {
-      waybar = hyprland.packages.${system}.waybar-hyprland;
-    })
-  ];
+  # nixpkgs.overlays = [    # Waybar with experimental features
+  #   (final: prev: {
+  #     waybar = hyprland.packages.${system}.waybar-hyprland;
+  #   })
+  # ];
 }

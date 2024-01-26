@@ -43,7 +43,7 @@
       };
 
       u = {
-        url = "path:utils";
+        url = "git+file:.?dir=utils";
         inputs.nixpkgs.follows = "nixpkgs";
       };
 
@@ -128,6 +128,13 @@
             packages.testvm = nixos-generators.nixosGenerate {
               inherit system;
               format = "proxmox";
+              specialArgs =  { inherit inputs home-manager u; } // {hostname = "testvm"; profile=u.recursiveMerge [secrets.profile.test secrets.profile.nervasion]; vmid="111";};
+              modules = [
+                nixos-generators.nixosModules.all-formats
+                home-manager.nixosModules.home-manager
+                ./hosts/guivm
+              ];
+
             };
 
             # devShells = forAllSystems devShell;
@@ -144,7 +151,7 @@
                   ./hosts/vm
                 ];
               };
-              testvm = nixpkgs.lib.nixosSystem {
+              testvm3 = nixpkgs.lib.nixosSystem {
                 inherit system;
                 specialArgs =  { inherit inputs home-manager u; } // {hostname = "testvm"; profile=u.recursiveMerge [secrets.profile.test secrets.profile.nervasion]; vmid="111";};
                 modules = [
