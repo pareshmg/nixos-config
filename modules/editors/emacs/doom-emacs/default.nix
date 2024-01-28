@@ -20,7 +20,8 @@
 {
   #services.emacs.enable = true;
 
-  system.userActivationScripts = {               # Installation script every time nixos-rebuild is run. So not during initial install.
+  system.userActivationScripts = {
+    # Installation script every time nixos-rebuild is run. So not during initial install.
     doomEmacs = {
       text = ''
         source ${config.system.build.setEnvironment}
@@ -32,7 +33,7 @@
           yes | $EMACS/bin/doom install
         fi
         $EMACS/bin/doom sync
-      '';                                        # It will always sync when rebuild is done. So changes will always be applied.
+      ''; # It will always sync when rebuild is done. So changes will always be applied.
     };
   };
 

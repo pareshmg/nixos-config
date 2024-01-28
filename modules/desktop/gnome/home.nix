@@ -72,38 +72,38 @@
     "org/gnome/desktop/wm/keybindings" = {
       # maximize = ["<Super>Up"];                     # For floating
       # unmaximize = ["<Super>Down"];
-      maximize = ["@as []"];                          # For tilers
-      unmaximize = ["@as []"];
-      switch-to-workspace-left = ["<Alt>Left"];
-      switch-to-workspace-right = ["<Alt>Right"];
-      switch-to-workspace-1 = ["<Alt>1"];
-      switch-to-workspace-2 = ["<Alt>2"];
-      switch-to-workspace-3 = ["<Alt>3"];
-      switch-to-workspace-4 = ["<Alt>4"];
-      switch-to-workspace-5 = ["<Alt>5"];
-      move-to-workspace-left = ["<Shift><Alt>Left"];
-      move-to-workspace-right = ["<Shift><Alt>Right"];
-      move-to-workspace-1 = ["<Shift><Alt>1"];
-      move-to-workspace-2 = ["<Shift><Alt>2"];
-      move-to-workspace-3 = ["<Shift><Alt>3"];
-      move-to-workspace-4 = ["<Shift><Alt>4"];
-      move-to-workspace-5 = ["<Shift><Alt>5"];
-      move-to-monitor-left = ["<Super><Alt>Left"];
-      move-to-monitor-right = ["<Super><Alt>Right"];
-      close = ["<Super>q" "<Alt>F4"];
-      toggle-fullscreen = ["<Super>f"];
+      maximize = [ "@as []" ]; # For tilers
+      unmaximize = [ "@as []" ];
+      switch-to-workspace-left = [ "<Alt>Left" ];
+      switch-to-workspace-right = [ "<Alt>Right" ];
+      switch-to-workspace-1 = [ "<Alt>1" ];
+      switch-to-workspace-2 = [ "<Alt>2" ];
+      switch-to-workspace-3 = [ "<Alt>3" ];
+      switch-to-workspace-4 = [ "<Alt>4" ];
+      switch-to-workspace-5 = [ "<Alt>5" ];
+      move-to-workspace-left = [ "<Shift><Alt>Left" ];
+      move-to-workspace-right = [ "<Shift><Alt>Right" ];
+      move-to-workspace-1 = [ "<Shift><Alt>1" ];
+      move-to-workspace-2 = [ "<Shift><Alt>2" ];
+      move-to-workspace-3 = [ "<Shift><Alt>3" ];
+      move-to-workspace-4 = [ "<Shift><Alt>4" ];
+      move-to-workspace-5 = [ "<Shift><Alt>5" ];
+      move-to-monitor-left = [ "<Super><Alt>Left" ];
+      move-to-monitor-right = [ "<Super><Alt>Right" ];
+      close = [ "<Super>q" "<Alt>F4" ];
+      toggle-fullscreen = [ "<Super>f" ];
     };
 
     "org/gnome/mutter" = {
       workspaces-only-on-primary = false;
       center-new-windows = true;
-      edge-tiling = false;                            # Disabled when tiling
+      edge-tiling = false; # Disabled when tiling
     };
     "org/gnome/mutter/keybindings" = {
       #toggle-tiled-left = ["<Super>Left"];           # For floating
       #toggle-tiled-right = ["<Super>Right"];
-      toggle-tiled-left = ["@as []"];                 # For tilers
-      toggle-tiled-right = ["@as []"];
+      toggle-tiled-left = [ "@as []" ]; # For tilers
+      toggle-tiled-right = [ "@as []" ];
     };
 
     "org/gnome/settings-daemon/plugins/power" = {
@@ -132,7 +132,8 @@
       name = "open-file-browser";
     };
 
-    "org/gnome/shell/extension/dash-to-panel" = {     # Possibly need to set this manually
+    "org/gnome/shell/extension/dash-to-panel" = {
+      # Possibly need to set this manually
       panel-position = ''{"0":"TOP","1":"Top"}'';
       panel-sizes = ''{"0":24,"1":24}'';
       panel-element-positions-monitors-sync = true;
@@ -165,7 +166,8 @@
       customize = true;
       sigma = 0;
     };
-    "org/gnome/shell/extensions/blur-my-shell/overview" = { # Temporary = D2D Bug
+    "org/gnome/shell/extensions/blur-my-shell/overview" = {
+      # Temporary = D2D Bug
       customize = true;
       sigma = 0;
     };
@@ -185,23 +187,24 @@
       window-gap-size = 8;
       dnd-center-layout = "stacked";
     };
-    "org/gnome/shell/extensions/forge/keybindings" = {      # Set active colors manually
+    "org/gnome/shell/extensions/forge/keybindings" = {
+      # Set active colors manually
       focus-border-toggle = true;
       float-always-on-top-enabled = true;
-      window-focus-up = ["<Super>Up"];
-      window-focus-down = ["<Super>Down"];
-      window-focus-left = ["<Super>Left"];
-      window-focus-right = ["<Super>Right"];
+      window-focus-up = [ "<Super>Up" ];
+      window-focus-down = [ "<Super>Down" ];
+      window-focus-left = [ "<Super>Left" ];
+      window-focus-right = [ "<Super>Right" ];
       # window-swap-up = ["<Shift><Super>Up"];
       # window-swap-down = ["<Shift><Super>Down"];
       # window-swap-left = ["<Shift><Super>Left"];
       # window-swap-right = ["<Shift><Super>Right"];
-      window-move-up = ["<Shift><Super>Up"];
-      window-move-down = ["<Shift><Super>Down"];
-      window-move-left = ["<Shift><Super>Left"];
-      window-move-right = ["<Shift><Super>Right"];
-      window-swap-last-active = ["@as []"];
-      window-toggle-float = ["<Shift><Super>f"];
+      window-move-up = [ "<Shift><Super>Up" ];
+      window-move-down = [ "<Shift><Super>Down" ];
+      window-move-left = [ "<Shift><Super>Left" ];
+      window-move-right = [ "<Shift><Super>Right" ];
+      window-swap-last-active = [ "@as []" ];
+      window-toggle-float = [ "<Shift><Super>f" ];
     };
     # "org/gnome/shell/extensions/dash-to-dock" = {   # If dock if preferred
     #   multi-monitor = true;
@@ -229,7 +232,7 @@
     gnomeExtensions.clipboard-indicator
     gnomeExtensions.workspace-indicator-2
     gnomeExtensions.bluetooth-quick-connect
-    gnomeExtensions.gsconnect                         # kdeconnect enabled in default.nix
+    gnomeExtensions.gsconnect # kdeconnect enabled in default.nix
     gnomeExtensions.pip-on-top
     gnomeExtensions.pop-shell
     gnomeExtensions.forge

@@ -3,7 +3,8 @@
 {
   nixpkgs.config.allowUnfree = true;
 
-  fonts = {                               # Fonts
+  fonts = {
+    # Fonts
     fontDir.enable = true;
     fonts = with pkgs; [
       #carlito                                 # NixOS
@@ -23,7 +24,8 @@
   };
 
   # enable zsh by default
-  programs = {                            # Shell needs to be enabled
+  programs = {
+    # Shell needs to be enabled
     zsh = {
       enable = true;
       enableCompletion = false;
@@ -31,26 +33,28 @@
   };
 
   environment = {
-    shells = with pkgs; [ zsh ];          # Default shell
+    shells = with pkgs; [ zsh ]; # Default shell
     variables = {
       EDITOR = "emacs -Q";
       VISUAL = "emacs -Q";
     };
-    systemPackages = (import ./system-packages.nix {inherit pkgs;}) ++ (with pkgs; [
+    systemPackages = (import ./system-packages.nix { inherit pkgs; }) ++ (with pkgs; [
       # agenix
       agenix.packages."${stdenv.hostPlatform.system}".default
     ]);
   };
 
-  nix = {                                   # Nix Package Manager settings
-    settings ={
-      auto-optimise-store = true;           # Optimise syslinks
+  nix = {
+    # Nix Package Manager settings
+    settings = {
+      auto-optimise-store = true; # Optimise syslinks
     };
-    gc = {                                  # Automatic garbage collection
+    gc = {
+      # Automatic garbage collection
       automatic = true;
       options = "--delete-older-than 2d";
     };
-    package = pkgs.nix;    # Enable nixFlakes on system
+    package = pkgs.nix; # Enable nixFlakes on system
     registry.nixpkgs.flake = inputs.nixpkgs;
     extraOptions = ''
       experimental-features = nix-command flakes

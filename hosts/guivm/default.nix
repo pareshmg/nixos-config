@@ -19,27 +19,31 @@ let
 in
 {
   imports =
-    [(import ../../modules/profiles/hardened.nix)] ++
-    [(import ./hardware-configuration.nix)] ++                # Current system hardware config
-    [(import ../../modules/desktop/kde/default.nix)];  # window manager
+    [ (import ../../modules/profiles/hardened.nix) ] ++
+    [ (import ./hardware-configuration.nix) ] ++ # Current system hardware config
+    [ (import ../../modules/desktop/kde/default.nix) ]; # window manager
 
-  boot = {                                      # Boot options
-    loader = {                                  # For legacy boot
+  boot = {
+    # Boot options
+    loader = {
+      # For legacy boot
       grub = {
         enable = true;
-        device = "/dev/sda";                    # Name of hard drive (can also be vda)
+        device = "/dev/sda"; # Name of hard drive (can also be vda)
       };
     };
   };
-  environment = {                               # Packages installed system wide
-    systemPackages = with pkgs; [               # This is because some options need to be configured.
+  environment = {
+    # Packages installed system wide
+    systemPackages = with pkgs; [
+      # This is because some options need to be configured.
       #discord
       #plex
       #simple-scan
       #x11vnc
       wacomtablet
       #clinfo
-    ] ++ (profile.additionalPackages { pkgs = pkgs;});
+    ] ++ (profile.additionalPackages { pkgs = pkgs; });
     #variables = {
     #  LIBVA_DRIVER_NAME = "i965";
     #};

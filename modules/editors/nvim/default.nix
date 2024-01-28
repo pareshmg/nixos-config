@@ -42,7 +42,7 @@
 
             lightline-vim
             indent-blankline-nvim
-           ];
+          ];
         };
       };
     };

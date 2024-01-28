@@ -24,14 +24,14 @@ in
       if [ -z $DISPLAY ] && [ "$(tty)" = "/dev/tty1" ]; then
         ${exec}
       fi
-    '';                                   # Will automatically open Hyprland when logged into tty1
+    ''; # Will automatically open Hyprland when logged into tty1
 
     variables = {
       #WLR_NO_HARDWARE_CURSORS="1";         # Possible variables needed in vm
       #WLR_RENDERER_ALLOW_SOFTWARE="1";
-      XDG_CURRENT_DESKTOP="Hyprland";
-      XDG_SESSION_TYPE="wayland";
-      XDG_SESSION_DESKTOP="Hyprland";
+      XDG_CURRENT_DESKTOP = "Hyprland";
+      XDG_SESSION_TYPE = "wayland";
+      XDG_SESSION_DESKTOP = "Hyprland";
     };
     sessionVariables = with host; if hostName == "work" then {
       #GBM_BACKEND = "nvidia-drm";
@@ -68,7 +68,7 @@ in
 
   security.pam.services.swaylock = {
     text = ''
-     auth include login
+      auth include login
     '';
   };
 
@@ -79,12 +79,14 @@ in
     };
   };
 
-  xdg.portal = {                                  # Required for flatpak with window managers and for file browsing
+  xdg.portal = {
+    # Required for flatpak with window managers and for file browsing
     enable = true;
     extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
   };
 
-  nixpkgs.overlays = [    # Waybar with experimental features
+  nixpkgs.overlays = [
+    # Waybar with experimental features
     (final: prev: {
       waybar = hyprland.packages.${system}.waybar-hyprland;
     })

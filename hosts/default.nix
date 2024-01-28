@@ -14,16 +14,16 @@
 { lib, inputs, nixpkgs, nixpkgs-unstable, home-manager, profile, location, agenix, ... }:
 
 let
-  system = "x86_64-linux";                                  # System architecture
+  system = "x86_64-linux"; # System architecture
 
   pkgs = import nixpkgs {
     inherit system;
-    config.allowUnfree = true;                              # Allow proprietary software
+    config.allowUnfree = true; # Allow proprietary software
   };
 
   unstable = import nixpkgs-unstable {
     inherit system;
-    config.allowUnfree = true;                              # Allow proprietary software
+    config.allowUnfree = true; # Allow proprietary software
   };
 
   # fix = import dslr {
@@ -155,10 +155,12 @@ in
   #   });
 
 
-  guivm = (let
-    user=profile.user;
-  in
-    lib.nixosSystem {                                    # VM profile
+  guivm = (
+    let
+      user = profile.user;
+    in
+    lib.nixosSystem {
+      # VM profile
       inherit system;
       specialArgs = {
         inherit unstable inputs user location;
@@ -172,7 +174,8 @@ in
         ./guivm
         ./configuration.nix
 
-        home-manager.nixosModules.home-manager {
+        home-manager.nixosModules.home-manager
+        {
           home-manager.useGlobalPkgs = true;
           home-manager.useUserPackages = true;
           home-manager.extraSpecialArgs = {
@@ -185,10 +188,11 @@ in
 
           };
           home-manager.users.${user} = {
-            imports = [(import ./home.nix)] ++ [(import ./guivm/home.nix)];
+            imports = [ (import ./home.nix) ] ++ [ (import ./guivm/home.nix) ];
           };
         }
       ];
-    });
+    }
+  );
 
 }

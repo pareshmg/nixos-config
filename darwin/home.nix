@@ -22,21 +22,22 @@ let
 in
 {
   home = {
-    packages = (pkgs.callPackage ./packages.nix {}) ++  (pkgs.callPackage ../shared/packages.nix {});
+    packages = (pkgs.callPackage ./packages.nix { }) ++ (pkgs.callPackage ../shared/packages.nix { });
     stateVersion = "23.05";
     enableNixpkgsReleaseCheck = false;
-    file =  lib.mkMerge [
+    file = lib.mkMerge [
       #additionalFiles
       #{ "emacs-launcher.command".source = myEmacsLauncher; }
-      { ".config/iterm2" = {
+      {
+        ".config/iterm2" = {
           source = ../shared/config/iterm2;
-          recursive=true;
+          recursive = true;
           onChange = ''
-          # Specify the preferences directory
-          /usr/bin/defaults write com.googlecode.iterm2 PrefsCustomFolder -string "~/.config/iterm2"
+            # Specify the preferences directory
+            /usr/bin/defaults write com.googlecode.iterm2 PrefsCustomFolder -string "~/.config/iterm2"
 
-          # Tell iTerm2 to use the custom preferences in the directory
-          /usr/bin/defaults write com.googlecode.iterm2 LoadPrefsFromCustomFolder -bool true
+            # Tell iTerm2 to use the custom preferences in the directory
+            /usr/bin/defaults write com.googlecode.iterm2 LoadPrefsFromCustomFolder -bool true
           '';
         };
       }
