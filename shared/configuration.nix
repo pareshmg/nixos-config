@@ -33,8 +33,8 @@
   environment = {
     shells = with pkgs; [ zsh ];          # Default shell
     variables = {
-      EDITOR = "emacs";
-      VISUAL = "emacs";
+      EDITOR = "emacs -Q";
+      VISUAL = "emacs -Q";
     };
     systemPackages = (import ./system-packages.nix {inherit pkgs;}) ++ (with pkgs; [
       # agenix

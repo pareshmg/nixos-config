@@ -84,7 +84,7 @@
       # };
 
       secrets.url = "path:./secrets_example"; #  NOTE: OVERRIDE THIS!!!
-      cmtnix.url = "git+ssh://git@github.com/Censio/CMTNix?ref=par/cmthome_minimal";
+      cmtnix.url = "git+ssh://git@github.com/Censio/CMTNix";
     };
 
   outputs = { self, nixpkgs, nixpkgs-unstable, home-manager, darwin,
