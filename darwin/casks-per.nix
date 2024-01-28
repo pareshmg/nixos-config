@@ -7,4 +7,5 @@
   "krita"
   "tuxguitar"
   "logi-options-plus"
+  "zotero"
 ]

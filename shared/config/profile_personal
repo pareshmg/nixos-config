@@ -132,7 +132,7 @@ source ~/.aliases
 ##################################################
 
 export EDITOR="emacs -nw -Q"
-export ALTERNATE_EDITOR="emacs -nw"
+export ALTERNATE_EDITOR="emacs -nw -Q"
 
 
 ##################################################
