@@ -34,6 +34,7 @@
       timeout = 1; # Grub auto select timeout
     };
   };
+  services.logrotate.checkConfig = false;
 
   users.users.${profile.user} = {
     # System User

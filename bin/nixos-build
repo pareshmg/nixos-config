@@ -31,7 +31,7 @@ FLAKE="$1"
 shift
 
 #FLAKE_TARGET="nixosConfigurations.x86_64-linux.${FLAKE}.system"
-FLAKE_TARGET="x86_64-linux.${FLAKE}"
+FLAKE_TARGET="${FLAKE}"
 
 sudo echo
 echo -e "${GREEN}Starting ${FLAKE_TARGET} with args $@ ...${CLEAR}"

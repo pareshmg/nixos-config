@@ -137,7 +137,9 @@
       });
 
       # devShells = forAllSystems devShell;
-      nixosConfigurations = forAllLinuxSystems (system: {
+      nixosConfigurations = let
+        system = "x86_64-linux";
+        in  {
         vm = nixpkgs.lib.nixosSystem {
           inherit system;
           specialArgs = { inherit inputs agenix secrets home-manager u location; } // { hostname = "nix"; profile = u.recursiveMerge [ secrets.profile.per secrets.profile.nervasion secrets.profile.vm ]; };
@@ -174,7 +176,7 @@
         #   inherit (nixpkgs) lib;
         #   inherit inputs nixpkgs nixpkgs-unstable home-manager location agenix;   # Also inherit home-manager so it does not need to be defined here.
         # }
-      });
+      };
 
       darwinConfigurations = forAllDarwinSystems (system: {
         # Darwin Configurations
@@ -193,6 +195,7 @@
             ./darwin/configuration-per.nix
           ];
         };
+
         pmpcmt = darwin.lib.darwinSystem {
           inherit system;
           specialArgs = { inherit inputs agenix secrets home-manager cmtnix u location; } // { hostname = "pmp-cmt"; profile = secrets.profile.work; };

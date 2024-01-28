@@ -11,7 +11,7 @@
 #           └─ default.nix
 #
 
-{ config, lib, pkgs, inputs, agenix, system, profile, location, hostname, ... }:
+{ config, lib, pkgs, inputs, agenix, system, profile, location, u, hostname, ... }:
 
 {
   imports = [
@@ -148,7 +148,7 @@
   home-manager = {
     useGlobalPkgs = true;
     useUserPackages = true;
-    extraSpecialArgs = { inherit profile; };
+    extraSpecialArgs = { inherit profile u; };
     users.${profile.user}.imports = builtins.trace "activating the home nix" [
       ../shared/home.nix
       ./vm/home.nix
