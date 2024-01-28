@@ -29,5 +29,5 @@
     ripgrep
     coreutils
     fd
-  ];                                             # Dependencies
+  ]; # Dependencies
 }

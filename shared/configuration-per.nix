@@ -26,7 +26,7 @@ in
         owner = "${profile.user}";
         mode = "660";
         symlink = false;
-     };
+      };
       android_signing_key = {
         file = builtins.trace "android_signing_key at ${secrets.per.android_signing_key}" secrets.per.android_signing_key;
         path = "${config.users.users.${profile.user}.home}/android_signing_key.jks";

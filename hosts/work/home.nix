@@ -16,24 +16,26 @@
 {
   imports =
     [
-      ../../modules/desktop/gnome/home.nix  # Window Manager
+      ../../modules/desktop/gnome/home.nix # Window Manager
     ];
 
-  home = {                                # Specific packages for desktop
+  home = {
+    # Specific packages for desktop
     packages = with pkgs; [
       # Applications
-      ansible           # Automation
-      onlyoffice-bin    # Office packages
-      rclone            # Gdrive mount  ($ rclone config | rclone mount --daemon gdrive: <mount> | fusermount -u <mount>)
-      wdisplays         # Display Configurator
+      ansible # Automation
+      onlyoffice-bin # Office packages
+      rclone # Gdrive mount  ($ rclone config | rclone mount --daemon gdrive: <mount> | fusermount -u <mount>)
+      wdisplays # Display Configurator
 
       # Dependencies
-      sshpass           # Ansible
+      sshpass # Ansible
     ];
   };
 
-  services = {                            # Applets
-    blueman-applet.enable = true;         # Bluetooth
+  services = {
+    # Applets
+    blueman-applet.enable = true; # Bluetooth
     cbatticon = {
       enable = true;
       criticalLevelPercent = 10;

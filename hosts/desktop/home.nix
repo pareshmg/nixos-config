@@ -16,23 +16,24 @@
 {
   imports =
     [
-      ../../modules/desktop/hyprland/home.nix  # Window Manager
+      ../../modules/desktop/hyprland/home.nix # Window Manager
     ];
 
-  home = {                                # Specific packages for desktop
+  home = {
+    # Specific packages for desktop
     packages = with pkgs; [
       # Applications
-      ansible           # Automation
-      sshpass           # Ansible Dependency
+      ansible # Automation
+      sshpass # Ansible Dependency
       #handbrake         # Encoder
-      hugo              # Static Website Builder
-      mkvtoolnix        # Matroska Tools
+      hugo # Static Website Builder
+      mkvtoolnix # Matroska Tools
       plex-media-player # Media Player
 
       # Dependencies
-      gmtp              # Used for mounting gopro
-      ispell            # Emacs spelling
-      
+      gmtp # Used for mounting gopro
+      ispell # Emacs spelling
+
       # Imported in default or from modules
       #discord          # Comms           # See overlay default.nix
       #ffmpeg           # Video Support
@@ -49,7 +50,8 @@
     ];
   };
 
-  services = {                            # Applets
-    blueman-applet.enable = true;         # Bluetooth
+  services = {
+    # Applets
+    blueman-applet.enable = true; # Bluetooth
   };
 }

@@ -31,8 +31,8 @@ in
     homeDirectory = "/home/${profile.user}";
 
     # Specific packages for desktop
-    packages = (pkgs.callPackage ./packages.nix {}) ++  (pkgs.callPackage ../../shared/packages.nix {});
-    file =  lib.mkMerge [
+    packages = (pkgs.callPackage ./packages.nix { }) ++ (pkgs.callPackage ../../shared/packages.nix { });
+    file = lib.mkMerge [
     ];
 
     stateVersion = "23.05";

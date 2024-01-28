@@ -5,25 +5,29 @@ let
 in
 {
   imports =
-    [(import ../../modules/profiles/hardened.nix)] ++
-    [(import ./hardware-configuration.nix)] ++                # Current system hardware config
-    [(import ../../modules/desktop/hyprland/default.nix)];  # window manager
+    [ (import ../../modules/profiles/hardened.nix) ] ++
+    [ (import ./hardware-configuration.nix) ] ++ # Current system hardware config
+    [ (import ../../modules/desktop/hyprland/default.nix) ]; # window manager
 
-  boot = {                                      # Boot options
-    loader = {                                  # For legacy boot
+  boot = {
+    # Boot options
+    loader = {
+      # For legacy boot
       grub = {
         enable = true;
-        device = "/dev/sda";                    # Name of hard drive (can also be vda)
+        device = "/dev/sda"; # Name of hard drive (can also be vda)
       };
     };
   };
 
-  environment = {                               # Packages installed system wide
-    systemPackages = with pkgs; [               # This is because some options need to be configured.
+  environment = {
+    # Packages installed system wide
+    systemPackages = with pkgs; [
+      # This is because some options need to be configured.
       #simple-scan
       wacomtablet
       #clinfo
-    ] ++ (profile.additionalPackages { pkgs = pkgs;});
+    ] ++ (profile.additionalPackages { pkgs = pkgs; });
     #variables = {
     #  LIBVA_DRIVER_NAME = "i965";
     #};
@@ -58,7 +62,7 @@ in
 
   users.users.${user} = {
     isNormalUser = true;
-    extraGroups = ["video" "audio" "networkmanager" "lp"  "kvm" "libvirtd" ];
+    extraGroups = [ "video" "audio" "networkmanager" "lp" "kvm" "libvirtd" ];
     shell = pkgs.zsh;
     uid = 1001;
     hashedPassword = profile.hashedPassword;
@@ -74,7 +78,7 @@ in
 
   home-manager = {
     users.${user} = {
-      imports = [(import ./home.nix)];
+      imports = [ (import ./home.nix) ];
     };
   };
 

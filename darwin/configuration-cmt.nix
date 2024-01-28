@@ -43,7 +43,7 @@ in
 
   # Enable home-manager
   home-manager = {
-    extraSpecialArgs = {inherit secrets u;} // {cmtcfg = config.cmt;};
+    extraSpecialArgs = { inherit secrets u; } // { cmtcfg = config.cmt; };
     users.${user}.imports = [
       cmtnix.homeManagerModules.cmtaws
       ./home-cmt.nix

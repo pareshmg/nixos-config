@@ -25,14 +25,18 @@
     },
     "cmtnix": {
       "locked": {
-        "lastModified": 1,
-        "narHash": "sha256-PZ/0ip1/nXvzOxaxn3e0WFVQcWgSFqH4K+ji3Gm9eyg=",
-        "path": "secrets_example",
-        "type": "path"
+        "dir": "secrets_example",
+        "dirtyRev": "75aad2472cecf78d0ae6a0680f26f1e4dd91b615-dirty",
+        "dirtyShortRev": "75aad24-dirty",
+        "lastModified": 1706278139,
+        "narHash": "sha256-Kq+2UvEcJFivbWaYHe+ly0mWwTqfhTDKrSa8vfJljMY=",
+        "type": "git",
+        "url": "file:.?dir=secrets_example"
       },
       "original": {
-        "path": "secrets_example",
-        "type": "path"
+        "dir": "secrets_example",
+        "type": "git",
+        "url": "file:.?dir=secrets_example"
       }
     },
     "darwin": {
@@ -222,14 +226,18 @@
     },
     "secrets": {
       "locked": {
-        "lastModified": 1,
-        "narHash": "sha256-PZ/0ip1/nXvzOxaxn3e0WFVQcWgSFqH4K+ji3Gm9eyg=",
-        "path": "secrets_example",
-        "type": "path"
+        "dir": "secrets_example",
+        "dirtyRev": "75aad2472cecf78d0ae6a0680f26f1e4dd91b615-dirty",
+        "dirtyShortRev": "75aad24-dirty",
+        "lastModified": 1706278139,
+        "narHash": "sha256-Kq+2UvEcJFivbWaYHe+ly0mWwTqfhTDKrSa8vfJljMY=",
+        "type": "git",
+        "url": "file:.?dir=secrets_example"
       },
       "original": {
-        "path": "secrets_example",
-        "type": "path"
+        "dir": "secrets_example",
+        "type": "git",
+        "url": "file:.?dir=secrets_example"
       }
     },
     "systems": {
@@ -270,10 +278,10 @@
       },
       "locked": {
         "dir": "utils",
-        "dirtyRev": "00a26492de0d79f625ac8d616752a7630135281c-dirty",
-        "dirtyShortRev": "00a2649-dirty",
-        "lastModified": 1706164912,
-        "narHash": "sha256-LW9CyEVjTMe3GbmizwdttOPZJ6o5yfmlQ7LenlCnpw0=",
+        "dirtyRev": "75aad2472cecf78d0ae6a0680f26f1e4dd91b615-dirty",
+        "dirtyShortRev": "75aad24-dirty",
+        "lastModified": 1706278139,
+        "narHash": "sha256-VT95wHDOafaxDtqjtvR5FYDpdM83E5eDX5aSS/E+mTE=",
         "type": "git",
         "url": "file:.?dir=utils"
       },

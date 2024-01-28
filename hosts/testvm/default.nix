@@ -19,21 +19,25 @@ let
 in
 {
   imports =
-    [(import ./hardware-configuration.nix)] ++                # Current system hardware config
-    [];
+    [ (import ./hardware-configuration.nix) ] ++ # Current system hardware config
+    [ ];
 
-  boot = {                                      # Boot options
+  boot = {
+    # Boot options
     kernelPackages = pkgs.linuxPackages_latest;
 
-    loader = {                                  # For legacy boot
+    loader = {
+      # For legacy boot
       grub = {
         enable = true;
-        device = "/dev/sda";                    # Name of hard drive (can also be vda)
+        device = "/dev/sda"; # Name of hard drive (can also be vda)
       };
     };
   };
-  environment = {                               # Packages installed system wide
-    systemPackages = with pkgs; [               # This is because some options need to be configured.
+  environment = {
+    # Packages installed system wide
+    systemPackages = with pkgs; [
+      # This is because some options need to be configured.
       #discord
       #plex
       #simple-scan
