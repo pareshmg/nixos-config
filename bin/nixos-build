@@ -29,8 +29,6 @@ echo -e "${GREEN}Starting ${FLAKE_TARGET} with args $@ ...${CLEAR}"
 
 #sudo SSH_AUTH_SOCK=$SSH_AUTH_SOCK /run/current-system/sw/bin/nixos-rebuild boot --flake .#$FLAKE_TARGET $@  --override-input secrets "git+file://${SECRETS_DIR}"
 
-sudo SSH_AUTH_SOCK=$SSH_AUTH_SOCK /run/current-system/sw/bin/nixos-rebuild build --flake .#$FLAKE_TARGET $@ --override-input secrets "git+file://${SECRETS_DIR}" #--override-input cmtnix "${CMTNIX_URL}"
-
 sudo SSH_AUTH_SOCK=$SSH_AUTH_SOCK /run/current-system/sw/bin/nixos-rebuild switch --flake .#$FLAKE_TARGET $@  --override-input secrets "git+file://${SECRETS_DIR}" #--override-input cmtnix "${CMTNIX_URL}"
 
 echo -e "${GREEN}Done${CLEAR}"
