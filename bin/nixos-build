@@ -3,29 +3,20 @@
 set -e
 set -x
 
+SCRIPT_DIR=$(dirname "$0")
+. $SCRIPT_DIR/common
+
+
 VERSION=1.0
-SECRETS_DIR="$HOME/.nix-secrets"
 #CMTNIX_DIR="${HOME}/cmt/CMTNix"
-CMTNIX_DIR="${SECRETS_DIR}"
+#CMTNIX_URL="git+file:.?dir=secrets_example"
 
 GREEN='\033[1;32m'
 RED='\033[1;31m'
 CLEAR='\033[0m'
 
-ARCH=$(uname -m)
-
-# case "$ARCH" in
-#   x86_64)
-#     FLAKE_TARGET="x86_64-linux"
-#     ;;
-#   aarch64)
-#     FLAKE_TARGET="aarch64-linux"
-#     ;;
-#   *)
-#     echo -e "${RED}Unsupported architecture: $ARCH${CLEAR}"
-#     exit 1
-#     ;;
-# esac
+SYSTEM="$1"
+shift
 
 FLAKE="$1"
 shift
@@ -37,6 +28,9 @@ sudo echo
 echo -e "${GREEN}Starting ${FLAKE_TARGET} with args $@ ...${CLEAR}"
 
 #sudo SSH_AUTH_SOCK=$SSH_AUTH_SOCK /run/current-system/sw/bin/nixos-rebuild boot --flake .#$FLAKE_TARGET $@  --override-input secrets "git+file://${SECRETS_DIR}"
-sudo SSH_AUTH_SOCK=$SSH_AUTH_SOCK /run/current-system/sw/bin/nixos-rebuild switch --flake .#$FLAKE_TARGET $@  --override-input secrets "git+file://${SECRETS_DIR}" #--override-input cmtnix "git+file://${CMTNIX_DIR}"
+
+sudo SSH_AUTH_SOCK=$SSH_AUTH_SOCK /run/current-system/sw/bin/nixos-rebuild build --flake .#$FLAKE_TARGET $@ --override-input secrets "git+file://${SECRETS_DIR}" #--override-input cmtnix "${CMTNIX_URL}"
+
+sudo SSH_AUTH_SOCK=$SSH_AUTH_SOCK /run/current-system/sw/bin/nixos-rebuild switch --flake .#$FLAKE_TARGET $@  --override-input secrets "git+file://${SECRETS_DIR}" #--override-input cmtnix "${CMTNIX_URL}"
 
 echo -e "${GREEN}Done${CLEAR}"

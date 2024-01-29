@@ -44,7 +44,7 @@
       };
 
       u = {
-        url = "git+file:.?dir=utils&ref=main";
+        url = "git+file:.?dir=utils";
         inputs.nixpkgs.follows = "nixpkgs";
       };
 
@@ -89,7 +89,7 @@
       # };
 
       secrets.url = "git+file:.?dir=secrets_example"; #  NOTE: OVERRIDE THIS!!!
-      cmtnix.url = "git+file:.?dir=secrets_example"; #  NOTE: OVERRIDE THIS!!!
+      cmtnix.url  = "git+file:.?dir=secrets_example"; #  NOTE: OVERRIDE THIS!!!
       #cmtnix.url = "git+ssh://git@github.com/Censio/CMTNix"; # NOTE: OVERRIDE THIS!!
     };
 
