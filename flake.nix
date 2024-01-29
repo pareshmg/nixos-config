@@ -135,9 +135,9 @@
           pkgs = sPkgs system;
         in
         {
-          bootstrap = pkgs.callPackage ./nix-bootstrap.nix { };
-          rebuild = pkgs.callPackage ./nix-rebuild.nix { };
-          default = pkgs.callPackage ./nix-rebuild.nix { };
+          bootstrap = pkgs.callPackage ./modules/build/nix-bootstrap.nix { };
+          rebuild = pkgs.callPackage ./modules/build/nix-rebuild.nix { };
+          default = pkgs.callPackage ./modules/build/nix-rebuild.nix { };
         }
       ));
 
