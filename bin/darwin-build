@@ -1,21 +1,24 @@
-#!/bin/sh -e
+#!/bin/sh
+
+set -e
+set -x
 
 SCRIPT_DIR=$(dirname "$0")
 . $SCRIPT_DIR/common
 
 
+SYSTEM="$1"
+shift # remove system
 
 FLAKE="$1"
 shift # remove flake
-SYSTEM="darwinConfigurations.$FLAKE.system"
-
-<<<<<<< HEAD
-CMTNIX="git+file://${HOME}/cmt/CMTNix"
-#CMTNIX="git+ssh://git@github.com/Censio/CMTNix.git"
 
 
-=======
->>>>>>> a35268c085c5409a7309f855cf31dfacd145ce85
+if [[ ! "${FLAKE}" =~ "cmt" ]]; then
+  CMTNIX_OVERRIDE="--override-input cmtnix 'git+file:.?dir=secrets_example'"
+fi
+
+
 # Navigate to the directory of this script
 cd $(dirname $(readlink -f $0))
 cd ..
@@ -28,17 +31,10 @@ sudo /bin/chmod +a "${USER} allow list,add_file,search,delete,add_subdirectory,d
 
 echo "${GREEN}Starting build ${FLAKE}...${CLEAR}"
 
-<<<<<<< HEAD
-nix --experimental-features 'nix-command flakes' build .#$SYSTEM $@ --override-input secrets "git+file://${SECRETS_DIR}" --override-input cmtnix $CMTNIX
+nix --experimental-features 'nix-command flakes' build ".#darwinConfigurations.${SYSTEM}.${FLAKE}.system" $@ --override-input secrets "git+file://${SECRETS_DIR}"
 
 echo "${GREEN}Switching to new generation...${CLEAR}"
-./result/sw/bin/darwin-rebuild switch --flake .#$FLAKE $@ --override-input secrets "git+file://${SECRETS_DIR}" --override-input cmtnix $CMTNIX
-=======
-nix --experimental-features 'nix-command flakes' build .#$SYSTEM $@ --override-input secrets "git+file://${SECRETS_DIR}"
-
-echo "${GREEN}Switching to new generation...${CLEAR}"
-./result/sw/bin/darwin-rebuild switch --flake .#$FLAKE $@ --override-input secrets "git+file://${SECRETS_DIR}"
->>>>>>> a35268c085c5409a7309f855cf31dfacd145ce85
+./result/sw/bin/darwin-rebuild switch --flake ".#${SYSTEM}.${FLAKE}" $@ --override-input secrets "git+file://${SECRETS_DIR}"
 
 echo "${GREEN}Cleaning up...${CLEAR}"
 unlink ./result

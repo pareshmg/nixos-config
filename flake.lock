@@ -278,15 +278,17 @@
       },
       "locked": {
         "dir": "utils",
-        "dirtyRev": "75aad2472cecf78d0ae6a0680f26f1e4dd91b615-dirty",
-        "dirtyShortRev": "75aad24-dirty",
-        "lastModified": 1706278139,
-        "narHash": "sha256-VT95wHDOafaxDtqjtvR5FYDpdM83E5eDX5aSS/E+mTE=",
+        "lastModified": 1706478098,
+        "narHash": "sha256-oOOHITslWa5rZsM3Igf8aLNAj6Afy0Y39fs1yj3gQ8w=",
+        "ref": "main",
+        "rev": "42759b5f0f75a1584a5d33d7fbf8c24e4da0b207",
+        "revCount": 35,
         "type": "git",
         "url": "file:.?dir=utils"
       },
       "original": {
         "dir": "utils",
+        "ref": "main",
         "type": "git",
         "url": "file:.?dir=utils"
       }

@@ -42,7 +42,7 @@
               # Your work config
             };
             identityPaths = [
-              "/Users/${user}/.ssh/cmt_id_rsa"
+              "/Users/${user}/.ssh/work_id_rsa"
             ];
           };
       };

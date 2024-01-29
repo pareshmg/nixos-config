@@ -44,7 +44,7 @@
       };
 
       u = {
-        url = "git+file:.?dir=utils";
+        url = "git+file:.?dir=utils&ref=main";
         inputs.nixpkgs.follows = "nixpkgs";
       };
 
@@ -77,7 +77,6 @@
       #   url = "github:vaxerski/Hyprland";                                   # Add "hyprland.nixosModules.default" to the host modules
       #   inputs.nixpkgs.follows = "nixpkgs";
       # };
-
       # plasma-manager = {                                                    # KDE Plasma user settings
       #   url = "github:pjones/plasma-manager";                               # Add "inputs.plasma-manager.homeManagerModules.plasma-manager" to the home-manager.users.${user}.imports
       #   inputs.nixpkgs.follows = "nixpkgs";
@@ -97,18 +96,17 @@
   outputs = { self, nixpkgs, flake-utils, nixpkgs-unstable, home-manager, darwin, agenix, u, secrets, cmtnix, nixos-generators, ... } @ inputs: # Function that tells my flake which to use and what do what to do with the dependencies.
     let # Variables that can be used in the config files.
       location = "$HOME/nixos-config";
-      linuxSystems = [ "x86_64-linux" "aarch64-linux" ];
       darwinSystems = [ "aarch64-darwin" "x86_64-darwin" ];
-      forAllLinuxSystems = f: nixpkgs.lib.genAttrs linuxSystems (system: f system);
-      forAllDarwinSystems = f: nixpkgs.lib.genAttrs darwinSystems (system: f system);
-      forAllSystems = f: nixpkgs.lib.genAttrs (linuxSystems ++ darwinSystems) (system: f system);
+      forAllSystems = nixpkgs.lib.genAttrs nixpkgs.lib.systems.flakeExposed;
+      forAllLinuxSystems = nixpkgs.lib.genAttrs (builtins.filter (x: (builtins.elemAt (builtins.split "-" x) 2) == "linux") nixpkgs.lib.systems.flakeExposed);
+      forAllDarwinSystems = nixpkgs.lib.genAttrs (builtins.filter (x: (builtins.elemAt (builtins.split "-" x) 2) == "darwin") nixpkgs.lib.systems.flakeExposed);
       devShell = system:
         let
           pkgs = nixpkgs.legacyPackages.${system};
         in
         {
           default = with pkgs; mkShell {
-            nativeBuildInputs = with pkgs; [ bashInteractive git age ]; #age-plugin-yubikey ];
+            nativeBuildInputs = with pkgs; [ bashInteractive git age ];
             shellHook = with pkgs; ''
               export EDITOR=emacs
             '';
@@ -121,9 +119,7 @@
     {
       formatter = forAllSystems (system: (sPkgs system).nixpkgs-fmt);
 
-      #packages.pmp = forAllSystems (system: darwin-build "pmp";
-
-      packages = forAllLinuxSystems (system: {
+      packages = (forAllLinuxSystems (system: {
         testvm = nixos-generators.nixosGenerate {
           inherit system;
           format = "proxmox";
@@ -134,9 +130,20 @@
             ./hosts/guivm
           ];
         };
-      });
+      })) // (forAllSystems(system:
+        let
+          pkgs = sPkgs system;
+        in
+        {
+          bootstrap = pkgs.callPackage ./nix-bootstrap.nix { };
+          rebuild = pkgs.callPackage ./nix-rebuild.nix { };
+          default = pkgs.callPackage ./nix-rebuild.nix { };
+        }
+      ));
 
-      # devShells = forAllSystems devShell;
+
+      devShells = forAllSystems devShell;
+
       nixosConfigurations = let
         system = "x86_64-linux";
         in  {
@@ -178,8 +185,8 @@
         # }
       };
 
-      darwinConfigurations = forAllDarwinSystems (system: {
-        # Darwin Configurations
+      darwinConfigurations = forAllSystems (system: { # Darwin Configurations
+
         pmp = darwin.lib.darwinSystem {
           inherit system;
           specialArgs = { inherit inputs agenix secrets home-manager cmtnix u location; } // { hostname = "pmp"; profile = secrets.profile.per; };
@@ -196,7 +203,10 @@
           ];
         };
 
-        pmpcmt = darwin.lib.darwinSystem {
+        pmpcmt = let
+          cmtnix = builtins.getFlake "git+ssh://git@github.com/Censio/CMTNix";
+        in
+          darwin.lib.darwinSystem {
           inherit system;
           specialArgs = { inherit inputs agenix secrets home-manager cmtnix u location; } // { hostname = "pmp-cmt"; profile = secrets.profile.work; };
           modules = [
