@@ -130,7 +130,7 @@
             ./hosts/guivm
           ];
         };
-      })) // (forAllSystems(system:
+      })) // (forAllSystems (system:
         let
           pkgs = sPkgs system;
         in
@@ -144,48 +144,51 @@
 
       devShells = forAllSystems devShell;
 
-      nixosConfigurations = let
-        system = "x86_64-linux";
-        in  {
-        vm = nixpkgs.lib.nixosSystem {
-          inherit system;
-          specialArgs = { inherit inputs agenix secrets home-manager u location; } // { hostname = "nix"; profile = u.recursiveMerge [ secrets.profile.per secrets.profile.nervasion secrets.profile.vm ]; };
-          modules = [
-            # Modules that are used
-            agenix.nixosModules.default
-            home-manager.nixosModules.home-manager
-            ./shared/configuration.nix
-            ./hosts/configuration.nix
-            ./shared/configuration-per.nix
-            ./hosts/vm
-          ];
-        };
-        testvm3 = nixpkgs.lib.nixosSystem {
-          inherit system;
-          specialArgs = { inherit inputs home-manager u; } // { hostname = "testvm"; profile = u.recursiveMerge [ secrets.profile.test secrets.profile.nervasion ]; vmid = "111"; };
-          modules = [
-            nixos-generators.nixosModules.all-formats
-            home-manager.nixosModules.home-manager
-            ./hosts/guivm
-          ];
-        };
-        testvm2 = nixpkgs.lib.nixosSystem {
-          system = "x86_64-linux"; # System architecture
-          specialArgs = { inherit inputs home-manager u; } // { hostname = "testvm2"; profile = secrets.profile.test; vmid = "111"; };
+      nixosConfigurations =
+        let
+          system = "x86_64-linux";
+        in
+        {
+          vm = nixpkgs.lib.nixosSystem {
+            inherit system;
+            specialArgs = { inherit inputs agenix secrets home-manager u location; } // { hostname = "nix"; profile = u.recursiveMerge [ secrets.profile.per secrets.profile.nervasion secrets.profile.vm ]; };
+            modules = [
+              # Modules that are used
+              agenix.nixosModules.default
+              home-manager.nixosModules.home-manager
+              ./shared/configuration.nix
+              ./hosts/configuration.nix
+              ./shared/configuration-per.nix
+              ./hosts/vm
+            ];
+          };
+          testvm3 = nixpkgs.lib.nixosSystem {
+            inherit system;
+            specialArgs = { inherit inputs home-manager u; } // { hostname = "testvm"; profile = u.recursiveMerge [ secrets.profile.test secrets.profile.nervasion ]; vmid = "111"; };
+            modules = [
+              nixos-generators.nixosModules.all-formats
+              home-manager.nixosModules.home-manager
+              ./hosts/guivm
+            ];
+          };
+          testvm2 = nixpkgs.lib.nixosSystem {
+            system = "x86_64-linux"; # System architecture
+            specialArgs = { inherit inputs home-manager u; } // { hostname = "testvm2"; profile = secrets.profile.test; vmid = "111"; };
 
-          modules = [
-            # Modules that are used
-            home-manager.nixosModules.home-manager
-            ./hosts/testvm
-          ];
+            modules = [
+              # Modules that are used
+              home-manager.nixosModules.home-manager
+              ./hosts/testvm
+            ];
+          };
+          # import ./hosts {                                                    # Imports ./hosts/default.nix
+          #   inherit (nixpkgs) lib;
+          #   inherit inputs nixpkgs nixpkgs-unstable home-manager location agenix;   # Also inherit home-manager so it does not need to be defined here.
+          # }
         };
-        # import ./hosts {                                                    # Imports ./hosts/default.nix
-        #   inherit (nixpkgs) lib;
-        #   inherit inputs nixpkgs nixpkgs-unstable home-manager location agenix;   # Also inherit home-manager so it does not need to be defined here.
-        # }
-      };
 
-      darwinConfigurations = forAllSystems (system: { # Darwin Configurations
+      darwinConfigurations = forAllSystems (system: {
+        # Darwin Configurations
 
         pmp = darwin.lib.darwinSystem {
           inherit system;
@@ -203,22 +206,23 @@
           ];
         };
 
-        pmpcmt = let
-          cmtnix = builtins.getFlake "git+ssh://git@github.com/Censio/CMTNix";
-        in
+        pmpcmt =
+          let
+            cmtnix = builtins.getFlake "git+ssh://git@github.com/Censio/CMTNix";
+          in
           darwin.lib.darwinSystem {
-          inherit system;
-          specialArgs = { inherit inputs agenix secrets home-manager cmtnix u location; } // { hostname = "pmp-cmt"; profile = secrets.profile.work; };
-          modules = [
-            # Modules that are used
-            agenix.darwinModules.default
-            home-manager.darwinModules.home-manager
-            cmtnix.darwinModules.cmt
-            ./shared/configuration.nix
-            ./darwin/configuration.nix
-            ./darwin/configuration-cmt.nix
-          ];
-        };
+            inherit system;
+            specialArgs = { inherit inputs agenix secrets home-manager cmtnix u location; } // { hostname = "pmp-cmt"; profile = secrets.profile.work; };
+            modules = [
+              # Modules that are used
+              agenix.darwinModules.default
+              home-manager.darwinModules.home-manager
+              cmtnix.darwinModules.cmt
+              ./shared/configuration.nix
+              ./darwin/configuration.nix
+              ./darwin/configuration-cmt.nix
+            ];
+          };
       });
 
       homeConfigurations = forAllSystems (system: {
