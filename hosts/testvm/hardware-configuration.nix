@@ -28,6 +28,9 @@ in
   boot.kernelModules = [ ];
   boot.extraModulePackages = [ ];
 
+  # to avoid logrotate failure https://discourse.nixos.org/t/logrotate-config-fails-due-to-missing-group-30000/28501/5
+  services.logrotate.checkConfig = false;
+
   # zfs
   # boot.supportedFilesystems = [ "zfs" ];
   # services.zfs = {
@@ -60,7 +63,7 @@ in
   # };
 
 
-
+  #config.system.nixos.label="guivm";
   swapDevices = [ ];
 
 

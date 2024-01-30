@@ -15,7 +15,7 @@
 { config, pkgs, profile, vmid, ... }:
 
 let
-  user = profile.user;
+
 in
 {
   imports =
@@ -77,9 +77,9 @@ in
     network.enable = true;
   };
 
-  users.users.guest = {
+  users.users.${profile.user} = {
     isNormalUser = true;
-    extraGroups = [ "wheel" "video" "audio" "camera" "networkmanager" "lp" "scanner" "kvm" "libvirtd" "docker" "podman" ];
+    extraGroups = [ "wheel" "video" "audio" "camera" "networkmanager" "lp" "scanner" ];
     shell = pkgs.zsh;
     uid = 1001;
     hashedPassword = profile.hashedPassword;

@@ -89,7 +89,7 @@
       # };
 
       secrets.url = "git+file:.?dir=secrets_example"; #  NOTE: OVERRIDE THIS!!!
-      cmtnix.url  = "git+file:.?dir=secrets_example"; #  NOTE: OVERRIDE THIS!!!
+      cmtnix.url = "git+file:.?dir=secrets_example"; #  NOTE: OVERRIDE THIS!!!
       #cmtnix.url = "git+ssh://git@github.com/Censio/CMTNix"; # NOTE: OVERRIDE THIS!!
     };
 
@@ -119,27 +119,40 @@
     {
       formatter = forAllSystems (system: (sPkgs system).nixpkgs-fmt);
 
-      packages = (forAllLinuxSystems (system: {
-        testvm = nixos-generators.nixosGenerate {
-          inherit system;
-          format = "proxmox";
-          specialArgs = { inherit inputs home-manager u; } // { hostname = "testvm"; profile = u.recursiveMerge [ secrets.profile.test secrets.profile.nervasion ]; vmid = "111"; };
-          modules = [
-            nixos-generators.nixosModules.all-formats
-            home-manager.nixosModules.home-manager
-            ./hosts/guivm
-          ];
-        };
-      })) // (forAllSystems (system:
-        let
-          pkgs = sPkgs system;
-        in
-        {
-          bootstrap = pkgs.callPackage ./modules/build/nix-bootstrap.nix { };
-          rebuild = pkgs.callPackage ./modules/build/nix-rebuild.nix { };
-          default = pkgs.callPackage ./modules/build/nix-rebuild.nix { };
-        }
-      ));
+      packages = u.recursiveMerge [
+        (forAllLinuxSystems (system: {
+          guivm = nixos-generators.nixosGenerate {
+            inherit system;
+            format = "proxmox";
+            specialArgs = { inherit inputs home-manager u; } // { hostname = "testvm"; profile = u.recursiveMerge [ secrets.profile.test secrets.profile.nervasion ]; vmid = "111"; };
+            modules = [
+              nixos-generators.nixosModules.all-formats
+              home-manager.nixosModules.home-manager
+              ./hosts/guivm
+            ];
+          };
+          testvm = nixos-generators.nixosGenerate {
+            inherit system;
+            format = "proxmox";
+            specialArgs = { inherit inputs home-manager u; } // { hostname = "testvm"; profile = u.recursiveMerge [ secrets.profile.test secrets.profile.nervasion ]; vmid = "111"; };
+            modules = [
+              nixos-generators.nixosModules.all-formats
+              home-manager.nixosModules.home-manager
+              ./hosts/testvm
+            ];
+          };
+        }))
+        (forAllSystems (system:
+          let
+            pkgs = sPkgs system;
+          in
+          {
+            bootstrap = pkgs.callPackage ./modules/build/nix-bootstrap.nix { };
+            rebuild = pkgs.callPackage ./modules/build/nix-rebuild.nix { };
+            default = pkgs.callPackage ./modules/build/nix-rebuild.nix { };
+          }
+        ))
+      ];
 
 
       devShells = forAllSystems devShell;

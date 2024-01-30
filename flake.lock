@@ -278,17 +278,16 @@
       },
       "locked": {
         "dir": "utils",
-        "lastModified": 1706478098,
-        "narHash": "sha256-oOOHITslWa5rZsM3Igf8aLNAj6Afy0Y39fs1yj3gQ8w=",
-        "ref": "main",
-        "rev": "42759b5f0f75a1584a5d33d7fbf8c24e4da0b207",
-        "revCount": 35,
+        "lastModified": 1706551207,
+        "narHash": "sha256-wUK6hLoC9HoFJjrvFf6tgU8nvhHqHgoOjgyIl6dMLHk=",
+        "ref": "refs/heads/main",
+        "rev": "5cbeae2cb6df1c0579cf16bfebe72ddfafd4e7d9",
+        "revCount": 40,
         "type": "git",
         "url": "file:.?dir=utils"
       },
       "original": {
         "dir": "utils",
-        "ref": "main",
         "type": "git",
         "url": "file:.?dir=utils"
       }
