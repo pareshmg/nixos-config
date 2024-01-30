@@ -1,5 +1,5 @@
 #!/usr/bin/env sh
-
+# shellcheck disable=all
 
 set -e
 set -x
@@ -11,7 +11,7 @@ GREEN='\033[1;32m'
 RED='\033[1;31m'
 YELLOW='\033[1;33m'
 CLEAR='\033[0m'
-NIXPKGS_ALLOW_UNFREE=1
+export NIXPKGS_ALLOW_UNFREE=1
 
 if [ "$(uname)" == "Darwin" ]; then
     FLAKE="${1:-pmp}"
@@ -45,6 +45,10 @@ if [ ! -d "$SECRETS_DIR" ]; then
 
     mkdir -p "${SECRETS_DIR}"
 
+    if [ ! -e "secrets_example/flake.nix" ]; then
+        echo "${RED}secrets flake template not found!!${CLEAR}"
+    fi
+
     < secrets_example/flake.nix sed "s/yourname/${LAPTOP_USERNAME}/g" | sed "s/Your Name/${FULL_NAME}/g" | sed "s/personal@email.com/${DEFAULT_EMAIL}/g" > "${SECRETS_DIR}/flake.nix"
 
     cd "${SECRETS_DIR}"
@@ -69,5 +73,6 @@ fi
 echo "${GREEN} secrets directory ${SECRETS_DIR} already exists. Skipping init ${CLEAR}"
 read -r -p "Please edit your nixos-config and press enter to continue" ENTER_TO_CONTINUE
 
+echo "$ENTER_TO_CONTINUE"
 cd "$MY_NIX_DIR"
-nix --extra-experimental-features 'nix-command flakes' run .#nix-rebuild -- "${FLAKE}" $@
+nix --extra-experimental-features 'nix-command flakes' run .#nix-rebuild -- "${FLAKE}" "$@"
