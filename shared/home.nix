@@ -20,7 +20,7 @@ in
     file = sharedFiles;
 
     activation = builtins.trace "setting up home activations" {
-      myActivationAction = lib.hm.dag.entryAfter ["writeBoundary"] ''
+      myActivationAction = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
         $DRY_RUN_CMD echo "setting up ssh config by $(whoami)"
         $DRY_RUN_CMD mv -f ~/.ssh/config ~/.ssh/config.bak || true
         $DRY_RUN_CMD grep -hs ^ ~/.ssh/*_ssh_config > ~/.ssh/config || mv -f ~/.ssh/config.bak ~/.ssh/config

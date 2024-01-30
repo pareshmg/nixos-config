@@ -22,7 +22,7 @@ let
           tap-to-click=true
         }
       }
-      '' else "";
+    '' else "";
   gestures = with host;
     if hostName == "laptop" || hostName == "work" then ''
       gestures {
@@ -243,7 +243,7 @@ in
       { event = "lock"; command = "lock"; }
     ];
     timeouts = [
-      { timeout= 300; command = "${pkgs.swaylock}/bin/swaylock -f";}
+      { timeout = 300; command = "${pkgs.swaylock}/bin/swaylock -f"; }
     ];
     systemdTarget = "xdg-desktop-portal-hyprland.service";
   } else {

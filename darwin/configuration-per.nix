@@ -20,11 +20,12 @@ let
 in
 {
   environment.systemPackages = [ mm ];
-  homebrew = {                            # Declare Homebrew using Nix-Darwin
-    casks = (pkgs.callPackage ./casks.nix {}) ++ (pkgs.callPackage ./casks-per.nix {});
+  homebrew = {
+    # Declare Homebrew using Nix-Darwin
+    casks = (pkgs.callPackage ./casks.nix { }) ++ (pkgs.callPackage ./casks-per.nix { });
   };
   home-manager = {
-    extraSpecialArgs = {inherit secrets u;} ;
+    extraSpecialArgs = { inherit secrets u; };
     users.${user}.imports = [
       ./home-per.nix
     ];

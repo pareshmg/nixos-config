@@ -10,7 +10,7 @@
 { inputs, config, lib, pkgs, profile, location, hostname, ... }:
 
 let
-  user=profile.user;
+  user = profile.user;
   color_ssh_py = pkgs.writeScriptBin "ssh_color_py" (builtins.readFile ../shared/scripts/ssh_color.py);
 in
 {
@@ -23,22 +23,25 @@ in
 
 
 
-  users.users."${user}" = {               # macOS user
+  users.users."${user}" = {
+    # macOS user
     name = "${user}";
     home = "/Users/${user}";
     isHidden = false;
-    shell = pkgs.zsh;                     # Default shell
+    shell = pkgs.zsh; # Default shell
   };
 
   networking = {
-    computerName = "${hostname}";             # Host name
+    computerName = "${hostname}"; # Host name
     hostName = "${hostname}";
   };
 
   environment = {
-    variables = {                         # System variables
+    variables = {
+      # System variables
     };
-    systemPackages = with pkgs; [         # Installed Nix packages
+    systemPackages = with pkgs; [
+      # Installed Nix packages
       # Terminal
       #ansible
       #ranger
@@ -48,19 +51,21 @@ in
 
 
   services = {
-    nix-daemon.enable = true;             # Auto upgrade daemon
+    nix-daemon.enable = true; # Auto upgrade daemon
   };
 
-  homebrew = {                            # Declare Homebrew using Nix-Darwin
+  homebrew = {
+    # Declare Homebrew using Nix-Darwin
     enable = true;
     onActivation = {
-      autoUpdate = false;                 # Auto update packages
+      autoUpdate = false; # Auto update packages
       upgrade = false;
-      cleanup = "zap";                    # Uninstall not listed packages and casks
+      cleanup = "zap"; # Uninstall not listed packages and casks
     };
-    brews = pkgs.callPackage ./brews.nix {};
-    casks = pkgs.callPackage ./casks.nix {};
-    masApps = { # search via mas search
+    brews = pkgs.callPackage ./brews.nix { };
+    casks = pkgs.callPackage ./casks.nix { };
+    masApps = {
+      # search via mas search
       #"1password" = 1333542190;
       # "enpass" = 732710998; #  Enpass - Password Manager
       "wireguard" = 1451685025;
@@ -83,11 +88,11 @@ in
   home-manager = {
     useGlobalPkgs = true;
     useUserPackages = true;
-    extraSpecialArgs = {inherit profile;};
+    extraSpecialArgs = { inherit profile; };
     users.${user}.imports = [
       ../shared/home.nix
       ./home.nix
-    ] ;
+    ];
     # :{
     #   home.enableNixpkgsReleaseCheck = false;
     #   home.packages = pkgs.callPackage ./packages.nix {};
@@ -176,23 +181,27 @@ in
   system = {
     checks.verifyNixPath = false; # Turn off NIX_PATH warnings now that we're using flakes
     defaults = {
-      NSGlobalDomain = {                  # Global macOS system settings
+      NSGlobalDomain = {
+        # Global macOS system settings
         KeyRepeat = 1;
         NSAutomaticCapitalizationEnabled = false;
         NSAutomaticSpellingCorrectionEnabled = false;
       };
-      dock = {                            # Dock settings
+      dock = {
+        # Dock settings
         autohide = true;
         orientation = "bottom";
         showhidden = true;
         mineffect = "scale";
         tilesize = 40;
       };
-      finder = {                          # Finder settings
-        QuitMenuItem = false;             # I believe this probably will need to be true if using spacebar
+      finder = {
+        # Finder settings
+        QuitMenuItem = false; # I believe this probably will need to be true if using spacebar
         FXPreferredViewStyle = "clmv";
-      };  
-      trackpad = {                        # Trackpad settings
+      };
+      trackpad = {
+        # Trackpad settings
         Clicking = true;
         TrackpadRightClick = true;
       };

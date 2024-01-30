@@ -7,6 +7,11 @@
 
 * Installation Guide
 
+
+#+begin_src bash
+nix run "github:pareshmg/nixos-config#bootstrap"
+#+end_src
+
 There are *3* main steps:
 
 

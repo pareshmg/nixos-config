@@ -17,18 +17,18 @@
         vim-markdown
 
         # Quality of life
-        vim-lastplace         # Opens document where you left it
-        auto-pairs            # Print double quotes/brackets/etc
-        vim-gitgutter         # See uncommitted changes of file :GitGutterEnable
+        vim-lastplace # Opens document where you left it
+        auto-pairs # Print double quotes/brackets/etc
+        vim-gitgutter # See uncommitted changes of file :GitGutterEnable
 
         # File Tree
-        nerdtree              # File Manager - set in extraConfig to F6
+        nerdtree # File Manager - set in extraConfig to F6
 
         # Customization
-        wombat256-vim         # Color scheme for lightline
-        srcery-vim            # Color scheme for text
+        wombat256-vim # Color scheme for lightline
+        srcery-vim # Color scheme for text
 
-        lightline-vim         # Info bar at bottom
+        lightline-vim # Info bar at bottom
         indent-blankline-nvim # Indentation lines
       ];
 

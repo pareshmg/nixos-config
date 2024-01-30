@@ -15,22 +15,25 @@
 
 {
   imports =
-    [ (modulesPath + "/installer/scan/not-detected.nix")
+    [
+      (modulesPath + "/installer/scan/not-detected.nix")
     ];
 
   boot.initrd.availableKernelModules = [ "xhci_pci" "ahci" "nvme" "usb_storage" "usbhid" "uas" "sd_mod" ];
   boot.initrd.kernelModules = [ ];
-  boot.kernelModules = [ "kvm-intel"];
+  boot.kernelModules = [ "kvm-intel" ];
   boot.extraModulePackages = with config.boot.kernelPackages; [ ];
 
   fileSystems."/" =
-    { #device = "/dev/disk/by-uuid/80e0d316-954b-4959-8c5d-06be7255a036";
+    {
+      #device = "/dev/disk/by-uuid/80e0d316-954b-4959-8c5d-06be7255a036";
       device = "/dev/disk/by-label/nixos";
       fsType = "ext4";
     };
 
   fileSystems."/boot" =
-    { #device = "/dev/disk/by-uuid/FCCC-9ECD";
+    {
+      #device = "/dev/disk/by-uuid/FCCC-9ECD";
       device = "/dev/disk/by-label/boot";
       fsType = "vfat";
     };
@@ -50,58 +53,71 @@
   #  };
 
   fileSystems."/mnt/toshiba1" =
-    { #device = "/dev/disk/by-uuid/7491ea96-a62d-4202-ada7-8d0310dfc967";
+    {
+      #device = "/dev/disk/by-uuid/7491ea96-a62d-4202-ada7-8d0310dfc967";
       device = "/dev/disk/by-label/toshiba";
       fsType = "ext4";
       options = [ "nofail" ];
     };
 
   fileSystems."/mnt/toshiba2" =
-    { #device = "/dev/disk/by-uuid/21307718-de74-4a24-aaa7-dd09f7e89e32";
+    {
+      #device = "/dev/disk/by-uuid/21307718-de74-4a24-aaa7-dd09f7e89e32";
       device = "/dev/disk/by-label/toshiba2";
       fsType = "ext4";
       options = [ "nofail" ];
     };
 
   fileSystems."/mnt/toshiba3" =
-    { #device = "/dev/disk/by-uuid/7f5e9ea1-2bc3-44c5-9b6a-d8fe2a311b73"; 
+    {
+      #device = "/dev/disk/by-uuid/7f5e9ea1-2bc3-44c5-9b6a-d8fe2a311b73"; 
       device = "/dev/disk/by-label/toshiba3";
       fsType = "ext4";
       options = [ "nofail" ];
     };
 
   fileSystems."/mnt/maxtor" =
-    { #device = "/dev/disk/by-uuid/36E6613DE660FE8D";
+    {
+      #device = "/dev/disk/by-uuid/36E6613DE660FE8D";
       device = "/dev/disk/by-label/maxtor";
       fsType = "ntfs";
       options = [ "nofail" ];
     };
 
   fileSystems."/storage" =
-    { #truenas smb storage
+    {
+      #truenas smb storage
       device = "//192.168.0.3/storage";
       fsType = "cifs";
-      options = let
-        automount_opts = "x-systemd.automount,noauto,x-systemd.idle-timeout=60,x-systemd.device-timeout=5s,x-systemd.mount-timeout=5s";
-      in ["${automount_opts},mfsymlinks,uid=1000,gid=100,credentials=/home/matthias/smb"];
+      options =
+        let
+          automount_opts = "x-systemd.automount,noauto,x-systemd.idle-timeout=60,x-systemd.device-timeout=5s,x-systemd.mount-timeout=5s";
+        in
+        [ "${automount_opts},mfsymlinks,uid=1000,gid=100,credentials=/home/matthias/smb" ];
     };
 
   fileSystems."/media" =
-    { #truenas smb storage
+    {
+      #truenas smb storage
       device = "//192.168.0.3/media";
       fsType = "cifs";
-      options = let
-        automount_opts = "x-systemd.automount,noauto,x-systemd.idle-timeout=60,x-systemd.device-timeout=5s,x-systemd.mount-timeout=5s";
-      in ["${automount_opts},mfsymlinks,uid=1000,gid=100,credentials=/home/matthias/smb"];
+      options =
+        let
+          automount_opts = "x-systemd.automount,noauto,x-systemd.idle-timeout=60,x-systemd.device-timeout=5s,x-systemd.mount-timeout=5s";
+        in
+        [ "${automount_opts},mfsymlinks,uid=1000,gid=100,credentials=/home/matthias/smb" ];
     };
 
   fileSystems."/hdd" =
-    { #proxmox smb storage
+    {
+      #proxmox smb storage
       device = "//192.168.0.2/extra";
       fsType = "cifs";
-      options = let
-        automount_opts = "x-systemd.automount,noauto,x-systemd.idle-timeout=60,x-systemd.device-timeout=5s,x-systemd.mount-timeout=5s";
-      in ["${automount_opts},mfsymlinks,uid=1000,gid=100,credentials=/home/matthias/smb2"];
+      options =
+        let
+          automount_opts = "x-systemd.automount,noauto,x-systemd.idle-timeout=60,x-systemd.device-timeout=5s,x-systemd.mount-timeout=5s";
+        in
+        [ "${automount_opts},mfsymlinks,uid=1000,gid=100,credentials=/home/matthias/smb2" ];
     };
 
   #swapDevices =
@@ -115,12 +131,13 @@
   hardware.cpu.intel.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
 
   networking = {
-    useDHCP = false;                            # Deprecated
+    useDHCP = false; # Deprecated
     hostName = "desktop";
     enableIPv6 = false;
-    bridges = {                                 # Bridge so interface can be used with virtual machines
+    bridges = {
+      # Bridge so interface can be used with virtual machines
       "br0" = {
-        interfaces = [ "enp3s0" ];              # enp2s0 without 16x PCI-e populated
+        interfaces = [ "enp3s0" ]; # enp2s0 without 16x PCI-e populated
       };
     };
     interfaces = {
@@ -135,10 +152,10 @@
       br0.ipv4.addresses = [{
         address = "192.168.0.50";
         prefixLength = 24;
-      } ];
+      }];
     };
     defaultGateway = "192.168.0.1";
-    nameservers = [ "192.168.0.4" "1.1.1.1"];   # Pi-Hole DNS
+    nameservers = [ "192.168.0.4" "1.1.1.1" ]; # Pi-Hole DNS
     #nameservers = [ "1.1.1.1" "1.0.0.1" ];     # Cloudflare (when Pi-Hole is down)
   };
 
