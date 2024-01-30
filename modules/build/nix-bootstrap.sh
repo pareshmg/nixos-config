@@ -15,8 +15,10 @@ export NIXPKGS_ALLOW_UNFREE=1
 
 if [ "$(uname)" == "Darwin" ]; then
     FLAKE="${1:-pmp}"
+    shift
 else
     FLAKE="${1:-vm}"
+    shift
 fi
 
 
