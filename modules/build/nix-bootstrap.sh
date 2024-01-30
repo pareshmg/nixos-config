@@ -54,6 +54,8 @@ if [ ! -d "$SECRETS_DIR" ]; then
     cd "${SECRETS_DIR}"
     git init .
     git add .
+    git config user.email "${LAPTOP_EMAIL}"
+    git config user.name "${FULL_NAME}"
     git commit -a -m "feat: [BOT] nix initialized flake"
 
 else
