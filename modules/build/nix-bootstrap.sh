@@ -49,7 +49,8 @@ if [ ! -d "$SECRETS_DIR" ]; then
         echo "${RED}secrets flake template not found!!${CLEAR}"
     fi
 
-    < secrets_example/flake.nix sed "s/yourname/${LAPTOP_USERNAME}/g" | sed "s/Your Name/${FULL_NAME}/g" | sed "s/personal@email.com/${DEFAULT_EMAIL}/g" > "${SECRETS_DIR}/flake.nix"
+    < secrets_example/flake.nix sed "s/yourname/${LAPTOP_USERNAME}/g" | sed "s/Your Name/${FULL_NAME}/g" | sed "s/personal@email.com/${LAPTOP_EMAIL}/g" > "${SECRETS_DIR}/flake.nix"
+
 
     cd "${SECRETS_DIR}"
     git init .
