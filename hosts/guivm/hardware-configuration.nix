@@ -19,7 +19,8 @@ let
 in
 {
   imports =
-    [ (modulesPath + "/profiles/qemu-guest.nix")
+    [
+      (modulesPath + "/profiles/qemu-guest.nix")
     ];
 
   boot.initrd.availableKernelModules = [ "ata_piix" "uhci_hcd" "virtio_pci" "virtio_scsi" "sd_mod" "sr_mod" ];
@@ -66,18 +67,18 @@ in
   #networking.useDHCP = lib.mkDefault true;
   networking = u.recursiveMerge [
     {
-      useDHCP = false;                        # Deprecated
+      useDHCP = false; # Deprecated
       hostId = profile.macAddress;
       interfaces = {
-          ens18 = {
-            ipv4.addresses = [ {
-              address = profile.ip;
-              prefixLength = 16;
-            } ];
-          };
+        ens18 = {
+          ipv4.addresses = [{
+            address = profile.ip;
+            prefixLength = 16;
+          }];
+        };
       };
     }
-    (u.getOrDefault profile "networking" {})
+    (u.getOrDefault profile "networking" { })
   ];
 
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";

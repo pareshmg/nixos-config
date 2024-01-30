@@ -19,32 +19,36 @@
 { config, pkgs, user, ... }:
 
 {
-  imports =                                               # For now, if applying to other system, swap files
-    [(import ./hardware-configuration.nix)] ++            # Current system hardware config @ /etc/nixos/hardware-configuration.nix
-    [(import ../../modules/desktop/bspwm/default.nix)] ++ # Window Manager
-    [(import ../../modules/desktop/virtualisation/docker.nix)] ++  # Docker
-    (import ../../modules/hardware);                      # Hardware devices
+  imports = # For now, if applying to other system, swap files
+    [ (import ./hardware-configuration.nix) ] ++ # Current system hardware config @ /etc/nixos/hardware-configuration.nix
+    [ (import ../../modules/desktop/bspwm/default.nix) ] ++ # Window Manager
+    [ (import ../../modules/desktop/virtualisation/docker.nix) ] ++ # Docker
+    (import ../../modules/hardware); # Hardware devices
 
-  boot = {                                  # Boot options
+  boot = {
+    # Boot options
     kernelPackages = pkgs.linuxPackages_latest;
 
-    loader = {                              # EFI Boot
+    loader = {
+      # EFI Boot
       efi = {
         canTouchEfiVariables = true;
         efiSysMountPoint = "/boot";
       };
-      grub = {                              # Most of grub is set up for dual boot
+      grub = {
+        # Most of grub is set up for dual boot
         enable = true;
         devices = [ "nodev" ];
         efiSupport = true;
-        useOSProber = true;                 # Find all boot options
+        useOSProber = true; # Find all boot options
         configurationLimit = 2;
       };
-      timeout = 1;                          # Grub auto select time
+      timeout = 1; # Grub auto select time
     };
   };
 
-  hardware.sane = {                         # Used for scanning with Xsane
+  hardware.sane = {
+    # Used for scanning with Xsane
     enable = true;
     extraBackends = [ pkgs.sane-airscan ];
   };
@@ -55,24 +59,28 @@
     ];
   };
 
-  programs = {                              # No xbacklight, this is the alterantive
+  programs = {
+    # No xbacklight, this is the alterantive
     dconf.enable = true;
     light.enable = true;
   };
 
   services = {
-    tlp.enable = true;                      # TLP and auto-cpufreq for power management
+    tlp.enable = true; # TLP and auto-cpufreq for power management
     #logind.lidSwitch = "ignore";           # Laptop does not go to sleep when lid is closed
     auto-cpufreq.enable = true;
     blueman.enable = true;
-    printing = {                            # Printing and drivers for TS5300
+    printing = {
+      # Printing and drivers for TS5300
       enable = true;
       drivers = [ pkgs.cnijfilter2 ];
     };
-    avahi = {                               # Needed to find wireless printer
+    avahi = {
+      # Needed to find wireless printer
       enable = true;
       nssmdns = true;
-      publish = {                           # Needed for detecting the scanner
+      publish = {
+        # Needed for detecting the scanner
         enable = true;
         addresses = true;
         userServices = true;
@@ -95,7 +103,7 @@
   systemd.tmpfiles.rules = [
     "d /var/lib/bluetooth 700 root root - -"
   ];
-  systemd.targets."bluetooth".after = ["systemd-tmpfiles-setup.service"];
+  systemd.targets."bluetooth".after = [ "systemd-tmpfiles-setup.service" ];
 
 
 
@@ -105,8 +113,8 @@
 
   # enable firewall and block all ports
   networking.firewall.enable = true;
-  networking.firewall.allowedTCPPorts = [];
-  networking.firewall.allowedUDPPorts = [];
+  networking.firewall.allowedTCPPorts = [ ];
+  networking.firewall.allowedUDPPorts = [ ];
 
   # disable coredump that could be exploited later
   # and also slow down the system when something crash
@@ -122,14 +130,14 @@
   # that will wrap the real binaries so everything
   # work out of the box.
   programs.firejail.wrappedBinaries = {
-      firefox = {
-          executable = "${pkgs.lib.getBin pkgs.firefox}/bin/firefox";
-          profile = "${pkgs.firejail}/etc/firejail/firefox.profile";
-      };
-      chromium = {
-          executable = "${pkgs.lib.getBin pkgs.chromium}/bin/chromium";
-          profile = "${pkgs.firejail}/etc/firejail/chromium.profile";
-      };
+    firefox = {
+      executable = "${pkgs.lib.getBin pkgs.firefox}/bin/firefox";
+      profile = "${pkgs.firejail}/etc/firejail/firefox.profile";
+    };
+    chromium = {
+      executable = "${pkgs.lib.getBin pkgs.chromium}/bin/chromium";
+      profile = "${pkgs.firejail}/etc/firejail/chromium.profile";
+    };
   };
 
   # enable antivirus clamav and

@@ -2,7 +2,8 @@
 
 {
   services = {
-    skhd = {                              # Hotkey daemon
+    skhd = {
+      # Hotkey daemon
       enable = true;
       package = pkgs.skhd;
       skhdConfig = ''
@@ -52,13 +53,13 @@
 
         # Menu
         #cmd + space : for now its using the default keybinding to open Spotlight Search
-      '';                                 # Hotkey config
+      ''; # Hotkey config
     };
   };
 
   system = {
     keyboard = {
-      enableKeyMapping = true;            # Needed for skhd
+      enableKeyMapping = true; # Needed for skhd
     };
   };
 }

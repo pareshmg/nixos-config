@@ -1,17 +1,3 @@
-#
-#  Specific system configuration settings for desktop
-#
-#  flake.nix
-#   ├─ ./hosts
-#   │   └─ ./vm
-#   │       ├─ default.nix *
-#   │       └─ hardware-configuration.nix
-#   └─ ./modules
-#       └─ ./desktop
-#           └─ ./bspwm
-#               └─ bspwm.nix
-#
-
 { config, pkgs, profile, vmid, ... }:
 
 let
@@ -19,31 +5,34 @@ let
 in
 {
   imports =
-    [(import ../../modules/profiles/hardened.nix)] ++
-    [(import ./hardware-configuration.nix)] ++                # Current system hardware config
-    [(import ../../modules/desktop/kde/default.nix)];  # window manager
+    [ (import ../../modules/profiles/hardened.nix) ] ++
+    [ (import ./hardware-configuration.nix) ] ++ # Current system hardware config
+    [ (import ../../modules/desktop/hyprland/default.nix) ]; # window manager
 
-  boot = {                                      # Boot options
-    loader = {                                  # For legacy boot
+  boot = {
+    # Boot options
+    loader = {
+      # For legacy boot
       grub = {
         enable = true;
-        device = "/dev/sda";                    # Name of hard drive (can also be vda)
+        device = "/dev/sda"; # Name of hard drive (can also be vda)
       };
     };
   };
-  environment = {                               # Packages installed system wide
-    systemPackages = with pkgs; [               # This is because some options need to be configured.
-      #discord
-      #plex
+
+  environment = {
+    # Packages installed system wide
+    systemPackages = with pkgs; [
+      # This is because some options need to be configured.
       #simple-scan
-      #x11vnc
       wacomtablet
       #clinfo
-    ] ++ (profile.additionalPackages { pkgs = pkgs;});
+    ] ++ (profile.additionalPackages { pkgs = pkgs; });
     #variables = {
     #  LIBVA_DRIVER_NAME = "i965";
     #};
   };
+
   system.stateVersion = "23.11";
 
   #config.system.nixos.label="guivm";
@@ -71,14 +60,27 @@ in
     network.enable = true;
   };
 
-  users.users.guest = {
+  users.users.${user} = {
     isNormalUser = true;
-    extraGroups = [ "wheel" "video" "audio" "camera" "networkmanager" "lp" "scanner" "kvm" "libvirtd" "docker" "podman" ];
+    extraGroups = [ "video" "audio" "networkmanager" "lp" "kvm" "libvirtd" ];
     shell = pkgs.zsh;
     uid = 1001;
     hashedPassword = profile.hashedPassword;
   };
+
+  programs = {
+    zsh = {
+      enable = true;
+    };
+  };
+
   security.sudo.wheelNeedsPassword = true; # User does not need to give password when using sudo.
+
+  home-manager = {
+    users.${user} = {
+      imports = [ (import ./home.nix) ];
+    };
+  };
 
   hardware = {
     opengl = {
@@ -93,5 +95,4 @@ in
       driSupport32Bit = true;
     };
   };
-
 }
