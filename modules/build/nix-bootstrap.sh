@@ -69,5 +69,6 @@ fi
 echo "${GREEN} secrets directory ${SECRETS_DIR} already exists. Skipping init ${CLEAR}"
 read -r -p "Please edit your nixos-config and press enter to continue" ENTER_TO_CONTINUE
 
+echo "$ENTER_TO_CONTINUE"
 cd "$MY_NIX_DIR"
-nix --extra-experimental-features 'nix-command flakes' run .#nix-rebuild -- "${FLAKE}" $@
+nix --extra-experimental-features 'nix-command flakes' run .#nix-rebuild -- "${FLAKE}" "$@"
