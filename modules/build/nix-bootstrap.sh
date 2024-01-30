@@ -41,7 +41,7 @@ if [ ! -d "$SECRETS_DIR" ]; then
 
     DEFAULT_EMAIL="me@$(whoami).com"
     read -r -p "What is your email? [default: $DEFAULT_EMAIL] " LAPTOP_EMAIL
-    LAPTOP_EMAIL=${LAPTOP_EMAIL:-"${DEFAULT_EMIAL}"}
+    LAPTOP_EMAIL=${LAPTOP_EMAIL:-"${DEFAULT_EMAIL}"}
 
     mkdir -p "${SECRETS_DIR}"
 
@@ -50,7 +50,6 @@ if [ ! -d "$SECRETS_DIR" ]; then
     fi
 
     < secrets_example/flake.nix sed "s/yourname/${LAPTOP_USERNAME}/g" | sed "s/Your Name/${FULL_NAME}/g" | sed "s/personal@email.com/${LAPTOP_EMAIL}/g" > "${SECRETS_DIR}/flake.nix"
-
 
     cd "${SECRETS_DIR}"
     git init .
