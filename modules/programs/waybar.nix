@@ -2,8 +2,13 @@
 # Bar
 #
 
-{ config, lib, pkgs, host, user, ...}:
-
+{ config, lib, pkgs, hostname, profile, ... }:
+let
+  user = profile.user;
+  mainMonitor = "";
+  secondMonitor = "";
+  thirdMonitor = "";
+in
 {
   environment.systemPackages = with pkgs; [
     waybar
@@ -20,12 +25,13 @@
   #   })
   # ];
 
-  home-manager.users.${user} = {                           # Home-manager waybar config
+  home-manager.users.${user} = {
+    # Home-manager waybar config
     programs.waybar = {
       enable = true;
-      systemd ={
+      systemd = {
         enable = true;
-        target = "sway-session.target";                     # Needed for waybar to start automatically
+        target = "sway-session.target"; # Needed for waybar to start automatically
       };
 
       style = ''
@@ -106,7 +112,7 @@
           background-color: rgba(0,0,0,0);
         }
       '';
-      settings = with host; {
+      settings = {
         Main = {
           layer = "top";
           position = "top";
@@ -121,10 +127,10 @@
               [ "custom/menu" "wlr/workspaces" ]
             else if programs.sway.enable == true then
               [ "sway/workspaces" "sway/window" "sway/mode" ]
-            else [];
+            else [ ];
 
           modules-right =
-            if hostName == "desktop" then
+            if hostname == "desktop" then
               [ "custom/ds4" "custom/mouse" "custom/kb" "custom/pad" "network" "cpu" "memory" "custom/pad" "pulseaudio" "custom/sink" "custom/pad" "clock" "tray" ]
             else
               [ "cpu" "memory" "custom/pad" "battery" "custom/pad" "backlight" "custom/pad" "pulseaudio" "custom/pad" "clock" "tray" ];
@@ -144,19 +150,19 @@
           "sway/workspaces" = {
             format = "<span font='12'>{icon}</span>";
             format-icons = {
-              "1"="";
-              "2"="";
-              "3"="";
-              "4"="";
-              "5"="";
+              "1" = "";
+              "2" = "";
+              "3" = "";
+              "4" = "";
+              "5" = "";
             };
             all-outputs = true;
             persistent_workspaces = {
-               "1" = [];
-               "2" = [];
-               "3" = [];
-               "4" = [];
-               "5" = [];
+              "1" = [ ];
+              "2" = [ ];
+              "3" = [ ];
+              "4" = [ ];
+              "5" = [ ];
             };
           };
           "wlr/workspaces" = {
@@ -198,8 +204,8 @@
           };
           backlight = {
             device = "intel_backlight";
-            format= "{percent}% <span font='11'>{icon}</span>";
-            format-icons = ["" ""];
+            format = "{percent}% <span font='11'>{icon}</span>";
+            format-icons = [ "" "" ];
             on-scroll-down = "${pkgs.light}/bin/light -U 5";
             on-scroll-up = "${pkgs.light}/bin/light -A 5";
           };
@@ -211,7 +217,7 @@
             };
             format = "{capacity}% <span font='11'>{icon}</span>";
             format-charging = "{capacity}% <span font='11'></span>";
-            format-icons = ["" "" "" "" ""];
+            format-icons = [ "" "" "" "" "" ];
             max-length = 25;
           };
           network = {
@@ -272,142 +278,145 @@
             icon-size = 13;
           };
         };
-        Sec = if hostName == "desktop" || hostName == "work" then {
-          layer = "top";
-          position = "top";
-          height = 16;
-          output = if hostName == "desktop" then [
-            "${secondMonitor}"
-          ] else [
-            "${secondMonitor}"
-            "${thirdMonitor}"
-          ];
-          modules-left = [ "custom/menu" "wlr/workspaces" ];
+        Sec =
+          if hostname == "desktop" || hostname == "work" then {
+            layer = "top";
+            position = "top";
+            height = 16;
+            output =
+              if hostname == "desktop" then [
+                "${secondMonitor}"
+              ] else [
+                "${secondMonitor}"
+                "${thirdMonitor}"
+              ];
+            modules-left = [ "custom/menu" "wlr/workspaces" ];
 
-          modules-right =
-            if hostName == "desktop" then
-              [ "custom/ds4" "custom/mouse" "custom/kb" "custom/pad" "pulseaudio" "custom/sink" "custom/pad" "clock"]
-            else
-              [ "cpu" "memory" "custom/pad" "battery" "custom/pad" "backlight" "custom/pad" "pulseaudio" "custom/pad" "clock" ];
+            modules-right =
+              if hostname == "desktop" then
+                [ "custom/ds4" "custom/mouse" "custom/kb" "custom/pad" "pulseaudio" "custom/sink" "custom/pad" "clock" ]
+              else
+                [ "cpu" "memory" "custom/pad" "battery" "custom/pad" "backlight" "custom/pad" "pulseaudio" "custom/pad" "clock" ];
 
-          "custom/pad" = {
-            format = "      ";
-            tooltip = false;
-          };
-          "custom/menu" = {
-            format = "<span font='16'></span>";
-            #on-click = "${pkgs.rofi}/bin/rofi -show p -modi p:${pkgs.rofi-power-menu}/bin/rofi-power-menu -theme $HOME/.config/rofi/config.rasi";
-            #on-click-right = "${pkgs.rofi}/bin/rofi -show drun";
-            on-click = ''~/.config/wofi/power.sh'';
-            on-click-right = "${pkgs.wofi}/bin/wofi --show drun";
-            tooltip = false;
-          };
-          "wlr/workspaces" = {
-            format = "<span font='11'>{name}</span>";
-            #format = "<span font='12'>{icon}</span>";
-            #format-icons = {
-            #  "1"="";
-            #  "2"="";
-            #  "3"="";
-            #  "4"="";
-            #  "5"="";
-            #  "6"="";
-            #  "7"="";
-            #  "8"="";
-            #  "9"="";
-            #  "10"="";
-            #};
-            active-only = false;
-            on-click = "activate";
-            #on-scroll-up = "hyprctl dispatch workspace e+1";
-            #on-scroll-down = "hyprctl dispatch workspace e-1";
-          };
-          clock = {
-            format = "{:%b %d %H:%M}";
-            tooltip-format = "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>";
-            #format-alt = "{:%A, %B %d, %Y} ";
-          };
-          cpu = {
-            format = " {usage}% <span font='11'></span> ";
-            interval = 1;
-          };
-          disk = {
-            format = "{percentage_used}% <span font='11'></span>";
-            path = "/";
-            interval = 30;
-          };
-          memory = {
-            format = "{}% <span font='11'></span>";
-            interval = 1;
-          };
-          backlight = {
-            device = "intel_backlight";
-            format= "{percent}% <span font='11'>{icon}</span>";
-            format-icons = ["" ""];
-            on-scroll-down = "${pkgs.light}/bin/light -U 5";
-            on-scroll-up = "${pkgs.light}/bin/light -A 5";
-          };
-          battery = {
-            interval = 60;
-            states = {
-              warning = 30;
-              critical = 15;
+            "custom/pad" = {
+              format = "      ";
+              tooltip = false;
             };
-            format = "{capacity}% <span font='11'>{icon}</span>";
-            format-charging = "{capacity}% <span font='11'></span>";
-            format-icons = ["" "" "" "" ""];
-            max-length = 25;
-          };
-          pulseaudio = {
-            format = "<span font='11'>{icon}</span> {volume}% {format_source} ";
-            format-bluetooth = "<span font='11'>{icon}</span> {volume}% {format_source} ";
-            format-bluetooth-muted = "<span font='11'>x</span> {volume}% {format_source} ";
-            format-muted = "<span font='11'>x</span> {volume}% {format_source} ";
-            #format-source = "{volume}% <span font='11'></span> ";
-            format-source = "<span font='10'></span> ";
-            format-source-muted = "<span font='11'></span> ";
-            format-icons = {
-              default = [ "" "" "" ];
-              headphone = "";
-              #hands-free = "";
-              #headset = "";
-              #phone = "";
-              #portable = "";
-              #car = "";
+            "custom/menu" = {
+              format = "<span font='16'></span>";
+              #on-click = "${pkgs.rofi}/bin/rofi -show p -modi p:${pkgs.rofi-power-menu}/bin/rofi-power-menu -theme $HOME/.config/rofi/config.rasi";
+              #on-click-right = "${pkgs.rofi}/bin/rofi -show drun";
+              on-click = ''~/.config/wofi/power.sh'';
+              on-click-right = "${pkgs.wofi}/bin/wofi --show drun";
+              tooltip = false;
             };
-            tooltip-format = "{desc}, {volume}%";
-            on-click = "${pkgs.pamixer}/bin/pamixer -t";
-            on-click-right = "${pkgs.pamixer}/bin/pamixer --default-source -t";
-            on-click-middle = "${pkgs.pavucontrol}/bin/pavucontrol";
-          };
-          "custom/sink" = {
-            #format = "<span font='10'>蓼</span>";
-            format = "{}";
-            exec = "$HOME/.config/waybar/script/sink.sh";
-            interval = 2;
-            on-click = "$HOME/.config/waybar/script/switch.sh";
-            tooltip = false;
-          };
-          "custom/mouse" = {
-            format = "{}";
-            exec = "$HOME/.config/waybar/script/mouse.sh";
-            interval = 60;
-          };
-          "custom/kb" = {
-            format = "{}";
-            exec = "$HOME/.config/waybar/script/kb.sh";
-            interval = 60;
-          };
-          "custom/ds4" = {
-            format = "{}";
-            exec = "$HOME/.config/waybar/script/ds4.sh";
-            interval = 60;
-          };
-        } else {};
+            "wlr/workspaces" = {
+              format = "<span font='11'>{name}</span>";
+              #format = "<span font='12'>{icon}</span>";
+              #format-icons = {
+              #  "1"="";
+              #  "2"="";
+              #  "3"="";
+              #  "4"="";
+              #  "5"="";
+              #  "6"="";
+              #  "7"="";
+              #  "8"="";
+              #  "9"="";
+              #  "10"="";
+              #};
+              active-only = false;
+              on-click = "activate";
+              #on-scroll-up = "hyprctl dispatch workspace e+1";
+              #on-scroll-down = "hyprctl dispatch workspace e-1";
+            };
+            clock = {
+              format = "{:%b %d %H:%M}";
+              tooltip-format = "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>";
+              #format-alt = "{:%A, %B %d, %Y} ";
+            };
+            cpu = {
+              format = " {usage}% <span font='11'></span> ";
+              interval = 1;
+            };
+            disk = {
+              format = "{percentage_used}% <span font='11'></span>";
+              path = "/";
+              interval = 30;
+            };
+            memory = {
+              format = "{}% <span font='11'></span>";
+              interval = 1;
+            };
+            backlight = {
+              device = "intel_backlight";
+              format = "{percent}% <span font='11'>{icon}</span>";
+              format-icons = [ "" "" ];
+              on-scroll-down = "${pkgs.light}/bin/light -U 5";
+              on-scroll-up = "${pkgs.light}/bin/light -A 5";
+            };
+            battery = {
+              interval = 60;
+              states = {
+                warning = 30;
+                critical = 15;
+              };
+              format = "{capacity}% <span font='11'>{icon}</span>";
+              format-charging = "{capacity}% <span font='11'></span>";
+              format-icons = [ "" "" "" "" "" ];
+              max-length = 25;
+            };
+            pulseaudio = {
+              format = "<span font='11'>{icon}</span> {volume}% {format_source} ";
+              format-bluetooth = "<span font='11'>{icon}</span> {volume}% {format_source} ";
+              format-bluetooth-muted = "<span font='11'>x</span> {volume}% {format_source} ";
+              format-muted = "<span font='11'>x</span> {volume}% {format_source} ";
+              #format-source = "{volume}% <span font='11'></span> ";
+              format-source = "<span font='10'></span> ";
+              format-source-muted = "<span font='11'></span> ";
+              format-icons = {
+                default = [ "" "" "" ];
+                headphone = "";
+                #hands-free = "";
+                #headset = "";
+                #phone = "";
+                #portable = "";
+                #car = "";
+              };
+              tooltip-format = "{desc}, {volume}%";
+              on-click = "${pkgs.pamixer}/bin/pamixer -t";
+              on-click-right = "${pkgs.pamixer}/bin/pamixer --default-source -t";
+              on-click-middle = "${pkgs.pavucontrol}/bin/pavucontrol";
+            };
+            "custom/sink" = {
+              #format = "<span font='10'>蓼</span>";
+              format = "{}";
+              exec = "$HOME/.config/waybar/script/sink.sh";
+              interval = 2;
+              on-click = "$HOME/.config/waybar/script/switch.sh";
+              tooltip = false;
+            };
+            "custom/mouse" = {
+              format = "{}";
+              exec = "$HOME/.config/waybar/script/mouse.sh";
+              interval = 60;
+            };
+            "custom/kb" = {
+              format = "{}";
+              exec = "$HOME/.config/waybar/script/kb.sh";
+              interval = 60;
+            };
+            "custom/ds4" = {
+              format = "{}";
+              exec = "$HOME/.config/waybar/script/ds4.sh";
+              interval = 60;
+            };
+          } else { };
       };
     };
     home.file = {
-      ".config/waybar/script/sink.sh" = {              # Custom script: Toggle speaker/headset
+      ".config/waybar/script/sink.sh" = {
+        # Custom script: Toggle speaker/headset
         text = ''
           #!/bin/sh
 
@@ -423,7 +432,8 @@
         '';
         executable = true;
       };
-      ".config/waybar/script/switch.sh" = {              # Custom script: Toggle speaker/headset
+      ".config/waybar/script/switch.sh" = {
+        # Custom script: Toggle speaker/headset
         text = ''
           #!/bin/sh
 
@@ -442,7 +452,8 @@
         '';
         executable = true;
       };
-      ".config/waybar/script/mouse.sh" = {              # Custom script: Mouse battery indicator
+      ".config/waybar/script/mouse.sh" = {
+        # Custom script: Mouse battery indicator
         text = ''
           #!/bin/sh
 
@@ -467,7 +478,8 @@
         '';
         executable = true;
       };
-      ".config/waybar/script/kb.sh" = {              # Custom script: Keyboard battery indicator
+      ".config/waybar/script/kb.sh" = {
+        # Custom script: Keyboard battery indicator
         text = ''
           #!/bin/sh
 
@@ -492,7 +504,8 @@
         '';
         executable = true;
       };
-      ".config/waybar/script/ds4.sh" = {              # Custom script: Dualshock battery indicator
+      ".config/waybar/script/ds4.sh" = {
+        # Custom script: Dualshock battery indicator
         text = ''
           #!/bin/sh
 

@@ -19,10 +19,11 @@
       ../../modules/desktop/bspwm/home.nix # Window Manager
     ];
 
-  home = {                                # Specific packages for laptop
+  home = {
+    # Specific packages for laptop
     packages = with pkgs; [
       # Applications
-      libreoffice                         # Office packages
+      libreoffice # Office packages
 
       # Display
       #light                              # xorg.xbacklight not supported. Other option is just use xrandr.
@@ -37,14 +38,15 @@
     alacritty.settings.font.size = 11;
   };
 
-  services = {                            # Applets
-    blueman-applet.enable = true;         # Bluetooth
+  services = {
+    # Applets
+    blueman-applet.enable = true; # Bluetooth
     network-manager-applet.enable = true; # Network
-#   cbatticon = {
-#     enable = true;
-#     criticalLevelPercent = 10;
-#     lowLevelPercent = 20;
-#     iconType = null;
-#   };
+    #   cbatticon = {
+    #     enable = true;
+    #     criticalLevelPercent = 10;
+    #     lowLevelPercent = 20;
+    #     iconType = null;
+    #   };
   };
 }

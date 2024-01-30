@@ -3,7 +3,7 @@ let
     fetchTarball
       https://github.com/NixOS/nixpkgs/archive/nixos-unstable.tar.gz;
   #pkgs = import <nixpkgs> {};
-  unstable = import unstableTarball {};
+  unstable = import unstableTarball { };
 
   shell = unstable.mkShell {
     buildInputs = [ unstable.etcher ];
@@ -11,6 +11,7 @@ let
       "electron-12.2.3"
     ];
   };
-in shell
+in
+shell
 
 # This no longer works. Better to just use $ NIXPKGS_ALLOW_INSECURE=1 nix run nixpkgs#etcher --impure

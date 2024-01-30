@@ -18,18 +18,18 @@
     xserver = {
       enable = true;
 
-      layout = "us";                              # Keyboard layout & €-sign
+      layout = "us"; # Keyboard layout & €-sign
       #xkbOptions = "eurosign:e";
       libinput.enable = true;
-      modules = [ pkgs.xf86_input_wacom ];        # Both needed for wacom tablet usage
+      modules = [ pkgs.xf86_input_wacom ]; # Both needed for wacom tablet usage
       wacom.enable = true;
 
       displayManager = {
-        sddm.enable = true;          # Display Manager
+        sddm.enable = true; # Display Manager
         #defaultSession = "plasmawayland";
       };
       desktopManager.plasma5 = {
-        enable = true;                            # Desktop Manager
+        enable = true; # Desktop Manager
       };
     };
     xrdp = {
@@ -42,7 +42,8 @@
   #hardware.pulseaudio.enable = false;
 
   environment = {
-    systemPackages = with pkgs.libsForQt5; [                 # Packages installed
+    systemPackages = with pkgs.libsForQt5; [
+      # Packages installed
       packagekit-qt
       bismuth
     ];

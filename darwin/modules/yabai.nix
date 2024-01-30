@@ -2,10 +2,12 @@
 
 {
   services = {
-    yabai = {                             # Tiling window manager
+    yabai = {
+      # Tiling window manager
       enable = true;
       package = pkgs.yabai;
-      config = {                          # Other configuration options
+      config = {
+        # Other configuration options
         layout = "bsp";
         auto_balance = "off";
         split_ratio = "0.50";
@@ -29,7 +31,7 @@
         yabai -m rule --add app='Activity Monitor' manage=off layer=above
         yabai -m rule --add app='Finder' manage=off layer=above
         yabai -m rule --add app='^System Information$' manage=off layer=above
-      '';                                 # Specific rules for what is managed and layered.
+      ''; # Specific rules for what is managed and layered.
     };
   };
 }

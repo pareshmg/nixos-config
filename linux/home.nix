@@ -13,13 +13,8 @@
 { lib, config, pkgs, agenix, home-manager, secrets, specialArgs, location, ... }:
 
 let
-  # Define the content of your file as a derivation
-  # myEmacsLauncher = pkgs.writeScript "emacs-launcher.command" ''
-  #   #!/bin/sh
-  #   emacsclient -c -n &
-  # '';
-  inherit (specialArgs) profile;
-  sharedFiles = import ../shared/files.nix { inherit config pkgs profile; };
+  inherit (specialArgs) profile u;
+  sharedFiles = import ../shared/files.nix { inherit config pkgs profile u; };
 in
 {
 
@@ -27,10 +22,10 @@ in
   home = {
     username = "${profile.user}";
     homeDirectory = "/home/${profile.user}";
-    packages = (pkgs.callPackage ./packages.nix {}) ++ (pkgs.callPackage ../shared/system-packages.nix {}) ++  (pkgs.callPackage ../shared/packages.nix {});
+    packages = (pkgs.callPackage ./packages.nix { }) ++ (pkgs.callPackage ../shared/system-packages.nix { }) ++ (pkgs.callPackage ../shared/packages.nix { });
     stateVersion = "23.05";
     enableNixpkgsReleaseCheck = false;
-    file =  lib.mkMerge [
+    file = lib.mkMerge [
       sharedFiles
     ];
   };

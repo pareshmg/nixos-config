@@ -7,49 +7,41 @@
 
 * Installation Guide
 
+
+#+begin_src bash
+nix run "github:pareshmg/nixos-config#bootstrap"
+#+end_src
+
 There are *3* main steps:
 
 
-1. Create your secrets
-2. Install nix + dependencies
+1. Create your secrets & customize flake
+2. Run ~setup~: Install nix + dependencies
 3. Build and install flake
 
 ** Creating secrets
-1. Make sure ~$HOME/.nix-secrets~ is a git repo
-2. In the file ~$HOME/.nix-secrets/flake.nix~ insert the blob below
-3. Make sure that ~flake.nix~ is added to the git repo otherwise nix won't see it
+An example setup of secrets is available in the ~secrets_example/~ directory. This repo uses ~secrets~ as a flake. Rather than editing the example directory, it is recommended that you copy it to ~$HOME/.nix-secrets~
 
-#+begin_src nix
-{
-  description = "My Personal Secrets";
-  inputs = {};
-  outputs = {self, ...} @inputs:
-    let
-      user = "yourname";
-      name = "Your Name";
-    in
-      {
-        profile= {
-          work = {
-            inherit user name;
-            email = "yourname@email.com";
-            identityPaths = [ ];
-          };
-        };
-      };
-}
-#+end_src
+1. ~cp -r secrets_example ~/.nix-secrets~
+2. ~cd ~/.nix-secrets~
+3. ~git init && git add .~
+4. Update ~flake.nix~ to have your information
 
+When running, please override the ~secrets~ flake with the one above. Note that the ~bin/buid~ scripts already do this.
 
 
 ** Install nix + dependencies
 
+TL;DR : Run ~bin/setup~
+
 - For NixOS: you're already set!
 - For all other OS
-  - Install [[https://nixos.org/download][Nix package manager]]
+  - run ~bin/setup~. This will
+    - Install [[https://nixos.org/download][Nix package manager]]
 - For MacOS only
-  - Install [[https://nixos.org/download][Nix package manager]]
-  - Install [[https://brew.sh/][homebrew]]
+  - run ~bin/setup~. This will
+    - Install [[https://nixos.org/download][Nix package manager]]
+    - Install [[https://brew.sh/][homebrew]]
 
 
 ** Build and install flake
@@ -59,10 +51,11 @@ There are *3* main steps:
 3. In this directory, run the appropriate build as defined in ~flake.nix~
 
 
-This flake currently has *3* host types
+This flake currently has *4* host types
  1. linux / NixOS ~bin/nixos-build $FLAKE~
  2. linux / Other ~bin/linux-build $USER~
  3. darwin / MacOS ~bin/darwin-build $FLAKE~
+ 4. linux / NixOS KVM export ~bin/vm-build $FLAKE~
 
 In addition, this build allows you to host one base machine and remote build from
 there. The main use case here is building on a work machine where you may not want to
@@ -101,11 +94,6 @@ And this can be accessed in your nixos-config as ~secrets.mysecrets.secret1~
 
 
 
-* Sources of inspiration
-
-[[https://github.com/matthiasbenaets/nixos-config][Matthias’ NixOS & Nix-Darwin System Configuration Flake]]
-
-[[https://github.com/dustinlyons/nixos-config#2-optional-setup-secrets][dustinlyons]]
 * System Structure
 Compontents relevant to all hosts:
 | *Shell*   | Zsh        |
@@ -128,10 +116,19 @@ For home-manager only machines:
 
 ** My machines
 
-| *FLAKE* | *OS*   | *DESKTOP* | *ARCH*  | *Comments*               |
-|---------+--------+-----------+---------+--------------------------|
-| pmp     | darwin | Y         | x86-64  | 2020 macbook pro         |
-| pmpcmt  | darwin | Y         | aarch64 | 2023 macbook pro         |
-| vm      | NixOS  | N         | x86-64  | headless virtual machine |
-| guivm   | NixOS  | Y         | x86-64  | virtual machine with KDE |
-| $user   | N/A    | N         | x86-64  | Home-manager only        |
+| *FLAKE* | *OS*   | *DESKTOP* | *ARCH*  | *Comments*                   |
+|---------+--------+-----------+---------+------------------------------|
+| pmp     | darwin | Y         | x86-64  | 2020 macbook pro - main      |
+| pmpcmt  | darwin | Y         | aarch64 | 2023 macbook pro - work      |
+| vm      | NixOS  | N         | x86-64  | headless VM with GPU         |
+| $user   | N/A    | N         | x86-64  | Home-manager only            |
+| ubuntu  | N/A    | N         | x86-64  | Home-manager only - work     |
+| testvm  | NixOS  | Y         | x86-64  | VM export for Proxmox w/ KDE |
+|         |        |           |         |                              |
+
+
+* Credits / Sources of inspiration
+
+[[https://github.com/matthiasbenaets/nixos-config][Matthias’ NixOS & Nix-Darwin System Configuration Flake]]
+
+[[https://github.com/dustinlyons/nixos-config#2-optional-setup-secrets][dustinlyons]]

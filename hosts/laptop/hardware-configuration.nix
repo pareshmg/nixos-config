@@ -16,7 +16,8 @@
 
 {
   imports =
-    [ (modulesPath + "/installer/scan/not-detected.nix")
+    [
+      (modulesPath + "/installer/scan/not-detected.nix")
     ];
 
   boot.initrd.availableKernelModules = [ "xhci_pci" "ehci_pci" "ahci" "usb_storage" "sd_mod" "rtsx_pci_sdmmc" ];
@@ -25,24 +26,26 @@
   boot.extraModulePackages = [ ];
 
   fileSystems."/" =
-    { device = "/dev/disk/by-label/nixos";
+    {
+      device = "/dev/disk/by-label/nixos";
       fsType = "ext4";
     };
 
   fileSystems."/boot" =
-    { device = "/dev/disk/by-uuid/6E06-6221";
+    {
+      device = "/dev/disk/by-uuid/6E06-6221";
       fsType = "vfat";
     };
 
   swapDevices = [ ];
-  
+
   networking = {
-    useDHCP = false;                        # Deprecated
+    useDHCP = false; # Deprecated
     hostName = "laptop";
     networkmanager.enable = true;
     interfaces = {
       enp0s25 = {
-        useDHCP = true;                     # For versatility sake, manually edit IP on nm-applet.
+        useDHCP = true; # For versatility sake, manually edit IP on nm-applet.
         #ipv4.addresses = [ {
         #    address = "192.168.0.51";
         #    prefixLength = 24;

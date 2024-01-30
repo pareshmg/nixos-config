@@ -19,7 +19,8 @@
       #../../modules/desktop/bspwm/home.nix  #Window Manager
     ];
 
-  home = {                                  # Specific packages for desktop
+  home = {
+    # Specific packages for desktop
     packages = with pkgs; [
       #firefox
       python311

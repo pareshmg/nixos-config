@@ -7,7 +7,7 @@
 #       └─ ./configuration.nix *
 #
 
-{ lib, home-manager, agenix, secrets, config, pkgs, profile, cmtnix, ... }:
+{ lib, home-manager, agenix, secrets, config, pkgs, profile, u, cmtnix, ... }:
 
 let
   # Define the content of your file as a derivation
@@ -43,7 +43,7 @@ in
 
   # Enable home-manager
   home-manager = {
-    extraSpecialArgs = {inherit secrets;} // {cmtcfg = config.cmt;};
+    extraSpecialArgs = { inherit secrets u; } // { cmtcfg = config.cmt; };
     users.${user}.imports = [
       cmtnix.homeManagerModules.cmtaws
       ./home-cmt.nix

@@ -55,12 +55,14 @@ in
 
 
   fileSystems."/" =
-    { device = "/dev/disk/by-uuid/7e38979e-68c7-466c-b8b7-db7b979841cd";
+    {
+      device = "/dev/disk/by-uuid/7e38979e-68c7-466c-b8b7-db7b979841cd";
       fsType = "ext4";
     };
 
   fileSystems."/home" =
-    { device = "/dev/disk/by-uuid/09ad8c4c-f140-494b-9277-37f46ab0c157";
+    {
+      device = "/dev/disk/by-uuid/09ad8c4c-f140-494b-9277-37f46ab0c157";
       fsType = "xfs";
     };
   # fileSystems."/var/lib/docker" =
@@ -68,7 +70,8 @@ in
   #     fsType = "ext4";
   #   };
   fileSystems."/mnt/cache" =
-    { device = "/dev/disk/by-uuid/6e7e9cce-524d-41cc-8507-e1e8a57f4de4";
+    {
+      device = "/dev/disk/by-uuid/6e7e9cce-524d-41cc-8507-e1e8a57f4de4";
       fsType = "ext4";
     };
   fileSystems."/media/pvenfs" = {
@@ -92,18 +95,18 @@ in
   #networking.useDHCP = lib.mkDefault true;
   networking = u.recursiveMerge [
     {
-      useDHCP = false;                        # Deprecated
+      useDHCP = false; # Deprecated
       hostId = profile.macAddress;
       interfaces = {
-          ens18 = {
-            ipv4.addresses = [ {
-              address = profile.ip;
-              prefixLength = 16;
-            } ];
-          };
+        ens18 = {
+          ipv4.addresses = [{
+            address = profile.ip;
+            prefixLength = 16;
+          }];
+        };
       };
     }
-    (u.getOrDefault profile "networking" {})
+    (u.getOrDefault profile "networking" { })
   ];
 
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";

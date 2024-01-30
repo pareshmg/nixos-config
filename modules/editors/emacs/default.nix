@@ -33,13 +33,13 @@
 }
 
 #Home-manager
-  #programs.emacs = {
-  #  enable = true;
-  #}; # also keep services.emacs
-  #
-  #home = {
-  #  activation = {
-  #    emacs = ''
-  #    '';
-  #  };
-  #};
+#programs.emacs = {
+#  enable = true;
+#}; # also keep services.emacs
+#
+#home = {
+#  activation = {
+#    emacs = ''
+#    '';
+#  };
+#};

@@ -5,22 +5,25 @@
 { config, lib, pkgs, host, ... }:
 
 let
-  mypolybar = pkgs.polybar.override {             # Extra packages to run polybar (mostly sound atm)
+  mypolybar = pkgs.polybar.override {
+    # Extra packages to run polybar (mostly sound atm)
     alsaSupport = true;
     pulseSupport = true;
   };
 in
 with host; {
-  config = lib.mkIf (config.xsession.enable) {    # Only evaluate code if using X11
+  config = lib.mkIf (config.xsession.enable) {
+    # Only evaluate code if using X11
     services = {
       polybar = {
         enable = true;
         script = ''                               # Running polybar on startup
           #  Handled by bspwmrc (modules/desktop/bspwm)
-        '';                                       # Gets fixed in the bspwmrc file
+        ''; # Gets fixed in the bspwmrc file
         package = mypolybar;
         config = {
-          "bar/main" = {                          # Bar name = Top
+          "bar/main" = {
+            # Bar name = Top
             monitor = "${mainMonitor}";
             width = "100%";
             height = 15;
@@ -34,7 +37,7 @@ with host; {
             module-margin-left = 1;
             #module-margin-right = "0.5";
 
-            font-0 = "SourceCodePro:size=10";     # Icons
+            font-0 = "SourceCodePro:size=10"; # Icons
             font-1 = "FontAwesome6Free:style=Solid:size=8";
             font-2 = "FontAwesome6Free:style=Regular:size=8";
             font-3 = "FontAwesome6Brands:style=Regular:size=8";
@@ -61,7 +64,7 @@ with host; {
             module-margin-left = 1;
             #module-margin-right = "0.5";
 
-            font-0 = "SourceCodePro:size=10";     # Icons
+            font-0 = "SourceCodePro:size=10"; # Icons
             font-1 = "FontAwesome6Free:style=Solid:size=8";
             font-2 = "FontAwesome6Free:style=Regular:size=8";
             font-3 = "FontAwesome6Brands:style=Regular:size=8";
@@ -72,20 +75,23 @@ with host; {
             #override-redirect = "true";
             wm-restack = "bspwm";
           };
-          "module/memory" = {                     # RAM
+          "module/memory" = {
+            # RAM
             type = "internal/memory";
             format = "<label>"; #<bar-used>";
             format-foreground = "#999";
             label = "  %percentage_used%%";
           };
-          "module/cpu" = {                        # CPU
+          "module/cpu" = {
+            # CPU
             type = "internal/cpu";
             interval = 1;
             format = "<label>"; # <ramp-coreload>";
             format-foreground = "#999";
             label = "  %percentage%%";
           };
-          "module/volume" = {                     # Volume
+          "module/volume" = {
+            # Volume
             type = "internal/pulseaudio";
             interval = 2;
             use-ui-max = "false";
@@ -97,10 +103,11 @@ with host; {
             ramp-volume-1 = "";
             ramp-volume-2 = "";
 
-            click-right = "${pkgs.pavucontrol}/bin/pavucontrol";  # Right click opens pavucontrol, left click mutes, scroll changes levels
+            click-right = "${pkgs.pavucontrol}/bin/pavucontrol"; # Right click opens pavucontrol, left click mutes, scroll changes levels
           };
-          "module/backlight" = {                  # Keeping for the futur when i have a screen that supports xbacklight
-            type = "internal/backlight";          # Now doen with sxhkb shortcuts
+          "module/backlight" = {
+            # Keeping for the futur when i have a screen that supports xbacklight
+            type = "internal/backlight"; # Now doen with sxhkb shortcuts
             card = "intel_backlight";
             #use-actual-brightness = "false";
             format = "<ramp> <bar>";
@@ -121,35 +128,36 @@ with host; {
             bar-empty-foreground = "#44";
           };
           #"module/wireless-network" = {           # Show either wired or wireless
-            #type = "internal/network";
-            #interface = "wlo1";
-            #interval = "3.0";
-            #ping-interval = 10;
-            #
-            #format-connected = "<ramp-signal>";
-            #format-connected = "<ramp-signal> <label-connected>";
-            #label-connected = "%essid%";
-            #label-disconnected = "";
-            #label-disconnected-foreground = "#66";
-            #
-            #ramp-signal-0 = "";
-            #
-            #animation-packetloss-0 = "";
-            #animation-packetloss-0-foreground = "#ffa64c";
-            #animation-packetloss-1 = "";
-            #animation-packetloss-1-foreground = "#00000000";
-            #animation-packetloss-framerate = 500;
-            #};
-            #"module/wired-network" = {              # Ditto module above
-            #type = "internal/network";
-            #interface = "enp0s25";
-            #interval = "3.0";
-            #
-            #label-connected = "  %{T3}%local_ip%%{T-}";
-            #label-connected = "";
-            #label-disconnected-foreground = "#66";
+          #type = "internal/network";
+          #interface = "wlo1";
+          #interval = "3.0";
+          #ping-interval = 10;
+          #
+          #format-connected = "<ramp-signal>";
+          #format-connected = "<ramp-signal> <label-connected>";
+          #label-connected = "%essid%";
+          #label-disconnected = "";
+          #label-disconnected-foreground = "#66";
+          #
+          #ramp-signal-0 = "";
+          #
+          #animation-packetloss-0 = "";
+          #animation-packetloss-0-foreground = "#ffa64c";
+          #animation-packetloss-1 = "";
+          #animation-packetloss-1-foreground = "#00000000";
+          #animation-packetloss-framerate = 500;
           #};
-          "module/battery" = {                    # Show battery (only when exist), uncomment to show battery and animations
+          #"module/wired-network" = {              # Ditto module above
+          #type = "internal/network";
+          #interface = "enp0s25";
+          #interval = "3.0";
+          #
+          #label-connected = "  %{T3}%local_ip%%{T-}";
+          #label-connected = "";
+          #label-disconnected-foreground = "#66";
+          #};
+          "module/battery" = {
+            # Show battery (only when exist), uncomment to show battery and animations
             type = "internal/battery";
             full-at = 98;
 
@@ -178,24 +186,26 @@ with host; {
             bar-capacity-empty-font = 3;
             bar-capacity-empty-foreground = "#44ffffff";
 
-            animation-charging-0 = "";          # Animation when charging
+            animation-charging-0 = ""; # Animation when charging
             animation-charging-1 = "";
             animation-charging-2 = "";
             animation-charging-3 = "";
             animation-charging-4 = "";
             animation-charging-framerate = 750;
           };
-          "module/date" = {                       # Time/Date  Day-Month-Year Hour:Minute
-          type = "internal/date";
+          "module/date" = {
+            # Time/Date  Day-Month-Year Hour:Minute
+            type = "internal/date";
             #date = "%{A1:notify-send -t 0 \"$(cal -m)\":}  %%{F#999}%d-%m-%Y%%{F-} %%{F#fff}%H:%M%%{F-}%{A}";
             date = "  %%{F#999}%d-%m-%Y%%{F-} %%{F#fff}%H:%M%%{F-}";
           };
-          "module/bspwm" = {                      # Workspaces
+          "module/bspwm" = {
+            # Workspaces
             type = "internal/bspwm";
             pin-workspace = true;
             #label-monitor = "%name%";
 
-            ws-icon-0 = "1;";                    # Needs to be the same amount and same name as bswmrc
+            ws-icon-0 = "1;"; # Needs to be the same amount and same name as bswmrc
             ws-icon-1 = "2;";
             ws-icon-2 = "3;";
             ws-icon-3 = "4;";
@@ -256,7 +266,8 @@ with host; {
             label-private-underline = "#c9665e";
             label-private-padding = 2;
           };
-          "module/title" = {                      # Show title of active screen
+          "module/title" = {
+            # Show title of active screen
             type = "internal/xwindow";
             format = "<label>";
             format-background = "#00000000";
@@ -347,56 +358,58 @@ with host; {
         };
       };
     };
-    home.file.".config/polybar/script/mic.sh" = {               # Custom script: Mic mute
+    home.file.".config/polybar/script/mic.sh" = {
+      # Custom script: Mic mute
       text = ''
-      #!/bin/sh
+        #!/bin/sh
 
-      case $1 in
-          "status")
-          #MUTED=$(pacmd list-sources | awk '/\*/,EOF {print}' | awk '/muted/ {print $2; exit}')
-          #if [[ $MUTED = "no" ]]; then
-          MUTED=$(awk -F"[][]" '/Left:/ { print $4 }' <(amixer sget Capture))
-          if [[ $MUTED = "on" ]]; then
-              echo ''
-          else
-              echo ''
-          fi
-          ;;
-          "toggle")
-          #ID=$(pacmd list-sources | grep "*\ index:" | cut -d' ' -f5)
-          #pactl set-source-mute $ID toggle
-          ${pkgs.alsa-utils}/bin/amixer set Capture toggle
-          ;;
-      esac
+        case $1 in
+            "status")
+            #MUTED=$(pacmd list-sources | awk '/\*/,EOF {print}' | awk '/muted/ {print $2; exit}')
+            #if [[ $MUTED = "no" ]]; then
+            MUTED=$(awk -F"[][]" '/Left:/ { print $4 }' <(amixer sget Capture))
+            if [[ $MUTED = "on" ]]; then
+                echo ''
+            else
+                echo ''
+            fi
+            ;;
+            "toggle")
+            #ID=$(pacmd list-sources | grep "*\ index:" | cut -d' ' -f5)
+            #pactl set-source-mute $ID toggle
+            ${pkgs.alsa-utils}/bin/amixer set Capture toggle
+            ;;
+        esac
       '';
       executable = true;
     };
-    home.file.".config/polybar/script/sink.sh" = {              # Custom script: Toggle speaker/headset (used in old config with desktop)
+    home.file.".config/polybar/script/sink.sh" = {
+      # Custom script: Toggle speaker/headset (used in old config with desktop)
       text = ''
-      #!/bin/sh
+        #!/bin/sh
 
-      ID1=$(awk '/ Built-in Audio Analog Stereo/ {sub(/.$/,"",$2); print $2 }' <(${pkgs.wireplumber}/bin/wpctl status) | head -n 1)
-      ID2=$(awk '/ S10 Bluetooth Speaker/ {sub(/.$/,"",$2); print $2 }' <(${pkgs.wireplumber}/bin/wpctl status) | sed -n 2p)
+        ID1=$(awk '/ Built-in Audio Analog Stereo/ {sub(/.$/,"",$2); print $2 }' <(${pkgs.wireplumber}/bin/wpctl status) | head -n 1)
+        ID2=$(awk '/ S10 Bluetooth Speaker/ {sub(/.$/,"",$2); print $2 }' <(${pkgs.wireplumber}/bin/wpctl status) | sed -n 2p)
 
-      HEAD=$(awk '/ Built-in Audio Analog Stereo/ { print $2 }' <(${pkgs.wireplumber}/bin/wpctl status | grep "*") | sed -n 2p)
-      SPEAK=$(awk '/ S10 Bluetooth Speaker/ { print $2 }' <(${pkgs.wireplumber}/bin/wpctl status | grep "*") | head -n 1)
+        HEAD=$(awk '/ Built-in Audio Analog Stereo/ { print $2 }' <(${pkgs.wireplumber}/bin/wpctl status | grep "*") | sed -n 2p)
+        SPEAK=$(awk '/ S10 Bluetooth Speaker/ { print $2 }' <(${pkgs.wireplumber}/bin/wpctl status | grep "*") | head -n 1)
 
-      case $1 in
-          "status")
-          if [[ $HEAD = "*" ]]; then
-              echo ''
-          elif [[ $SPEAK = "*" ]]; then
-              echo '蓼'
-          fi
-          ;;
-          "toggle")
-          if [[ $HEAD = "*" ]]; then
-              ${pkgs.wireplumber}/bin/wpctl set-default $ID2
-          elif [[ $SPEAK = "*" ]]; then
-              ${pkgs.wireplumber}/bin/wpctl set-default $ID1
-          fi
-          ;;
-      esac
+        case $1 in
+            "status")
+            if [[ $HEAD = "*" ]]; then
+                echo ''
+            elif [[ $SPEAK = "*" ]]; then
+                echo '蓼'
+            fi
+            ;;
+            "toggle")
+            if [[ $HEAD = "*" ]]; then
+                ${pkgs.wireplumber}/bin/wpctl set-default $ID2
+            elif [[ $SPEAK = "*" ]]; then
+                ${pkgs.wireplumber}/bin/wpctl set-default $ID1
+            fi
+            ;;
+        esac
       '';
       executable = true;
     };
