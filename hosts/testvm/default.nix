@@ -66,8 +66,8 @@ in
       bios = "seabios";
 
       # optional configs
-      #additionalSpace = "512M";
-      #diskSize = "auto";
+      additionalSpace = "2048M";
+      diskSize = "auto";
       agent = true;
     };
   };

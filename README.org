@@ -9,7 +9,7 @@
 
 
 #+begin_src bash
-nix run "github:pareshmg/nixos-config#bootstrap"
+nix --extra-experimental-features 'nix-command flakes' run "github:pareshmg/nixos-config#bootstrap"
 #+end_src
 
 There are *3* main steps:

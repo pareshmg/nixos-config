@@ -44,7 +44,8 @@
       };
 
       u = {
-        url = "git+file:.?dir=utils";
+        #url = "git+file:.?dir=utils";
+        url = "github:pareshmg/nixos-config?dir=utils";
         inputs.nixpkgs.follows = "nixpkgs";
       };
 
@@ -88,8 +89,8 @@
       #   inputs.nixpkgs.follows = "nixpkgs";
       # };
 
-      secrets.url = "git+file:.?dir=secrets_example"; #  NOTE: OVERRIDE THIS!!!
-      cmtnix.url = "git+file:.?dir=secrets_example"; #  NOTE: OVERRIDE THIS!!!
+      secrets.url = "github:pareshmg/nixos-config?dir=secrets_example"; #  NOTE: OVERRIDE THIS!!!
+      cmtnix.url = "github:pareshmg/nixos-config?dir=secrets_example"; #  NOTE: OVERRIDE THIS!!!
       #cmtnix.url = "git+ssh://git@github.com/Censio/CMTNix"; # NOTE: OVERRIDE THIS!!
     };
 
