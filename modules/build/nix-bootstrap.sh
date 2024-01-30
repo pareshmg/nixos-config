@@ -54,6 +54,8 @@ if [ ! -d "$SECRETS_DIR" ]; then
     cd "${SECRETS_DIR}"
     git init .
     git add .
+    git config user.email "${LAPTOP_EMAIL}"
+    git config user.name "${FULL_NAME}"
     git commit -a -m "feat: [BOT] nix initialized flake"
 
 else
@@ -75,4 +77,4 @@ read -r -p "Please edit your nixos-config and press enter to continue" ENTER_TO_
 
 echo "$ENTER_TO_CONTINUE"
 cd "$MY_NIX_DIR"
-nix --extra-experimental-features 'nix-command flakes' run .#nix-rebuild -- "${FLAKE}" "$@"
+nix --extra-experimental-features 'nix-command flakes' run .#rebuild -- "${FLAKE}" "$@"
