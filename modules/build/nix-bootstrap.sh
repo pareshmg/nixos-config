@@ -77,4 +77,4 @@ read -r -p "Please edit your nixos-config and press enter to continue" ENTER_TO_
 
 echo "$ENTER_TO_CONTINUE"
 cd "$MY_NIX_DIR"
-nix --extra-experimental-features 'nix-command flakes' run .#nix-rebuild -- "${FLAKE}" "$@"
+nix --extra-experimental-features 'nix-command flakes' run .#rebuild -- "${FLAKE}" "$@"
