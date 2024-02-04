@@ -60,7 +60,7 @@ in
     onActivation = {
       autoUpdate = false; # Auto update packages
       upgrade = false;
-      cleanup = "zap"; # Uninstall not listed packages and casks
+      #cleanup = "zap"; # Uninstall not listed packages and casks
     };
     brews = pkgs.callPackage ./brews.nix { };
     casks = pkgs.callPackage ./casks.nix { };

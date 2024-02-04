@@ -73,10 +73,24 @@ if [ "$(uname)" == "Darwin" ]; then
     fi
 fi
 
+read -r -p "${GREEN} Going to build flake ${FLAKE}. Enter to continue. X to abort? ${CLEAR}" UINPUT
+if [[ "$UINPUT" =~ ^[xX]$ ]]
+then
+    return
+fi
 
-echo "${GREEN} secrets directory ${SECRETS_DIR} already exists. Skipping init ${CLEAR}"
-read -r -p "Please edit your nixos-config and press enter to continue" ENTER_TO_CONTINUE
+read -r -p "${GREEN} Please edit your nixos-config in ${MY_NIX_DIR}/flake.nix. Enter to continue. X to abort ${CLEAR}" UINPUT
+if [[ "$UINPUT" =~ ^[xX]$ ]]
+then
+    return
+fi
 
-echo "$ENTER_TO_CONTINUE"
+read -r -p "${GREEN} Please edit your profile in ${SECRETS_DIR}. Enter to continue. X to abort ${CLEAR}" UINPUT
+if [[ "$UINPUT" =~ ^[xX]$ ]]
+then
+    return
+fi
+
+
 cd "$MY_NIX_DIR"
 nix --extra-experimental-features 'nix-command flakes' run .#rebuild -- "${FLAKE}" "$@"

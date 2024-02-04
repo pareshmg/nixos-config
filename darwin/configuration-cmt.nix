@@ -19,11 +19,10 @@ let
 in
 {
   cmt = secrets.profile.work.cmt;
-
   age = {
     secrets = {
       cmt_aws_daily_roles = {
-        file = secrets.cmt.daily_roles;
+        file = secrets.cmt.cmt_aws_daily_roles;
         path = "${config.users.users.${user}.home}/.aws/daily-roles.yaml";
         owner = "${user}";
         mode = "660";
@@ -43,9 +42,9 @@ in
 
   # Enable home-manager
   home-manager = {
-    extraSpecialArgs = { inherit secrets u; } // { cmtcfg = config.cmt; };
+    extraSpecialArgs = { inherit secrets u; } ;
     users.${user}.imports = [
-      cmtnix.homeManagerModules.cmtaws
+      cmtnix.homeManagerModules.cmtnix
       ./home-cmt.nix
     ];
   };
