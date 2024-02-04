@@ -14,10 +14,11 @@ FLAKE="$1"
 shift # remove flake
 
 
-if [[ ! "${FLAKE}" =~ "cmt" ]]; then
-  CMTNIX_OVERRIDE="--override-input cmtnix 'git+file:.?dir=secrets_example'"
+if [[ "${FLAKE}" =~ "cmt" ]]; then
+  CMTNIX_OVERRIDE="--override-input cmtnix git+ssh://git@github.com/Censio/CMTNix"
+else
+  CMTNIX_OVERRIDE=""
 fi
-
 
 # Navigate to the directory of this script
 cd $(dirname $(readlink -f $0))
@@ -31,10 +32,10 @@ sudo /bin/chmod +a "${USER} allow list,add_file,search,delete,add_subdirectory,d
 
 echo "${GREEN}Starting build ${FLAKE}...${CLEAR}"
 
-nix --experimental-features 'nix-command flakes' build ".#darwinConfigurations.${SYSTEM}.${FLAKE}.system" $@ --override-input secrets "git+file://${SECRETS_DIR}"
+nix --experimental-features 'nix-command flakes' build ".#darwinConfigurations.${SYSTEM}.${FLAKE}.system" $@ --override-input secrets "git+file://${SECRETS_DIR}" $CMTNIX_OVERRIDE
 
 echo "${GREEN}Switching to new generation...${CLEAR}"
-./result/sw/bin/darwin-rebuild switch --flake ".#${SYSTEM}.${FLAKE}" $@ --override-input secrets "git+file://${SECRETS_DIR}"
+./result/sw/bin/darwin-rebuild switch --flake ".#${SYSTEM}.${FLAKE}" $@ --override-input secrets "git+file://${SECRETS_DIR}" $CMTNIX_OVERRIDE
 
 echo "${GREEN}Cleaning up...${CLEAR}"
 unlink ./result

@@ -140,6 +140,7 @@
               nixos-generators.nixosModules.all-formats
               home-manager.nixosModules.home-manager
               ./hosts/testvm
+              ./hosts/testvm/proxmox.nix
             ];
           };
         }))
@@ -176,6 +177,14 @@
               ./hosts/vm
             ];
           };
+          minimal = nixpkgs.lib.nixosSystem {
+            inherit system;
+            specialArgs = { inherit inputs agenix secrets home-manager u location; } // { hostname = "nix"; profile = u.recursiveMerge [ secrets.profile.test secrets.profile.nervasion secrets.profile.vm ]; };
+            modules = [
+              # Modules that are used
+              ./hosts/minimal
+            ];
+          };
           testvm3 = nixpkgs.lib.nixosSystem {
             inherit system;
             specialArgs = { inherit inputs home-manager u; } // { hostname = "testvm"; profile = u.recursiveMerge [ secrets.profile.test secrets.profile.nervasion ]; vmid = "111"; };
@@ -187,8 +196,7 @@
           };
           testvm2 = nixpkgs.lib.nixosSystem {
             system = "x86_64-linux"; # System architecture
-            specialArgs = { inherit inputs home-manager u; } // { hostname = "testvm2"; profile = secrets.profile.test; vmid = "111"; };
-
+            specialArgs = { inherit inputs home-manager u; } // { hostname = "testvm2"; profile = secrets.profile.test; };
             modules = [
               # Modules that are used
               home-manager.nixosModules.home-manager
@@ -222,7 +230,7 @@
 
         pmpcmt =
           let
-            cmtnix = builtins.getFlake "git+ssh://git@github.com/Censio/CMTNix";
+            #cmtnix = builtins.getFlake "git+ssh://git@github.com/Censio/CMTNix";
           in
           darwin.lib.darwinSystem {
             inherit system;
@@ -231,7 +239,7 @@
               # Modules that are used
               agenix.darwinModules.default
               home-manager.darwinModules.home-manager
-              cmtnix.darwinModules.cmt
+              cmtnix.darwinModules.cmtnix
               ./shared/configuration.nix
               ./darwin/configuration.nix
               ./darwin/configuration-cmt.nix
@@ -252,11 +260,11 @@
           in
           home-manager.lib.homeManagerConfiguration {
             inherit pkgs;
-            extraSpecialArgs = { inherit inputs system pkgs agenix secrets home-manager profile location cmtcfg; };
+            extraSpecialArgs = { inherit inputs system pkgs agenix secrets home-manager profile location; };
             modules = [
               agenix.homeManagerModules.default
               ./linux/minimal-home.nix
-            ] ++ (if cmtcfg != null then [ cmtnix.homeManagerModules.cmtaws ] else [ ]);
+            ] ++ (if cmtcfg != null then [ cmtnix.homeManagerModules.cmtaws { cmt = cmtcfg; } ] else [ ]);
           };
 
         ${secrets.profile.per.user} =

@@ -35,7 +35,7 @@ if [ -d ${SECRETS_DIR} ]; then
 fi
 
 # ssh in and run the build
-ssh -t ${TARGET} "cd ~/nixos-config; ./bin/setup && ./bin/build $FLAKE $@"
+ssh -t ${TARGET} "cd ~/nixos-config; ./bin/setup && nix run . -- $FLAKE $@"
 
 # remove secrets
 #ssh -t ${TARGET} "rm -rf ~/.nix-secrets"

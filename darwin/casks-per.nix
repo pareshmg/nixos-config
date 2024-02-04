@@ -8,4 +8,5 @@
   "tuxguitar"
   "logi-options-plus"
   "zotero"
+  "blender"
 ]
