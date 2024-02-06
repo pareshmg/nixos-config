@@ -143,6 +143,15 @@
               ./hosts/testvm/proxmox.nix
             ];
           };
+          minimalvm = nixos-generators.nixosGenerate {
+            inherit system;
+            format = "proxmox";
+            specialArgs = { inherit inputs home-manager u; } // { hostname = "minimal"; profile = u.recursiveMerge [ secrets.profile.test secrets.profile.nervasion ]; vmid = "111"; };
+            modules = [
+              nixos-generators.nixosModules.all-formats
+              ./hosts/minimal
+            ];
+          };
         }))
         (forAllSystems (system:
           let
@@ -179,10 +188,10 @@
           };
           minimal = nixpkgs.lib.nixosSystem {
             inherit system;
-            specialArgs = { inherit inputs agenix secrets home-manager u location; } // { hostname = "nix"; profile = u.recursiveMerge [ secrets.profile.test secrets.profile.nervasion secrets.profile.vm ]; };
+            specialArgs = { inherit inputs agenix secrets home-manager u location; } // { hostname = "minimal"; profile = u.recursiveMerge [ secrets.profile.test secrets.profile.nervasion secrets.profile.vm ]; };
             modules = [
               # Modules that are used
-              ./hosts/minimal
+              #./hosts/minimal
             ];
           };
           testvm3 = nixpkgs.lib.nixosSystem {

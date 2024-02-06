@@ -25,7 +25,7 @@ in
     "${modulesPath}/virtualisation/qemu-vm.nix"
   ];
 
-  virtualisation.qemu.options = [ "-vga none" "-device virtio-vga-gl" "-display sdl,gl=on,show-cursor=off" ];
+  #virtualisation.qemu.options = [ "-vga none" "-device virtio-vga-gl" "-display sdl,gl=on,show-cursor=off" ];
 
   environment = {
     #   loginShellInit = ''
