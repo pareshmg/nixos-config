@@ -28,7 +28,7 @@ in
     username = "${profile.user}";
     homeDirectory = "/home/${profile.user}";
     packages = (pkgs.callPackage ./packages.nix { }) ++ (pkgs.callPackage ../shared/system-packages.nix { });
-    stateVersion = "23.05";
+    stateVersion = "23.11";
     enableNixpkgsReleaseCheck = false;
     file = lib.mkMerge [
       sharedFiles

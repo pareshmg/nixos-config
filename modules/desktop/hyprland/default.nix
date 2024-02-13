@@ -22,10 +22,12 @@ in
   # imports = [ ../virtualisation/qemu.nix ];
   imports = [
     # We need to import that to make it work.
-    "${modulesPath}/virtualisation/qemu-vm.nix"
+    #"${modulesPath}/virtualisation/qemu-vm.nix"
   ];
 
-  virtualisation.qemu.options = [ "-vga none" "-device virtio-vga-gl" "-display sdl,gl=on,show-cursor=off" ];
+  #virtualisation.qemu.options = [ "-vga none" "-device virtio-vga-gl" "-display sdl,gl=on,show-cursor=off" ];
+
+  hardware.opengl.enable = true;
 
   environment = {
     #   loginShellInit = ''
