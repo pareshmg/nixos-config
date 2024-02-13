@@ -68,21 +68,21 @@ in
 
 
   #networking.useDHCP = lib.mkDefault true;
-  networking = u.recursiveMerge [
-    {
-      useDHCP = false; # Deprecated
-      hostId = profile.macAddress;
-      interfaces = {
-        ens18 = {
-          ipv4.addresses = [{
-            address = profile.ip;
-            prefixLength = 16;
-          }];
-        };
-      };
-    }
-    (u.getOrDefault profile "networking" { })
-  ];
+  # networking = u.recursiveMerge [
+  #   {
+  #     useDHCP = false; # Deprecated
+  #     hostId = profile.macAddress;
+  #     interfaces = {
+  #       ens18 = {
+  #         ipv4.addresses = [{
+  #           address = profile.ip;
+  #           prefixLength = 16;
+  #         }];
+  #       };
+  #     };
+  #   }
+  #   (u.getOrDefault profile "networking" { })
+  # ];
 
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
   #hardware.cpu.intel.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;

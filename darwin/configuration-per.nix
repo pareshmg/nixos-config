@@ -19,7 +19,13 @@ let
   mm = (u.getOrDefault secrets "utils.mm" (_: "")) pkgs;
 in
 {
+  imports = [
+    ./modules/yabai.nix
+    ./modules/skhd.nix
+  ];
+
   environment.systemPackages = [ mm ];
+
   homebrew = {
     # Declare Homebrew using Nix-Darwin
     casks = (pkgs.callPackage ./casks.nix { }) ++ (pkgs.callPackage ./casks-per.nix { });

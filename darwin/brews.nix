@@ -3,4 +3,7 @@
 [
   "wireguard-tools"
   "cliclick"
+
+  "ollama"
+
 ]

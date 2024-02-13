@@ -20,7 +20,8 @@ in
 {
   imports =
     [ (import ./hardware-configuration.nix) ] ++ # Current system hardware config
-    [ ];
+    [ (import ../../modules/desktop/i3/default.nix) ];
+
 
   boot = {
     # Boot options
@@ -44,7 +45,7 @@ in
       #x11vnc
       #wacomtablet
       #clinfo
-    ]; #++ (profile.additionalPackages { pkgs = pkgs;});
+    ] ++ (profile.additionalPackages { inherit pkgs;});
     #variables = {
     #  LIBVA_DRIVER_NAME = "i965";
     #};
@@ -77,14 +78,14 @@ in
     network.enable = true;
   };
 
-  users.users.${profile.user} = {
-    isNormalUser = true;
-    extraGroups = [ "wheel" "video" "audio" "camera" "networkmanager" "lp" "scanner" ];
-    shell = pkgs.zsh;
-    uid = 1001;
-    hashedPassword = profile.hashedPassword;
-  };
-  security.sudo.wheelNeedsPassword = true; # User does not need to give password when using sudo.
 
+
+  home-manager = {
+    extraSpecialArgs = { inherit profile; };
+    users.${profile.user}.imports = [
+      ./home.nix
+      ../../modules/desktop/i3/home.nix
+    ];
+  };
 
 }

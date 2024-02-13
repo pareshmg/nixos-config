@@ -10,6 +10,6 @@ echo "${GREEN}Installing VM...${CLEAR}"
 VMID=$1
 VMFILE=$2
 
-ssh root@pve "qm destroy ${VMID} --destroy-unreferenced-disks 1 --purge 1; qmrestore /var/lib/vz/dump/${VMFILE} ${VMID} --unique true --force"
+ssh root@pve "qm stop ${VMID} -skiplock; qm destroy ${VMID} --destroy-unreferenced-disks 1 --purge 1; qmrestore /var/lib/vz/dump/${VMFILE} ${VMID} --unique true --force"
 
 echo "${GREEN}VM installed${CLEAR}"

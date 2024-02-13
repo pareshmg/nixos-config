@@ -17,6 +17,10 @@
       additionalSpace = "2048M";
       diskSize = "auto";
       agent = true;
+
+    };
+    qemuExtraConf = {
+      vga="virtio";
     };
   };
 

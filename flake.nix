@@ -139,8 +139,21 @@
             modules = [
               nixos-generators.nixosModules.all-formats
               home-manager.nixosModules.home-manager
+              ./hosts/minimal
               ./hosts/testvm
               ./hosts/testvm/proxmox.nix
+            ];
+          };
+          waylandvm = nixos-generators.nixosGenerate {
+            inherit system;
+            format = "proxmox";
+            specialArgs = { inherit inputs home-manager u; } // { hostname = "testvm"; profile = u.recursiveMerge [ secrets.profile.test secrets.profile.nervasion ]; vmid = "111"; };
+            modules = [
+              nixos-generators.nixosModules.all-formats
+              home-manager.nixosModules.home-manager
+              ./hosts/minimal
+              ./hosts/waylandvm
+              ./hosts/waylandvm/proxmox.nix
             ];
           };
           minimalvm = nixos-generators.nixosGenerate {
