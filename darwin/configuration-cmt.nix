@@ -19,6 +19,7 @@ let
 in
 {
   cmt = secrets.profile.work.cmt;
+  services.cmtLLM.enable = true;
   age = {
     secrets = {
       cmt_aws_daily_roles = {

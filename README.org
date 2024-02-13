@@ -13,7 +13,21 @@ nix --extra-experimental-features 'nix-command flakes' run --no-write-lock-file 
 #+end_src
 
 
-You can optionally pass to the above the argument ~-- ${FLAKE}~ which will boostrap the specified flake. Please select a flake from [[*Flakes][Flakes]]
+You can optionally pass to the above the argument ~-- ${FLAKE}~ which will boostrap the specified flake. Please select a flake from the flakes table
+
+** Flakes
+
+| *FLAKE*   | *OS*   | *DESKTOP* | *ARCH*  | *Comments*                           |
+|-----------+--------+-----------+---------+--------------------------------------|
+| pmp       | darwin | Y         | x86-64  | 2020 macbook pro - main              |
+| pmpcmt    | darwin | Y         | aarch64 | 2023 macbook pro - work              |
+| vm        | NixOS  | N         | x86-64  | headless VM with GPU                 |
+| $user     | N/A    | N         | x86-64  | Home-manager only                    |
+| ubuntu    | N/A    | N         | x86-64  | Home-manager only - work             |
+| testvm    | NixOS  | Y         | x86-64  | i3 VM export for Proxmox             |
+| minimal   | NixOS  | N         | x86-64  | a minimal VM export for Proxmox      |
+| waylandvm | NixOS  | Y         | x86-64  | Sway + Wayland VM export for Proxmox |
+|           |        |           |         |                                      |
 
 
 
@@ -119,19 +133,6 @@ For home-manager only machines:
 - Packages are installed in user space only
 - use flake as defined in your secrets as ~secrets.profile.per.user~
 
-
-** Flakes
-
-| *FLAKE* | *OS*   | *DESKTOP* | *ARCH*  | *Comments*                   |
-|---------+--------+-----------+---------+------------------------------|
-| pmp     | darwin | Y         | x86-64  | 2020 macbook pro - main      |
-| pmpcmt  | darwin | Y         | aarch64 | 2023 macbook pro - work      |
-| vm      | NixOS  | N         | x86-64  | headless VM with GPU         |
-| $user   | N/A    | N         | x86-64  | Home-manager only            |
-| ubuntu  | N/A    | N         | x86-64  | Home-manager only - work     |
-| testvm  | NixOS  | Y         | x86-64  | VM export for Proxmox w/ KDE |
-| minimal | NixOS  | N         | x86-64  | VM export for Proxmox        |
-|         |        |           |         |                              |
 
 
 * Credits / Sources of inspiration

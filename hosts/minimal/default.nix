@@ -54,6 +54,7 @@ in
   programs.zsh.enable = true;
 
 
+  # user configuration
   users.users.${profile.user} = {
     isNormalUser = true;
     extraGroups = [ "video" "audio" "networkmanager" "lp" "kvm" "libvirtd" ];
