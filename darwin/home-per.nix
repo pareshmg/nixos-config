@@ -21,6 +21,10 @@ let
   inherit (specialArgs) profile;
 in
 {
+  imports = [
+    ../modules/programs/tex.nix
+  ];
+
   home = {
     packages = (pkgs.callPackage ./packages.nix { })
       ++ (pkgs.callPackage ../shared/packages.nix { })
@@ -29,9 +33,8 @@ in
 
     activation = builtins.trace "setting up home activations" {
       configActivationAction = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
-        $DRY_RUN_CMD cat "$HOME/Library/Application Support/KeepassXC/keepassxc.ini.orig" > "$HOME/Library/Application Support/KeepassXC/keepassxc.ini"
+        $DRY_RUN_CMD cat "$HOME/Library/Application Support/KeepassXC/keepassxc.ini.orig" || true # > "$HOME/Library/Application Support/KeepassXC/keepassxc.ini || true"
       '';
     };
-
   };
 }

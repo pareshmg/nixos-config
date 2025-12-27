@@ -25,23 +25,6 @@ in
     packages = (pkgs.callPackage ./packages.nix { }) ++ (pkgs.callPackage ../shared/packages.nix { });
     stateVersion = "23.11";
     enableNixpkgsReleaseCheck = false;
-    file = lib.mkMerge [
-      #additionalFiles
-      #{ "emacs-launcher.command".source = myEmacsLauncher; }
-      {
-        ".config/iterm2" = {
-          source = ../shared/config/iterm2;
-          recursive = true;
-          onChange = ''
-            # Specify the preferences directory
-            /usr/bin/defaults write com.googlecode.iterm2 PrefsCustomFolder -string "~/.config/iterm2"
-
-            # Tell iTerm2 to use the custom preferences in the directory
-            /usr/bin/defaults write com.googlecode.iterm2 LoadPrefsFromCustomFolder -bool true
-          '';
-        };
-      }
-    ];
     sessionPath = [
       "/System/Volumes/Data/opt/homebrew/bin"
     ];
@@ -67,7 +50,7 @@ in
   #       custom = "$HOME/.config/zsh_nix/custom";
   #     };
 
-  #     initExtra = ''
+  #     initContent = ''
   #       # Spaceship
   #       source ${pkgs.spaceship-prompt}/share/zsh/site-functions/prompt_spaceship_setup
   #       autoload -U promptinit; promptinit

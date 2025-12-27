@@ -12,16 +12,13 @@
 #               └─ bspwm.nix
 #
 
-{ config, pkgs, profile, vmid, ... }:
+{ config, lib, pkgs, profile, vmid, ... }:
 
-let
-
-in
 {
   services.logrotate.checkConfig = false;
-  # imports =
-  #   [ (import ./hardware-configuration.nix) ] ++ # Current system hardware config
-  #   [ ];
+  imports = [
+    ./hardware-configuration.nix
+  ];
 
   # boot = {
   #   # Boot options
@@ -57,12 +54,21 @@ in
   # user configuration
   users.users.${profile.user} = {
     isNormalUser = true;
-    extraGroups = [ "video" "audio" "networkmanager" "lp" "kvm" "libvirtd" ];
+    extraGroups = [
+      "video"
+      "audio"
+      "networkmanager"
+      "lp"
+      "kvm"
+      "libvirtd"
+      "docker"
+      "dialout" # for zwave ttyACM0
+    ];
     shell = pkgs.zsh;
-    uid = 1001;
-    hashedPassword = profile.hashedPassword;
+    #uid = 1001;
+    inherit (profile) hashedPassword;
   };
-  security.sudo.wheelNeedsPassword = true; # User does not need to give password when using sudo.
+  security.sudo.wheelNeedsPassword = lib.mkDefault true; # User does not need to give password when using sudo.
 
 
 }

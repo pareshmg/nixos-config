@@ -2,7 +2,8 @@
 
 let
   mod = "Mod4";
-in {
+in
+{
   xsession.windowManager.i3 = {
     enable = true;
     config = {

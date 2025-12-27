@@ -10,7 +10,7 @@
   nix = {
     package = pkgs.nixFlakes;
     extraOptions = ''
-        experimental-features = nix-command flakes
+      experimental-features = nix-command flakes
     '';
   };
 
@@ -31,9 +31,6 @@
     #hostName = "testvm"; # edit this to your liking
   };
 
-  # QEMU-specific
-  services.spice-vdagentd.enable = true;
-  services.qemuGuest.enable = true;
 
   # locales
   # https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
@@ -50,18 +47,22 @@
   nixpkgs.config.pulseaudio = true;
   hardware.pulseaudio.enable = true;
 
-  # ssh
-  services.openssh = {
-    enable = false;
-    settings = {
-      #kexAlgorithms = [ "curve25519-sha256" ];
-      #ciphers = [ "chacha20-poly1305@openssh.com" ];
-      #passwordAuthentication = false;
-      #permitRootLogin = "no"; # do not allow to login as root user
-      #kbdInteractiveAuthentication = false;
+  services = {
+    # QEMU-specific
+    spice-vdagentd.enable = true;
+    qemuGuest.enable = true;
+    # ssh
+    openssh = {
+      enable = false;
+      settings = {
+        #kexAlgorithms = [ "curve25519-sha256" ];
+        #ciphers = [ "chacha20-poly1305@openssh.com" ];
+        #passwordAuthentication = false;
+        #permitRootLogin = "no"; # do not allow to login as root user
+        #kbdInteractiveAuthentication = false;
+      };
     };
   };
-
   nixpkgs.config.allowUnfree = true;
 
   fonts.packages = with pkgs; [
@@ -80,14 +81,14 @@
     curl
     wget
     foot
-  ] ++ (profile.additionalPackages { inherit pkgs;});
+  ] ++ (profile.additionalPackages { inherit pkgs; });
 
 
   home-manager = {
     useGlobalPkgs = true;
     useUserPackages = true;
     extraSpecialArgs = { inherit profile; };
-    users.${profile.user}.imports = [./home.nix];
+    users.${profile.user}.imports = [ ./home.nix ];
   };
 
 

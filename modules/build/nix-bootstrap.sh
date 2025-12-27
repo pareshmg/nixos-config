@@ -4,8 +4,8 @@
 set -e
 set -x
 
-MY_NIX_DIR=~/nixos-config
-SECRETS_DIR=~/.nix-secrets
+MY_NIX_DIR=~/.config/nixos-config
+SECRETS_DIR=~/.config/nix-secrets
 
 GREEN='\033[1;32m'
 RED='\033[1;31m'

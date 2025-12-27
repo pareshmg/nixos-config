@@ -14,9 +14,6 @@
 
 { config, pkgs, profile, vmid, ... }:
 
-let
-
-in
 {
   imports =
     [ (import ./hardware-configuration.nix) ] ++ # Current system hardware config
@@ -37,15 +34,7 @@ in
   };
   environment = {
     # Packages installed system wide
-    systemPackages = with pkgs; [
-      # This is because some options need to be configured.
-      #discord
-      #plex
-      #simple-scan
-      #x11vnc
-      #wacomtablet
-      #clinfo
-    ] ++ (profile.additionalPackages { inherit pkgs;});
+    systemPackages = with pkgs; (profile.additionalPackages { inherit pkgs; });
     #variables = {
     #  LIBVA_DRIVER_NAME = "i965";
     #};

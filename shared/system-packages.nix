@@ -9,7 +9,7 @@ with pkgs; [
   tmux
 
   # emacs for all
-  emacs29-nox
+  emacs-nox
   fd
   ripgrep
   coreutils

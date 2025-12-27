@@ -13,13 +13,13 @@
 
 { pkgs, config, lib, profile, ... }:
 
-let
-  # Define the content of your file as a derivation
-  # myEmacsLauncher = pkgs.writeScript "emacs-launcher.command" ''
-  #   #!/bin/sh
-  #   emacsclient -c -n &
-  # '';
-in
+#let
+# Define the content of your file as a derivation
+# myEmacsLauncher = pkgs.writeScript "emacs-launcher.command" ''
+#   #!/bin/sh
+#   emacsclient -c -n &
+# '';
+#in
 {
   imports =
     [

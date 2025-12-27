@@ -4,14 +4,14 @@
   enable = true;
   # syntaxHighlighting.enable = true;
   enableCompletion = false;
-  initExtra = ''                            # Zsh theme
+  initContent = ''                            # Zsh theme
     export PATHORIG=$PATH
 
     if [ -f ~/.profile_personal ]; then
         source ~/.profile_personal
     fi
-    if [ -f ~/.cmt ]; then
-        source ~/.cmt
+    if [ -f ~/.ssai ]; then
+        source ~/.ssai
     fi
     #autoload -U promptinit; promptinit
     # Hook direnv
@@ -36,9 +36,9 @@
     enable = true;
     plugins = [
       "git"
-      "history-substring-search"
+      #"history-substring-search"
       "tmux"
-      "per-directory-history"
+      #"per-directory-history"
       "docker"
       "kubectl"
       "z"

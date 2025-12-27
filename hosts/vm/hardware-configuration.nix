@@ -14,31 +14,14 @@
 
 { config, lib, pkgs, modulesPath, profile, u, ... }:
 let
-  user = profile.user;
+  inherit (profile) user;
 in
 {
-  imports =
-    [
-      (modulesPath + "/profiles/qemu-guest.nix")
-    ];
-
-  boot.initrd.availableKernelModules = [ "ata_piix" "uhci_hcd" "virtio_pci" "virtio_scsi" "sd_mod" "sr_mod" ];
-  boot.initrd.kernelModules = [ ];
-  boot.kernelModules = [ ];
-  boot.extraModulePackages = [ ];
-
-  # zfs
-  # boot.supportedFilesystems = [ "zfs" ];
-  # services.zfs = {
-  #   autoScrub.enable = true;
-  #   trim.enable = true;
-  # };
-
   hardware.nvidia = {
 
     # Modesetting is needed for most wayland compositors
     modesetting.enable = false;
-    nvidiaPersistenced = true;
+    #nvidiaPersistenced = true;
     powerManagement.enable = true;
     # powerManagement.finegrained = true;
 
@@ -54,45 +37,41 @@ in
   };
 
 
-  fileSystems."/" =
-    {
-      device = "/dev/disk/by-uuid/7e38979e-68c7-466c-b8b7-db7b979841cd";
-      fsType = "ext4";
-    };
+  fileSystems = {
+    "/" =
+      {
+        device = "/dev/disk/by-uuid/7e38979e-68c7-466c-b8b7-db7b979841cd";
+        fsType = "ext4";
+      };
 
-  fileSystems."/home" =
-    {
-      device = "/dev/disk/by-uuid/09ad8c4c-f140-494b-9277-37f46ab0c157";
-      fsType = "xfs";
+    "/home" =
+      {
+        device = "/dev/disk/by-uuid/09ad8c4c-f140-494b-9277-37f46ab0c157";
+        fsType = "xfs";
+      };
+    # fileSystems."/var/lib/docker" =
+    #   { device = "/dev/disk/by-uuid/049a8269-2f23-48d1-8381-38db88c0459b";
+    #     fsType = "ext4";
+    #   };
+    "/mnt/cache" =
+      {
+        device = "/dev/disk/by-uuid/6e7e9cce-524d-41cc-8507-e1e8a57f4de4";
+        fsType = "ext4";
+      };
+    "/media/pvenfs" = {
+      device = "nfs.l.nervasion.com:/mnt/nas/orya";
+      fsType = "nfs";
+      options = [ "x-systemd.automount" "noauto" ];
     };
-  # fileSystems."/var/lib/docker" =
-  #   { device = "/dev/disk/by-uuid/049a8269-2f23-48d1-8381-38db88c0459b";
-  #     fsType = "ext4";
-  #   };
-  fileSystems."/mnt/cache" =
-    {
-      device = "/dev/disk/by-uuid/6e7e9cce-524d-41cc-8507-e1e8a57f4de4";
-      fsType = "ext4";
+    "/home/${user}/.org" = {
+      device = "nfs.l.nervasion.com:/mnt/nas/nextcloud/localstorage/Org";
+      fsType = "nfs";
+      options = [ "x-systemd.automount" "user" "noauto" ];
+      #options = [ "x-systemd.automount" "user,noauto,soft,intr,rsize=8192,wsize=8192,timeo=900,retrans=3,proto=tcp,all_squash,anonuid=0,anongid=0" ];
+      #options = [ "x-systemd.automount" "user,noauto"];
     };
-  fileSystems."/media/pvenfs" = {
-    device = "nfs.l.nervasion.com:/mnt/nas/orya";
-    fsType = "nfs";
-    options = [ "x-systemd.automount" "noauto" ];
   };
-  fileSystems."/home/${user}/.org" = {
-    device = "nfs.l.nervasion.com:/mnt/nas/nextcloud/localstorage/Org";
-    fsType = "nfs";
-    options = [ "x-systemd.automount" "user" "noauto" ];
-    #options = [ "x-systemd.automount" "user,noauto,soft,intr,rsize=8192,wsize=8192,timeo=900,retrans=3,proto=tcp,all_squash,anonuid=0,anongid=0" ];
-    #options = [ "x-systemd.automount" "user,noauto"];
-  };
 
-
-
-  swapDevices = [ ];
-
-
-  #networking.useDHCP = lib.mkDefault true;
   networking = u.recursiveMerge [
     {
       useDHCP = false; # Deprecated
@@ -105,9 +84,20 @@ in
           }];
         };
       };
+      firewall = {
+        enable = true;
+        interfaces."ens18".allowedTCPPorts = [
+          80
+          443
+          11434 # Ollama
+        ];
+      };
     }
     (u.getOrDefault profile "networking" { })
   ];
+
+
+  swapDevices = [ ];
 
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
   #hardware.cpu.intel.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;

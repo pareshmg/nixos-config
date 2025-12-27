@@ -7,10 +7,10 @@
 #       └─ ./configuration.nix *
 #
 
-{ inputs, config, lib, pkgs, profile, location, hostname, ... }:
+{ inputs, config, lib, pkgs, profile, location, u, hostname, ... }:
 
 let
-  user = profile.user;
+  inherit (profile) user;
   color_ssh_py = pkgs.writeScriptBin "ssh_color_py" (builtins.readFile ../shared/scripts/ssh_color.py);
 in
 {
@@ -47,10 +47,11 @@ in
     ];
   };
 
+  security.pam.services.sudo_local.touchIdAuth = true;
 
-  services = {
-    nix-daemon.enable = true; # Auto upgrade daemon
-  };
+  # services = {
+  #   nix-daemon.enable = true; # Auto upgrade daemon
+  # };
 
   homebrew = {
     # Declare Homebrew using Nix-Darwin
@@ -67,7 +68,7 @@ in
       #"1password" = 1333542190;
       # "enpass" = 732710998; #  Enpass - Password Manager
       "wireguard" = 1451685025;
-      "Xcode" = 497799835;
+      # "Xcode" = 497799835;
 
     };
   };
@@ -86,7 +87,7 @@ in
   home-manager = {
     useGlobalPkgs = true;
     useUserPackages = true;
-    extraSpecialArgs = { inherit profile; };
+    extraSpecialArgs = { inherit profile u location; };
     users.${user}.imports = [
       ../shared/home.nix
       ./home.nix
@@ -177,34 +178,203 @@ in
   # ];
 
   system = {
+    primaryUser = user;
     checks.verifyNixPath = false; # Turn off NIX_PATH warnings now that we're using flakes
     defaults = {
       NSGlobalDomain = {
         # Global macOS system settings
-        KeyRepeat = 1;
+        _HIHideMenuBar = false;
+        "com.apple.keyboard.fnState" = false;
+        "com.apple.mouse.tapBehavior" = 1;
+        "com.apple.sound.beep.feedback" = 0;
+        "com.apple.sound.beep.volume" = 0.0;
+        "com.apple.springing.delay" = 1.0;
+        "com.apple.springing.enabled" = null;
+        "com.apple.swipescrolldirection" = true;
+        "com.apple.trackpad.enableSecondaryClick" = true;
+        "com.apple.trackpad.forceClick" = false;
+        "com.apple.trackpad.scaling" = null;
+        "com.apple.trackpad.trackpadCornerClickBehavior" = null;
+        AppleEnableMouseSwipeNavigateWithScrolls = true;
+        AppleEnableSwipeNavigateWithScrolls = true;
+        AppleFontSmoothing = null;
+        AppleICUForce24HourTime = false;
+        AppleInterfaceStyle = "Dark";
+        AppleInterfaceStyleSwitchesAutomatically = false;
+        AppleKeyboardUIMode = null;
+        AppleMeasurementUnits = "Inches";
+        AppleMetricUnits = 0;
+        ApplePressAndHoldEnabled = false;
+        AppleScrollerPagingBehavior = true;
+        AppleShowAllExtensions = true;
+        AppleShowAllFiles = false;
+        AppleShowScrollBars = "WhenScrolling";
+        AppleSpacesSwitchOnActivate = true;
+        AppleTemperatureUnit = "Fahrenheit";
+        AppleWindowTabbingMode = "always";
+        InitialKeyRepeat = 15; # slider values: 120, 94, 68, 35, 25, 15
+        KeyRepeat = 2; # slider values: 120, 90, 60, 30, 12, 6, 2
         NSAutomaticCapitalizationEnabled = false;
+        NSAutomaticDashSubstitutionEnabled = false;
+        NSAutomaticPeriodSubstitutionEnabled = false;
+        NSAutomaticQuoteSubstitutionEnabled = false;
         NSAutomaticSpellingCorrectionEnabled = false;
+        NSAutomaticWindowAnimationsEnabled = true;
+        NSDisableAutomaticTermination = null;
+        NSDocumentSaveNewDocumentsToCloud = false;
+        NSNavPanelExpandedStateForSaveMode = true;
+        NSNavPanelExpandedStateForSaveMode2 = true;
+        NSScrollAnimationEnabled = true;
+        NSTableViewDefaultSizeMode = 2;
+        NSTextShowsControlCharacters = false;
+        NSUseAnimatedFocusRing = true;
+        NSWindowResizeTime = 2.0e-2;
+        PMPrintingExpandedStateForPrint = true;
+        PMPrintingExpandedStateForPrint2 = true;
       };
+      CustomUserPreferences = {
+        NSGlobalDomain = {
+          NSCloseAlwaysConfirmsChanges = false;
+          AppleSpacesSwitchOnActivate = true;
+        };
+        "com.apple.ActivityMonitor" = {
+          UpdatePeriod = 1;
+        };
+        "com.apple.spaces" = {
+          "spans-displays" = false;
+        };
+        "com.apple.menuextra.clock" = {
+          #DateFormat = "EEE MMM d h:mm a";
+          #FlashDateSeparators = false;
+        };
+
+      };
+      # alf = {
+      #   allowdownloadsignedenabled = 1;
+      #   allowsignedenabled = 1;
+      #   globalstate = 1;
+      #   loggingenabled = 0;
+      #   stealthenabled = 1;
+      # };
       dock = {
         # Dock settings
+        appswitcher-all-displays = true;
         autohide = true;
-        orientation = "bottom";
-        showhidden = true;
+        autohide-delay = 0.0;
+        autohide-time-modifier = 0.15;
+        dashboard-in-overlay = false;
+        enable-spring-load-actions-on-all-items = false;
+        expose-animation-duration = 0.0;
+        expose-group-apps = false;
+        launchanim = false;
         mineffect = "scale";
+        minimize-to-application = false;
+        mouse-over-hilite-stack = true;
+        mru-spaces = false;
+        orientation = "bottom";
+        show-process-indicators = true;
+        show-recents = false;
+        showhidden = true;
         tilesize = 40;
+        persistent-apps = [
+          "/Applications/KeePassXC.app"
+          "/Applications/Firefox.app"
+          # {
+          #   app = "/Applications/Firefox.app";
+          # }
+          # {
+          #   spacer = {
+          #     small = true;
+          #   };
+          # }
+          # {
+          #   folder = "~/Downloads";
+          # }
+        ];
+        # persistent-others = [ "${userHome}/Downloads/" ];
       };
       finder = {
-        # Finder settings
-        QuitMenuItem = false; # I believe this probably will need to be true if using spacebar
+        _FXShowPosixPathInTitle = false;
+        _FXSortFoldersFirst = true;
+        AppleShowAllExtensions = true;
+        AppleShowAllFiles = false;
+        CreateDesktop = true;
+        FXDefaultSearchScope = "SCcf";
+        FXEnableExtensionChangeWarning = false;
         FXPreferredViewStyle = "clmv";
+        QuitMenuItem = false;
+        ShowPathbar = true;
+        ShowStatusBar = false;
+      };
+      loginwindow = {
+        autoLoginUser = null;
+        DisableConsoleAccess = false;
+        GuestEnabled = false;
+        LoginwindowText = "paresh.mg@gmail.com";
+        PowerOffDisabledWhileLoggedIn = false;
+        RestartDisabled = false;
+        RestartDisabledWhileLoggedIn = false;
+        SHOWFULLNAME = false;
+        ShutDownDisabled = false;
+        ShutDownDisabledWhileLoggedIn = false;
+        SleepDisabled = false;
+      };
+      screencapture = {
+        disable-shadow = true;
+        location = "~/Downloads";
+        show-thumbnail = true;
+        type = "png";
+        target = "file";
+      };
+      spaces = {
+        spans-displays = false;
       };
       trackpad = {
-        # Trackpad settings
+        ActuationStrength = 1;
         Clicking = true;
+        Dragging = true;
+        FirstClickThreshold = 1;
+        SecondClickThreshold = 2;
         TrackpadRightClick = true;
+        TrackpadThreeFingerDrag = false;
+        TrackpadThreeFingerTapGesture = 0;
       };
+      # universalaccess = {
+      #   closeViewScrollWheelToggle = false;
+      #   closeViewZoomFollowsFocus = false;
+      #   reduceTransparency = false;
+      #   mouseDriverCursorSize = 1.0;
+      # };
+      SoftwareUpdate = {
+        AutomaticallyInstallMacOSUpdates = true;
+      };
+      LaunchServices = {
+        LSQuarantine = true;
+      };
+      WindowManager = {
+        AppWindowGroupingBehavior = true;
+        AutoHide = false;
+        EnableStandardClickToShowDesktop = false;
+        EnableTiledWindowMargins = false;
+        GloballyEnabled = false;
+        HideDesktop = false;
+        StageManagerHideWidgets = false;
+        StandardHideDesktopIcons = false;
+        StandardHideWidgets = false;
+      };
+      ".GlobalPreferences" = {
+        "com.apple.mouse.scaling" = null;
+        "com.apple.sound.beep.sound" = null;
+      };
+
     };
-    activationScripts.postActivation.text = ''sudo chsh -s ${pkgs.zsh}/bin/zsh || true''; # Since it's not possible to declare default shell, run this command after build
+    startup = {
+      chime = false;
+    };
+    activationScripts.postActivation.text = ''
+      sudo chsh -s ${pkgs.zsh}/bin/zsh || true
+      sudo mdutil -E /Applications
+    ''; # Since it's not possible to declare default shell, run this command after build
     stateVersion = 4;
 
     # defaults = {

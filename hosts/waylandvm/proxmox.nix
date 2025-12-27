@@ -20,7 +20,7 @@
 
     };
     qemuExtraConf = {
-      vga="virtio";
+      vga = "virtio";
     };
   };
 

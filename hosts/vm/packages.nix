@@ -1,4 +1,4 @@
-{ pkgs }:
+{ lib, pkgs }:
 
 with pkgs;
 [
@@ -6,4 +6,5 @@ with pkgs;
   sshpass # for ansible
   terraform
   git-lfs
+  (lib.hiPrio (ollama-master.override {acceleration="cuda";}))
 ]
