@@ -12,7 +12,7 @@ let
   };
 in
 with host; {
-  config = lib.mkIf (config.xsession.enable) {
+  config = lib.mkIf config.xsession.enable {
     # Only evaluate code if using X11
     services = {
       polybar = {

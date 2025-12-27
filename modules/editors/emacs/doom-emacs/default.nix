@@ -16,25 +16,20 @@
 
 
 { config, pkgs, ... }:
-
+let
+  doom-sync = pkgs.callPackage ./doom-sync.nix { };
+in
 {
   #services.emacs.enable = true;
-
-  system.userActivationScripts = {
-    # Installation script every time nixos-rebuild is run. So not during initial install.
-    doomEmacs = {
-      text = ''
-        source ${config.system.build.setEnvironment}
-        EMACS="$HOME/.config/emacs"
-        DOOMDIR="$HOME/.config/doom"
-
-        if [ ! -d "$EMACS" ]; then
-          ${pkgs.git}/bin/git clone https://github.com/hlissner/doom-emacs.git $EMACS
-          yes | $EMACS/bin/doom install
-        fi
-        $EMACS/bin/doom sync
-      ''; # It will always sync when rebuild is done. So changes will always be applied.
-    };
-  };
+  environment.systemPackages = [ doom-sync ];
+  # system.userActivationScripts = {
+  #   # Installation script every time nixos-rebuild is run. So not during initial install.
+  #   doomEmacs = {
+  #     text = ''
+  #       #!/bin/sh
+  #       ${doom-sync}/bin/doom-sync
+  #     ''; # It will always sync when rebuild is done. So changes will always be applied.
+  #   };
+  # };
 
 }

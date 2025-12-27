@@ -2,14 +2,16 @@
 
 
 {
-  home.username = profile.user;
-  home.homeDirectory = "/home/${profile.user}";
+  home = {
+    username = profile.user;
+    homeDirectory = "/home/${profile.user}";
+    packages = with pkgs; [
+      #mako
+      #wl-clipboard
+      #shotman
+    ];
+  };
   programs.home-manager.enable = true;
-  home.packages = with pkgs; [
-    #mako
-    #wl-clipboard
-    #shotman
-  ];
   wayland.windowManager.sway = {
     enable = true;
     config = rec {
@@ -22,12 +24,12 @@
       };
     };
     extraConfig = ''
-                  bindsym Print               exec shotman -c output
-                  bindsym Print+Shift         exec shotman -c region
-                  bindsym Print+Shift+Control exec shotman -c window
+      bindsym Print               exec shotman -c output
+      bindsym Print+Shift         exec shotman -c region
+      bindsym Print+Shift+Control exec shotman -c window
 
-                  #output * bg ${pkgs.sway}/share/backgrounds/sway/Sway_Wallpaper_Blue_1920x1080.png fill
-                '';
+      #output * bg ${pkgs.sway}/share/backgrounds/sway/Sway_Wallpaper_Blue_1920x1080.png fill
+    '';
   };
   home.stateVersion = "23.11";
 }

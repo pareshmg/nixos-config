@@ -12,10 +12,10 @@
 #
 
 { config, lib, pkgs, hostname, system, nixpkgs, modulesPath, ... }:
-let
-  # exec = with host; if hostName == "work" then "exec nvidia-offload Hyprland" else "exec Hyprland"; # Starting Hyprland with nvidia (bit laggy so disabling)
-  #exec = "exec Hyprland";
-in
+#let
+# exec = with host; if hostName == "work" then "exec nvidia-offload Hyprland" else "exec Hyprland"; # Starting Hyprland with nvidia (bit laggy so disabling)
+#exec = "exec Hyprland";
+#in
 {
   #imports = [ ../../programs/waybar.nix ];
   #imports = [ "${nixpkgs}/nixos/modules/virtualisation/qemu-vm.nix" ];

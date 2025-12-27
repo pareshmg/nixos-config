@@ -7,9 +7,35 @@ set -x
 echo "${GREEN}Installing VM...${CLEAR}"
 #./result/activate
 
-VMID=$1
-VMFILE=$2
+# Default values
+TARGET_HOST="pve"
 
-ssh root@pve "qm stop ${VMID} -skiplock; qm destroy ${VMID} --destroy-unreferenced-disks 1 --purge 1; qmrestore /var/lib/vz/dump/${VMFILE} ${VMID} --unique true --force"
+# Parse command line options
+while getopts ":i:f:h:" opt; do
+  case ${opt} in
+    i )
+      VMID=$OPTARG
+      ;;
+    f )
+      VMFILE=$OPTARG
+      ;;
+    h )
+      TARGET_HOST=$OPTARG
+      ;;
+    \? )
+      echo "Invalid option: $OPTARG" 1>&2
+      ;;
+    : )
+      echo "Invalid option: $OPTARG requires an argument" 1>&2
+      exit 1
+      ;;
+  esac
+done
+
+
+# Shift off the options and their arguments processed by getopts
+shift "$((OPTIND-1))"
+
+ssh root@${TARGET_HOST} "qm stop ${VMID} -skiplock; qm destroy ${VMID} --destroy-unreferenced-disks 1 --purge 1; qmrestore /var/lib/vz/dump/${VMFILE} ${VMID} --unique true --force"
 
 echo "${GREEN}VM installed${CLEAR}"

@@ -15,7 +15,7 @@ let
   #   #!/bin/sh
   #   emacsclient -c -n &
   # '';
-  user = profile.user;
+  inherit (profile) user;
   mm = (u.getOrDefault secrets "utils.mm" (_: "")) pkgs;
 in
 {
@@ -48,4 +48,11 @@ in
     };
   };
 
+  # launchd.daemons."limit.maxfiles" = {
+  #   # enable = true;
+  #   serviceConfig = {
+  #     ProgramArguments = [ "launchctl" "limit" "maxfiles" "65536" "65536" ];
+  #     RunAtLoad = true;
+  #   };
+  # };  
 }

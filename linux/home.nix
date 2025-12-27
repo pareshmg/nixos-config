@@ -10,11 +10,11 @@
 #           └─ ./alacritty.nix
 #
 
-{ lib, config, pkgs, agenix, home-manager, secrets, specialArgs, location, ... }:
+{ lib, config, pkgs, agenix, home-manager, secrets, specialArgs, ... }:
 
 let
-  inherit (specialArgs) profile u;
-  sharedFiles = import ../shared/files.nix { inherit config pkgs profile u; };
+  inherit (specialArgs) profile u location;
+  sharedFiles = import ../shared/files.nix { inherit config pkgs profile u location; };
 in
 {
 
@@ -38,7 +38,7 @@ in
       enable = true;
       # syntaxHighlighting.enable = true;
       enableCompletion = false;
-      initExtra = ''                            # Zsh theme
+      initContent = ''                            # Zsh theme
           if [ -f ~/.profile_personal ]; then
               source ~/.profile_personal
           fi

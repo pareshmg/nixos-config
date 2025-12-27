@@ -69,8 +69,7 @@ let
       #exec-once=${pkgs.google-drive-ocamlfuse}/bin/google-drive-ocamlfuse /GDrive
       exec-once=${pkgs.rclone}/bin/rclone mount --daemon gdrive: /GDrive
     '' else "";
-in
-let
+
   hyprlandConf = with host; ''
     ${workspaces}
     ${monitors}

@@ -14,19 +14,19 @@
 
 { config, lib, pkgs, profile, u, vmid, hostname, modulesPath, ... }:
 
-let
-
-in
 {
   imports =
     [
       (modulesPath + "/profiles/qemu-guest.nix")
     ];
 
-  boot.initrd.availableKernelModules = [ "ata_piix" "uhci_hcd" "virtio_pci" "virtio_scsi" "sd_mod" "sr_mod" ];
-  boot.initrd.kernelModules = [ ];
-  boot.kernelModules = [ ];
-  boot.extraModulePackages = [ ];
+  boot = {
+    initrd = {
+      availableKernelModules = [ "ata_piix" "uhci_hcd" "virtio_pci" "virtio_scsi" "sd_mod" "sr_mod" ];
+      kernelModules = [ ];
+    };
+    extraModulePackages = [ ];
+  };
 
   # zfs
   # boot.supportedFilesystems = [ "zfs" ];
@@ -64,18 +64,55 @@ in
   swapDevices = [ ];
 
 
+  # services.resolved = {
+  #   enable = true;
+  #   #dnssec = "true";
+  #   domains = [ "~." ];
+  #   fallbackDns = [ "10.28.1.1" ];
+  #   #dnsovertls = "true";
+  # };
+
+
+  systemd.network = {
+    enable = true;
+    networks = {
+      "10-ens18" = {
+        # match the interface by name
+        matchConfig.Name = "ens18";
+        address = [
+          # configure addresses including subnet mask
+          (profile.ip + "/16")
+        ];
+        routes = [
+          # create default routes for both IPv6 and IPv4
+          #{ routeConfig.Gateway = "fe80::1"; }
+          { routeConfig.Gateway = "10.28.1.1"; }
+          # or when the gateway is not on the same network
+          # { routeConfig = {
+          #     Gateway = "172.31.1.1";
+          #     GatewayOnLink = true;
+          #   }; }
+        ];
+        # make the routes on this interface a dependency for network-online.target
+        linkConfig.RequiredForOnline = "routable";
+      };
+    };
+  };
   networking = u.recursiveMerge [
     {
-      useDHCP = true; # Deprecated
-      hostId = profile.macAddress;
-      interfaces = {
-        ens18 = {
-          ipv4.addresses = [{
-            address = profile.ip;
-            prefixLength = 16;
-          }];
-        };
-      };
+      hostName = u.getOrDefault profile "networking.hostName" "nixos";
+      useDHCP = false; # Deprecated
+      defaultGateway.interface = "ens18";
+      #useNetworkd = true;
+      #hostId = profile.macAddress;
+      # interfaces = {
+      #   ens18 = {
+      #     ipv4.addresses = [{
+      #       address = profile.ip;
+      #       prefixLength = 16;
+      #     }];
+      #   };
+      # };
     }
     (u.getOrDefault profile "networking" { })
   ];

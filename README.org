@@ -31,6 +31,24 @@ You can optionally pass to the above the argument ~-- ${FLAKE}~ which will boost
 
 
 
+* Modifying & Rebuilding Guide
+
+| *FLAKE*   | *local build*                | *remote build*                         |
+|-----------+------------------------------+----------------------------------------|
+| pmp       | nix run . -- pmp             | ./bin/remote-build $DARWIN_HOST pmp    |
+| pmpcmt    | nix run . -- pmpcmt          | ./bin/remote-build $DARWIN_HOST pmpcmt |
+| vm        | nix run . -- vm              | ./bin/remote-build $NIXOS_HOST vm      |
+| $user     | N/A                          | ./bin/remote-build $LINUX_HOST $user   |
+| ubuntu    | N/A                          | ./bin/remote-build $LINUX_HOST ubuntu  |
+| testvm    | ./bin/vm-build testvm 111    | -                                      |
+| minimal   | ./bin/vm-build minimal 112   | -                                      |
+| waylandvm | ./bin/vm-build waylandvm 113 | -                                      |
+|           |                              |                                        |
+
+
+
+* Information
+
 ** Additional Details
 There are *3* main steps:
 
@@ -40,10 +58,10 @@ There are *3* main steps:
 3. Build and install flake
 
 *** Creating secrets
-An example setup of secrets is available in the ~secrets_example/~ directory. This repo uses ~secrets~ as a flake. Rather than editing the example directory, it is recommended that you copy it to ~$HOME/.nix-secrets~
+An example setup of secrets is available in the ~secrets_example/~ directory. This repo uses ~secrets~ as a flake. Rather than editing the example directory, it is recommended that you copy it to ~$HOME/.config/nix-secrets~
 
-1. ~cp -r secrets_example ~/.nix-secrets~
-2. ~cd ~/.nix-secrets~
+1. ~cp -r secrets_example ~/.config/nix-secrets~
+2. ~cd ~/.config/nix-secrets~
 3. ~git init && git add .~
 4. Update ~flake.nix~ to have your information
 
@@ -66,7 +84,7 @@ TL;DR : Run ~bin/setup~
 
 *** Build and install flake
 
-1. Checkout this repo to ~$HOME/nixos-config~
+1. Checkout this repo to ~$HOME/.config/nixos-config~
 2. Edit your ~flake.nix~ to set the profiles as you have defined in your secrets
 3. In this directory, run the appropriate build as defined in ~flake.nix~
 
@@ -88,7 +106,7 @@ bin/remote-build $FLAKE $TARGET_HOST
 *** Additional config
 
 **** Using secrets
-If you are going to use agenix secrets, add to your ~$HOME/.nix-secrets/flake.nix~ identity paths under the corresponding profiles to the ssh key path you want
+If you are going to use agenix secrets, add to your ~$HOME/.config/nix-secrets/flake.nix~ identity paths under the corresponding profiles to the ssh key path you want
 
  #+begin_src nix :comments yes
 {
