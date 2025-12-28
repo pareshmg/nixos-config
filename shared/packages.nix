@@ -24,7 +24,7 @@ with pkgs; [
   wget
   zip
 
-  ollama
+  #ollama
   aider-chat
 
   # Encryption and security tools

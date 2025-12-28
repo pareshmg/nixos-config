@@ -131,7 +131,7 @@
             let
               pkgs-master = import nixpkgs-master { inherit (final) system; config.allowUnfree = true; };
             in
-            pkgs-master.ollama;
+            pkgs-master.ollama-cuda;
         };
       };
 
@@ -214,7 +214,45 @@
               ./hosts/nixcache/proxmox.nix
             ];
           };
-        }))
+        } //
+        (let
+          clusterIp = secrets.profile.k3s.clusterIp;
+          serverIps = secrets.profile.k3s.serverIps;
+          ipPrefixLength = secrets.profile.k3s.ipPrefixLength;
+        in {
+
+          k8s-master0 = let
+            vmconf = {
+              vmid = "300";
+            };
+            hostname = "k8s-master0";
+            profile = u.recursiveMerge [ secrets.profile.k3s secrets.profile.nervasion {ip=builtins.elemAt serverIps 0;}]; 
+          in 
+            nixos-generators.nixosGenerate {
+            inherit system;
+            format = "proxmox";
+            specialArgs = { inherit inputs home-manager u vmconf hostname profile; } ;
+            modules = [
+              nixos-generators.nixosModules.all-formats
+              agenix.nixosModules.default
+              home-manager.nixosModules.home-manager
+              ./hosts/minimal
+              ./hosts/minimal/proxmox.nix
+              ./hosts/k3s/common.nix
+              {
+                config.services.k3s-cluster = {
+                  inherit serverIps clusterIp;
+                  enable = true;
+                  machineMode = "first-server";
+                  k3sTokenAgeFile = secrets.per.k3s-token;
+                  ipPrefixLength = ipPrefixLength;
+                };
+                
+              }
+            ];
+          };
+          
+        })))
         (forAllSystems (system:
           let
             pkgs = sPkgs system;

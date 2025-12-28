@@ -4,6 +4,8 @@
     ./dev.nix
   ];
 
+  nixpkgs.config.allowUnfree = true;
+
   # Set your time zone.
   time.timeZone = "America/New_York";
   # security.rtkit.enable = true;
@@ -12,6 +14,7 @@
   
   # nixpkgs.config.allowUnfree = true;
   ids.gids.nixbld = 350;
+
   fonts = {
     # Fonts
     # fontDir.enable = true;

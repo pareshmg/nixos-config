@@ -50,7 +50,6 @@ in
 
       # optional configs
       #additionalSpace = "512M";
-      #diskSize = "auto";
       agent = true;
     };
   };

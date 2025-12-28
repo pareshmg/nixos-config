@@ -86,7 +86,7 @@
         routes = [
           # create default routes for both IPv6 and IPv4
           #{ routeConfig.Gateway = "fe80::1"; }
-          { routeConfig.Gateway = "10.28.1.1"; }
+          { Gateway = "10.28.1.1"; }
           # or when the gateway is not on the same network
           # { routeConfig = {
           #     Gateway = "172.31.1.1";

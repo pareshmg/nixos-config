@@ -20,6 +20,7 @@ in
   ];
 
 
+  ids.gids.nixbld = 350;
 
   users.users."${user}" = {
     # macOS user

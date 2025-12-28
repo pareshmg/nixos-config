@@ -227,16 +227,32 @@
     },
     "nixpkgs_2": {
       "locked": {
-        "lastModified": 1765363881,
-        "narHash": "sha256-3C3xWn8/2Zzr7sxVBmpc1H1QfxjNfta5IMFe3O9ZEPw=",
+        "lastModified": 1766736597,
+        "narHash": "sha256-BASnpCLodmgiVn0M1MU2Pqyoz0aHwar/0qLkp7CjvSQ=",
         "owner": "nixos",
         "repo": "nixpkgs",
-        "rev": "d2b1213bf5ec5e62d96b003ab4b5cbc42abfc0d0",
+        "rev": "f560ccec6b1116b22e6ed15f4c510997d99d5852",
         "type": "github"
       },
       "original": {
         "owner": "nixos",
-        "ref": "nixos-25.05",
+        "ref": "nixos-25.11",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
+    "nixpkgs_3": {
+      "locked": {
+        "lastModified": 1764677808,
+        "narHash": "sha256-H3lC7knbXOBrHI9hITQ7modLuX20mYJVhZORL5ioms0=",
+        "owner": "nixos",
+        "repo": "nixpkgs",
+        "rev": "1aab89277eb2d87823d5b69bae631a2496cff57a",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nixos",
+        "ref": "nixos-25.11",
         "repo": "nixpkgs",
         "type": "github"
       }
@@ -259,14 +275,17 @@
       }
     },
     "secrets": {
+      "inputs": {
+        "nixpkgs": "nixpkgs_2"
+      },
       "locked": {
-        "dir": "secrets_example",
-        "lastModified": 1707818266,
-        "narHash": "sha256-eYi7AIgQ6x8nIVMDR9MXxrDPeli8Xrb904fAfRpRAmM=",
-        "owner": "pareshmg",
-        "repo": "nixos-config",
-        "rev": "f8ed5da91ff68bc868ac63ae79b7010481e1e638",
-        "type": "github"
+        "lastModified": 1766947473,
+        "narHash": "sha256-9EhGxQ/U1fezxU1F+5jvmwKXhPNRPzMFq0EpUU8fpcM=",
+        "ref": "refs/heads/main",
+        "rev": "df7e3642c0e46edce980e7ef213a5ac2f8361353",
+        "revCount": 49,
+        "type": "git",
+        "url": "file:///home/pareshmg/.config/nix-secrets"
       },
       "original": {
         "dir": "secrets_example",
@@ -277,15 +296,15 @@
     },
     "snix": {
       "inputs": {
-        "nixpkgs": "nixpkgs_2",
+        "nixpkgs": "nixpkgs_3",
         "systems": "systems_3"
       },
       "locked": {
-        "lastModified": 1765564614,
-        "narHash": "sha256-duQW0iXXmJAxJ4eU7N8YxtZzxdQ55rZNjRjgHz+YsMQ=",
+        "lastModified": 1764874820,
+        "narHash": "sha256-U/PzYd2/uUl653TIi5E8lcD2TeBPn2r0rAk80pXfNwo=",
         "ref": "refs/heads/main",
-        "rev": "78681bc99c758be9ba55c6a0807e9dcf9590e2c0",
-        "revCount": 43,
+        "rev": "c197489e8bd349d5c8fa30778cc6ef7d8da14e92",
+        "revCount": 38,
         "type": "git",
         "url": "ssh://git@github.com/salescience/snix"
       },

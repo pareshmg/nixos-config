@@ -15,9 +15,12 @@
 
       # optional configs
       additionalSpace = "20480M";
-      diskSize = "auto";
       agent = true;
     };
+  };
+  virtualisation = {
+    diskSize = "auto";
+
   };
 
 }

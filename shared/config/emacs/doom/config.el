@@ -33,7 +33,7 @@
 ;; available. You can either set `doom-theme' or manually load a theme with the
 ;; `load-theme' function. This is the default:
 (setq doom-theme 'doom-molokai)
-;; (setq doom-molokai-brighter-comments t)
+(setq doom-molokai-brighter-comments t)
 (setq doom-molokai-brighter-modeline t)
 ;; (set-background-color "#1C1E1F")
 

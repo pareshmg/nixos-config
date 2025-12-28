@@ -6,5 +6,7 @@ with pkgs;
   sshpass # for ansible
   terraform
   git-lfs
-  (lib.hiPrio (ollama-master.override {acceleration="cuda";}))
+  #(lib.hiPrio (ollama-master.override {acceleration="cuda";}))
+  #ollama-master
+  ollama-master
 ]
