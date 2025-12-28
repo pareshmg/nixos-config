@@ -46,6 +46,7 @@ shift "$((OPTIND-1))"
 SECRETS_DIR="$HOME/.config/nix-secrets"
 
 
+
 # Navigate to the directory of this script
 cd $(dirname $(readlink -f $0))
 cd ..

@@ -20,8 +20,8 @@
     # fontDir.enable = true;
     packages = with pkgs; [
       #fonts = with pkgs; [
-      #carlito
-      #vegur  
+      #carlito                                 # NixOS
+      #vegur                                   # NixOS
       #source-code-pro
       fira-code
       meslo-lgs-nf
