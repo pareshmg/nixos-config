@@ -4,7 +4,7 @@
 
 { config, pkgs, profile, ... }:
 let
-  user = profile.user;
+  inherit (profile) user;
 in
 {
   # Add libvirtd and kvm to userGroups

@@ -1,25 +1,34 @@
 { inputs, config, lib, pkgs, agenix, ... }:
-
 {
+  imports = [
+    ./dev.nix
+  ];
+
   nixpkgs.config.allowUnfree = true;
+
+  # Set your time zone.
+  time.timeZone = "America/New_York";
+  # security.rtkit.enable = true;
+  # security.polkit.enable = true;
+
+  
+  # nixpkgs.config.allowUnfree = true;
+  ids.gids.nixbld = 350;
 
   fonts = {
     # Fonts
-    fontDir.enable = true;
-    fonts = with pkgs; [
-      #carlito                                 # NixOS
-      #vegur                                   # NixOS
+    # fontDir.enable = true;
+    packages = with pkgs; [
+      #fonts = with pkgs; [
+      #carlito
+      #vegur  
       #source-code-pro
       fira-code
       meslo-lgs-nf
       julia-mono
       font-awesome
       #corefonts
-      (nerdfonts.override {
-        fonts = [
-          "FiraCode"
-        ];
-      })
+      nerd-fonts.fira-code
     ];
   };
 
@@ -34,10 +43,7 @@
 
   environment = {
     shells = with pkgs; [ zsh ]; # Default shell
-    variables = {
-      EDITOR = "emacs -Q";
-      VISUAL = "emacs -Q";
-    };
+    variables = { };
     systemPackages = (import ./system-packages.nix { inherit pkgs; }) ++ (with pkgs; [
       # agenix
       agenix.packages."${stdenv.hostPlatform.system}".default
@@ -46,15 +52,19 @@
 
   nix = {
     # Nix Package Manager settings
+    optimise = {
+      #automatic = true;
+    };
     settings = {
-      auto-optimise-store = true; # Optimise syslinks
+      keep-going = true;
     };
     gc = {
       # Automatic garbage collection
       automatic = true;
-      options = "--delete-older-than 2d";
+      options = "--delete-older-than 15d";
     };
     package = pkgs.nix; # Enable nixFlakes on system
+    # package = pkgs.nixVersions.nix_2_26;
     registry.nixpkgs.flake = inputs.nixpkgs;
     extraOptions = ''
       experimental-features = nix-command flakes

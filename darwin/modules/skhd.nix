@@ -1,5 +1,10 @@
 { config, lib, pkgs, ... }:
 
+let
+  hyper = "rcmd + rshift + ralt + rctrl";
+  basemod = "cmd + ctrl";
+  yabaicmd = "${pkgs.yabai}/bin/yabai";
+in
 {
   services = {
     skhd = {
@@ -8,51 +13,57 @@
       package = pkgs.skhd;
       skhdConfig = ''
         # Open Terminal
-        alt - return : /Applications/Alacritty.App/Contents/MacOS/alacritty
+        ${basemod} - y : echo "hi, test works" > /tmp/skhd_test.txt
 
         # Toggle Window
-        lalt - t : yabai -m window --toggle float && yabai -m window --grid 4:4:1:1:2:2
-        lalt - f : yabai -m window --toggle zoom-fullscreen
-        lalt - q : yabai -m window --close
+        ${basemod} - t : ${yabaicmd} -m window --toggle float && ${yabaicmd} -m window --grid 4:4:1:1:2:2
+        ${basemod} - f : ${yabaicmd} -m window --toggle zoom-fullscreen
+        ${basemod} - q : ${yabaicmd} -m window --close
 
         # Focus Window
-        lalt - up : yabai -m window --focus north
-        lalt - down : yabai -m window --focus south
-        lalt - left : yabai -m window --focus west
-        lalt - right : yabai -m window --focus east
+        ${basemod} - i : ${yabaicmd} -m window --focus north
+        ${basemod} - k : ${yabaicmd} -m window --focus south
+        ${basemod} - j : ${yabaicmd} -m window --focus west
+        ${basemod} - l : ${yabaicmd} -m window --focus east
 
         # Swap Window
-        shift + lalt - up : yabai -m window --swap north
-        shift + lalt - down : yabai -m window --swap south
-        shift + lalt - left : yabai -m window --swap west
-        shift + lalt - right : yabai -m window --swap east
+        shift + ${basemod} - i : ${yabaicmd} -m window --swap north
+        shift + ${basemod} - k : ${yabaicmd} -m window --swap south
+        shift + ${basemod} - j : ${yabaicmd} -m window --swap west
+        shift + ${basemod} - l : ${yabaicmd} -m window --swap east
 
         # Resize Window
-        shift + cmd - left : yabai -m window --resize left:-50:0 && yabai -m window --resize right:-50:0
-        shift + cmd - right : yabai -m window --resize left:50:0 && yabai -m window --resize right:50:0
-        shift + cmd - up : yabai -m window --resize up:-50:0 && yabai -m window --resize down:-50:0
-        shift + cmd - down : yabai -m window --resize up:-50:0 && yabai -m window --resize down:-50:0
+        # ${basemod} - a : ${yabaicmd} -m window --resize left:-50:0 && ${yabaicmd} -m window --resize right:-50:0
+        # ${basemod} - d : ${yabaicmd} -m window --resize left:50:0 && ${yabaicmd} -m window --resize right:50:0
+        ${basemod} - a : ${yabaicmd} -m window --ratio rel:-0.05
+        ${basemod} - d : ${yabaicmd} -m window --ratio rel:0.05
+        ${basemod} - w : ${yabaicmd} -m window --resize up:-50:0 && ${yabaicmd} -m window --resize down:-50:0
+        ${basemod} - s : ${yabaicmd} -m window --resize up:50:0 && ${yabaicmd} -m window --resize down:50:0
 
         # Focus Space
-        ctrl - 1 : yabai -m space --focus 1
-        ctrl - 2 : yabai -m space --focus 2
-        ctrl - 3 : yabai -m space --focus 3
-        ctrl - 4 : yabai -m space --focus 4
-        ctrl - 5 : yabai -m space --focus 5
-        #ctrl - left : yabai -m space --focus prev
-        #ctrl - right: yabai -m space --focus next
+        # ${basemod} - 1 : ${yabaicmd} -m space --focus 1
+        # ${basemod} - 2 : ${yabaicmd} -m space --focus 2
+        # ${basemod} - 3 : ${yabaicmd} -m space --focus 3
+        # ${basemod} - 4 : ${yabaicmd} -m space --focus 4
+        # ${basemod} - 5 : ${yabaicmd} -m space --focus 5
+        # ${basemod} - [ : ${yabaicmd} -m space --focus prev
+        # ${basemod} - ] : ${yabaicmd} -m space --focus next
+
+        # Multiple displays
+        ${basemod} - 1 : ${yabaicmd} -m window --display next
+
 
         # Send to Space
-        shift + ctrl - 1 : yabai -m window --space 1
-        shift + ctrl - 2 : yabai -m window --space 2
-        shift + ctrl - 3 : yabai -m window --space 3
-        shift + ctrl - 4 : yabai -m window --space 4
-        shift + ctrl - 5 : yabai -m window --space 5
-        shift + ctrl - left : yabai -m window --space prev && yabai -m space --focus prev
-        shift + ctrl - right : yabai -m window --space next && yabai -m space --focus next
+        # shift + ctrl - 1 : ${yabaicmd} -m window --space 1
+        # shift + ctrl - 2 : ${yabaicmd} -m window --space 2
+        # shift + ctrl - 3 : ${yabaicmd} -m window --space 3
+        # shift + ctrl - 4 : ${yabaicmd} -m window --space 4
+        # shift + ctrl - 5 : ${yabaicmd} -m window --space 5
+        # shift + ctrl - left : ${yabaicmd} -m window --space prev && ${yabaicmd} -m space --focus prev
+        # shift + ctrl - right : ${yabaicmd} -m window --space next && ${yabaicmd} -m space --focus next
 
         # Menu
-        #cmd + space : for now its using the default keybinding to open Spotlight Search
+        # cmd + space : for now its using the default keybinding to open Spotlight Search
       ''; # Hotkey config
     };
   };
@@ -62,4 +73,6 @@
       enableKeyMapping = true; # Needed for skhd
     };
   };
+
+  environment.systemPackages = [ pkgs.skhd ];
 }

@@ -40,20 +40,22 @@
 
                                         ; Specific files
 (setq org-gtd-file (concat org-directory "gtd.org"))
+(setq org-android-file (concat org-directory "Inbox.org"))
 (setq org-checklists-file (concat org-directory "checklists.org"))
 (setq org-notes-file (concat org-directory "notes.org"))
                                         ;(setq org-projects-file (concat org-directory "projects.org"))
-                                        ;(setq org-journal-file (concat org-directory "journal.org"))
+(setq org-journal-file (concat org-directory "journal.org"))
                                         ;(setq org-health-file (concat org-directory "health.org"))
                                         ;(setq org-semester-file (concat org-directory "class.org"))
                                         ;(setq org-research-file (concat org-directory "otherProjects.org"))
                                         ;(setq org-cancer-file (concat org-directory "cancer.org"))
 
-(setq org-cmt-file  (if (string-match-p (regexp-quote "cmt") (system-name)) (concat org-directory "orya.org")))
+;;(setq org-salescience-file  (if (string-match-p (regexp-quote "salescience") (system-name)) (concat org-directory "salescience.org")))
+(setq org-salescience-file  (concat org-directory "salescience.org"))
 (setq org-orya-file (if (file-exists-p "~/dev/codeupdate") (concat org-directory "orya.org")))
 ;;(setq org-phd-file (concat org-directory "PhD.org"))
                                         ;(setq org-weiss-file (concat org-directory "weiss.org"))
-                                        ;(setq org-cmt-jira-file "~/.org-jira/MM.org")
+                                        ;(setq org-salescience-jira-file "~/.org-jira/MM.org")
 
 
 (setq org-src-ask-before-returning-to-edit-buffer nil)
@@ -199,21 +201,22 @@
 ;;                               '("gtd" . org-gtd-file)
 ;;                               (if (file-exists-p "~/dev/codeupdate")
 ;;                                   '("orya" . org-orya-file)
-;;                                 '("cmt" . org-cmt-file))
+;;                                 '("salescience" . org-salescience-file))
 ;;                                '("checklists" . org-checklists-file)
 ;;                                '("notes" . org-notes-file)))
 
 
 (setq org-agenda-files (remove nil (list org-gtd-file
                                          org-orya-file
-                                         org-cmt-file
+                                         org-salescience-file
+                                         org-android-file
                                         ;org-cancer-file
                                         ;org-projects-file
                                          org-checklists-file
                                          org-notes-file
                                          ;;org-phd-file
                                         ;org-semester-file
-                                        ;org-cmt-jira-file
+                                        ;org-salescience-jira-file
                                          ;;org-gcal-home-file
                                         ;org-gcal-work-file
                                         ;org-gcal-school-file
@@ -338,20 +341,8 @@
 
 
 
-;; FIXME: debug - remove
-(org-agenda-list
- '(
-   (org-agenda-start-with-log-mode t)
-   )
- (format-time-string "%Y-%m-%d" (time-subtract (current-time) (days-to-time 5)))
- 7
- '(org-agenda-log-mode-items '(note state clock closed done reschedule))
- )
-
 (setq org-agenda-log-mode-items '(note state clock closed done))
 (setq org-agenda-start-with-log-mode t)
-
-;; end debug
 
 ;;
 ;; **** Columns and effort
@@ -423,10 +414,10 @@
           "* TODO %?\n  %i")
          ;;
          )
-       (if org-cmt-file
+       (if org-salescience-file
            '(
-             ("c" "CMT Templates")
-             ("cp" "CMT Me" entry (file+olp ,org-cmt-file "Todo" "Paresh")
+             ("s" "SALESCIENCE Templates")
+             ("sp" "SALESCIENCE Me" entry (file+olp ,org-salescience-file "Todo" "Paresh")
               "* TODO %?\n  %i")
              ))
        (if org-orya-file
@@ -627,7 +618,7 @@ org-completing-read to complete."
         (day   (format-time-string "%Y-%m-%d %A"))
         )
     (my/goto-or-create-heading-in-file
-     "~/.org/orya.org"
+     org-journal-file
      (concat "Journal/" year "/" month "/" day)
   )))
 
@@ -729,7 +720,7 @@ org-completing-read to complete."
                                         ;(add-hook 'org-insert-heading-hook 'bh/insert-heading-inactive-timestamp)
 
 
-(add-hook 'org-insert-heading-hook 'pah/insert-creation-date)
+;; (add-hook 'org-insert-heading-hook 'pah/insert-creation-date)
 
 
 ;; for remember

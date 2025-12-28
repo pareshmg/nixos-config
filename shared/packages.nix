@@ -4,12 +4,11 @@ with pkgs; [
   # General packages for development and system management
 
   # doom emacs
-  clang
+  # clang
 
   # act
   # alacritty
-  aspell
-  # aspellDicts.en
+  # (aspellWithDicts (ds: with ds; [ en en-computers en-science ]))
   # bash-completion
   # bat
   # btop
@@ -24,6 +23,9 @@ with pkgs; [
   # sqlite
   wget
   zip
+
+  #ollama
+  aider-chat
 
   # Encryption and security tools
   # _1password
@@ -81,7 +83,7 @@ with pkgs; [
   # jetbrains-mono
   jq
   gettext
-  # tree
+  tree
   tmux
   unrar
   unzip
@@ -91,20 +93,36 @@ with pkgs; [
 
   # k8s
   kubetail
+  kubectl
+  kubernetes-helm
+  k9s
+
+  awscli2
+
+  # nix related tools
+  cachix
+  nil
+  basedpyright
+
+  # formatters and linters
+  shellcheck
+  statix
+  ruff
 
   # Python packages
   (
     let
       my-python-packages = ps: with ps; [
-        pandas
         requests
         ipython
+        pydantic
         # other python packages
       ];
     in
-    python311.withPackages my-python-packages
+    python3.withPackages my-python-packages
   )
-  python311Packages.virtualenv
-  python311Packages.pip
-  python311Packages.setuptools
+  python3Packages.virtualenv
+  python3Packages.pip
+  python3Packages.setuptools
+  python3Packages.pydantic
 ]

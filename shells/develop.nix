@@ -8,7 +8,7 @@
   description = "A development environment";
 
   inputs = {
-    nixpkgs = { url = "github:nixos/nixpkgs/nixpkgs-unstable"; };
+    nixpkgs = { url = "github:nixos/nixpkgs/nixpkgs-23.11"; };
   };
 
   outputs = inputs:

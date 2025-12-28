@@ -79,6 +79,10 @@ function tssh {
         mkdir ~/.ssh/ctl
     fi
     ctl="$HOME/.ssh/ctl/%L-%r@%h:%p"
+    #if [ -e "$ctl" ]; then
+    # this is stale, clean it up
+    rm -f $ctl || true
+    #fi
     ssh -nNf -o ControlMaster=yes -o ControlPath=$ctl ${TARGET_USER}@${TARGET_HOST}
     rsync -e "ssh -o 'ControlPath=${ctl}'" --perms --chmod=u+rw,g+rw,o+r -L ~/.tmux.conf ${TARGET_USER}@${TARGET_HOST}:\~/.tmux.conf.${TUSER}
     title "${1}.${reg}" && ssh_color ${TARGET_USER}@${TARGET_HOST} -o ControlPath=${ctl} -t -A ${@:2} ${cmd}
@@ -86,6 +90,7 @@ function tssh {
   else
     ssh_color ${TARGET_USER}@${TARGET_HOST} -t -A ${@:2}
   fi
+
 }
 compdef tessh=ssh
 compdef tssh=ssh
@@ -197,3 +202,16 @@ alias k='kubectl'
 alias kc="kubectl config set-context --current --namespace"
 alias kb='kubebash'
 alias kbn='kubebashn'
+
+
+function myinstance {
+    INSTANCE_ID=$(aws ec2 describe-instances --filters "Name=tag:Name,Values=*${USER}*" --query "Reservations[*].Instances[*].InstanceId"  "$@" --output text | head -n 1)
+    INSTANCE_NAME=$(aws ec2 describe-instances --instance-ids "$INSTANCE_ID" --query "Reservations[*].Instances[*].Tags[?Key=='Name'].Value" "$@" --output text)
+    echo "Connecting to $INSTANCE_NAME ($INSTANCE_ID)" >&2
+    echo $INSTANCE_ID
+}
+
+
+function startinstance {
+ aws ec2 start-instances --instance-ids $1
+}

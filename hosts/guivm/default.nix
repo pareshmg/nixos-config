@@ -1,7 +1,7 @@
 { config, pkgs, profile, vmid, ... }:
 
 let
-  user = profile.user;
+  inherit (profile) user;
 in
 {
   imports =
@@ -27,7 +27,7 @@ in
       #simple-scan
       wacomtablet
       #clinfo
-    ] ++ (profile.additionalPackages { pkgs = pkgs; });
+    ] ++ (profile.additionalPackages { inherit pkgs; });
     #variables = {
     #  LIBVA_DRIVER_NAME = "i965";
     #};
@@ -50,7 +50,6 @@ in
 
       # optional configs
       #additionalSpace = "512M";
-      #diskSize = "auto";
       agent = true;
     };
   };
@@ -65,7 +64,7 @@ in
     extraGroups = [ "video" "audio" "networkmanager" "lp" "kvm" "libvirtd" ];
     shell = pkgs.zsh;
     uid = 1001;
-    hashedPassword = profile.hashedPassword;
+    inherit (profile) hashedPassword;
   };
 
   programs = {
@@ -91,7 +90,7 @@ in
         #rocm-opencl-icd                         # AMD
         #rocm-opencl-runtime
       ];
-      driSupport = true;
+      #driSupport = true;
       driSupport32Bit = true;
     };
   };
