@@ -79,6 +79,10 @@ function tssh {
         mkdir ~/.ssh/ctl
     fi
     ctl="$HOME/.ssh/ctl/%L-%r@%h:%p"
+    #if [ -e "$ctl" ]; then
+    # this is stale, clean it up
+    rm -f $ctl || true
+    #fi
     ssh -nNf -o ControlMaster=yes -o ControlPath=$ctl ${TARGET_USER}@${TARGET_HOST}
     rsync -e "ssh -o 'ControlPath=${ctl}'" --perms --chmod=u+rw,g+rw,o+r -L ~/.tmux.conf ${TARGET_USER}@${TARGET_HOST}:\~/.tmux.conf.${TUSER}
     title "${1}.${reg}" && ssh_color ${TARGET_USER}@${TARGET_HOST} -o ControlPath=${ctl} -t -A ${@:2} ${cmd}
@@ -86,6 +90,7 @@ function tssh {
   else
     ssh_color ${TARGET_USER}@${TARGET_HOST} -t -A ${@:2}
   fi
+
 }
 compdef tessh=ssh
 compdef tssh=ssh

@@ -22,8 +22,8 @@ cd $(dirname $(readlink -f $0))
 cd ..
 
 # copy the config over
-#rsync --exclude 'flake.lock' -az $PWD/ ${TARGET}:~/nixos-config
-rsync -az $PWD/ ${TARGET}:~/nixos-config
+#rsync --exclude 'flake.lock' -az $PWD/ ${TARGET}:~/.config/nixos-config
+rsync -az $PWD/ ${TARGET}:~/.config/nixos-config
 
 
 
@@ -31,14 +31,14 @@ rsync -az $PWD/ ${TARGET}:~/nixos-config
 
 # copy the secrets over
 if [ -d ${SECRETS_DIR} ]; then
-    rsync -az ${SECRETS_DIR}/ ${TARGET}:~/.nix-secrets
+    rsync -az ${SECRETS_DIR}/ ${TARGET}:~/.config/nix-secrets
 fi
 
 # ssh in and run the build
-ssh -t ${TARGET} "cd ~/nixos-config; ./bin/setup && nix run . -- $FLAKE $@"
+ssh -t ${TARGET} "cd ~/.config/nixos-config; ./bin/setup && nix --experimental-features 'nix-command flakes' run . -- $FLAKE $@"
 
 # remove secrets
-#ssh -t ${TARGET} "rm -rf ~/.nix-secrets"
+#ssh -t ${TARGET} "rm -rf ~/.config/nix-secrets"
 
 set +e
 set +x

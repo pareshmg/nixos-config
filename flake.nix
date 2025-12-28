@@ -19,8 +19,10 @@
 
   inputs = # All flake references used to build my NixOS setup. These are dependencies.
     {
-      nixpkgs.url = "github:nixos/nixpkgs/nixos-23.11"; # Default Stable Nix Packages
-      nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable"; # Unstable Nix Packages
+      nixpkgs.url = "github:nixos/nixpkgs/nixos-25.05"; # Default Stable Nix Packages
+      nixpkgs-master.url = "github:nixos/nixpkgs/master"; # Default Stable Nix Packages
+      nixpkgs-darwin.url = "github:NixOS/nixpkgs/nixpkgs-25.05-darwin";
+      #nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable"; # Unstable Nix Packages
       # dslr.url = "github:nixos/nixpkgs/nixos-22.11";                        # Quick fix
 
       agenix = {
@@ -30,12 +32,12 @@
 
       home-manager = {
         # User Package Management
-        url = "github:nix-community/home-manager/release-23.11";
+        url = "github:nix-community/home-manager/release-25.05";
         inputs.nixpkgs.follows = "nixpkgs";
       };
 
       darwin = {
-        url = "github:lnl7/nix-darwin/master"; # MacOS Package Management
+        url = "github:lnl7/nix-darwin/nix-darwin-25.05"; # MacOS Package Management
         inputs.nixpkgs.follows = "nixpkgs";
       };
 
@@ -90,13 +92,12 @@
       # };
 
       secrets.url = "github:pareshmg/nixos-config?dir=secrets_example"; #  NOTE: OVERRIDE THIS!!!
-      cmtnix.url = "github:pareshmg/nixos-config?dir=secrets_example"; #  NOTE: OVERRIDE THIS!!!
-      #cmtnix.url = "git+ssh://git@github.com/Censio/CMTNix"; # NOTE: OVERRIDE THIS!!
+      snix.url = "git+ssh://git@github.com/salescience/snix";
+
     };
 
-  outputs = { self, nixpkgs, flake-utils, nixpkgs-unstable, home-manager, darwin, agenix, u, secrets, cmtnix, nixos-generators, ... } @ inputs: # Function that tells my flake which to use and what do what to do with the dependencies.
+  outputs = { self, nixpkgs, nixpkgs-master, flake-utils, home-manager, darwin, agenix, u, secrets, nixos-generators, snix, nixpkgs-darwin, ... } @ inputs: # Function that tells my flake which to use and what do what to do with the dependencies.
     let # Variables that can be used in the config files.
-      location = "$HOME/nixos-config";
       darwinSystems = [ "aarch64-darwin" "x86_64-darwin" ];
       forAllSystems = nixpkgs.lib.genAttrs nixpkgs.lib.systems.flakeExposed;
       forAllLinuxSystems = nixpkgs.lib.genAttrs (builtins.filter (x: (builtins.elemAt (builtins.split "-" x) 2) == "linux") nixpkgs.lib.systems.flakeExposed);
@@ -120,6 +121,18 @@
     {
       formatter = forAllSystems (system: (sPkgs system).nixpkgs-fmt);
 
+
+      overlays = {
+        ollama-master = final: prev: {
+          ollama-master =
+            let
+              pkgs-master = import nixpkgs-master { inherit (final) system; config.allowUnfree = true; };
+            in
+            pkgs-master.ollama-cuda;
+        };
+      };
+
+
       packages = u.recursiveMerge [
         (forAllLinuxSystems (system: {
           guivm = nixos-generators.nixosGenerate {
@@ -139,8 +152,21 @@
             modules = [
               nixos-generators.nixosModules.all-formats
               home-manager.nixosModules.home-manager
+              ./hosts/minimal
               ./hosts/testvm
               ./hosts/testvm/proxmox.nix
+            ];
+          };
+          waylandvm = nixos-generators.nixosGenerate {
+            inherit system;
+            format = "proxmox";
+            specialArgs = { inherit inputs home-manager u; } // { hostname = "testvm"; profile = u.recursiveMerge [ secrets.profile.test secrets.profile.nervasion ]; vmid = "111"; };
+            modules = [
+              nixos-generators.nixosModules.all-formats
+              home-manager.nixosModules.home-manager
+              ./hosts/minimal
+              ./hosts/waylandvm
+              ./hosts/waylandvm/proxmox.nix
             ];
           };
           minimalvm = nixos-generators.nixosGenerate {
@@ -150,6 +176,39 @@
             modules = [
               nixos-generators.nixosModules.all-formats
               ./hosts/minimal
+            ];
+          };
+          basedevvm = nixos-generators.nixosGenerate {
+            inherit system;
+            format = "proxmox";
+            specialArgs = { inherit inputs home-manager u agenix secrets; } // { hostname = "basedev"; profile = u.recursiveMerge [ secrets.profile.test secrets.profile.nervasion ]; vmid = "112"; };
+            modules = [
+              nixos-generators.nixosModules.all-formats
+              home-manager.nixosModules.home-manager
+              ./hosts/basedev
+            ];
+          };
+          ha = nixos-generators.nixosGenerate {
+            inherit system;
+            format = "proxmox";
+            specialArgs = { inherit inputs home-manager u agenix secrets; } // { hostname = "ha"; profile = u.recursiveMerge [ secrets.profile.ha secrets.profile.nervasion ]; vmid = "112"; };
+            modules = [
+              nixos-generators.nixosModules.all-formats
+              home-manager.nixosModules.home-manager
+              ./hosts/ha
+              ./hosts/ha/proxmox.nix
+            ];
+          };
+          nixcache = nixos-generators.nixosGenerate {
+            inherit system;
+            format = "proxmox";
+            specialArgs = { inherit inputs home-manager u agenix secrets; } // { hostname = "nixcache"; profile = u.recursiveMerge [ secrets.profile.nixcache secrets.profile.nervasion ]; vmid = "200"; };
+            modules = [
+              nixos-generators.nixosModules.all-formats
+              home-manager.nixosModules.home-manager
+              agenix.nixosModules.default
+              ./hosts/nixcache
+              ./hosts/nixcache/proxmox.nix
             ];
           };
         }))
@@ -165,7 +224,6 @@
         ))
       ];
 
-
       devShells = forAllSystems devShell;
 
       nixosConfigurations =
@@ -175,32 +233,35 @@
         {
           vm = nixpkgs.lib.nixosSystem {
             inherit system;
-            specialArgs = { inherit inputs agenix secrets home-manager u location; } // { hostname = "nix"; profile = u.recursiveMerge [ secrets.profile.per secrets.profile.nervasion secrets.profile.vm ]; };
+            specialArgs = { inherit inputs agenix secrets home-manager u; } // { hostname = "nix"; profile = u.recursiveMerge [ secrets.profile.work secrets.profile.per secrets.profile.nervasion secrets.profile.vm ]; };
             modules = [
               # Modules that are used
+              {
+                nixpkgs.overlays = [ self.overlays.ollama-master ];
+              }
               agenix.nixosModules.default
               home-manager.nixosModules.home-manager
-              ./shared/configuration.nix
               ./hosts/configuration.nix
               ./shared/configuration-per.nix
+              ./shared/configuration-ssai.nix
               ./hosts/vm
             ];
           };
           minimal = nixpkgs.lib.nixosSystem {
             inherit system;
-            specialArgs = { inherit inputs agenix secrets home-manager u location; } // { hostname = "minimal"; profile = u.recursiveMerge [ secrets.profile.test secrets.profile.nervasion secrets.profile.vm ]; };
+            specialArgs = { inherit inputs agenix secrets home-manager u; } // { hostname = "minimal"; profile = u.recursiveMerge [ secrets.profile.test secrets.profile.nervasion secrets.profile.vm ]; };
             modules = [
               # Modules that are used
               #./hosts/minimal
             ];
           };
-          testvm3 = nixpkgs.lib.nixosSystem {
+          ha = nixpkgs.lib.nixosSystem {
             inherit system;
-            specialArgs = { inherit inputs home-manager u; } // { hostname = "testvm"; profile = u.recursiveMerge [ secrets.profile.test secrets.profile.nervasion ]; vmid = "111"; };
+            specialArgs = { inherit inputs home-manager u; } // { hostname = "ha"; profile = u.recursiveMerge [ secrets.profile.ha secrets.profile.nervasion ]; vmid = "112"; };
             modules = [
               nixos-generators.nixosModules.all-formats
               home-manager.nixosModules.home-manager
-              ./hosts/guivm
+              ./hosts/ha
             ];
           };
           testvm2 = nixpkgs.lib.nixosSystem {
@@ -214,7 +275,7 @@
           };
           # import ./hosts {                                                    # Imports ./hosts/default.nix
           #   inherit (nixpkgs) lib;
-          #   inherit inputs nixpkgs nixpkgs-unstable home-manager location agenix;   # Also inherit home-manager so it does not need to be defined here.
+          #   inherit inputs nixpkgs nixpkgs-unstable home-manager agenix;   # Also inherit home-manager so it does not need to be defined here.
           # }
         };
 
@@ -223,37 +284,57 @@
 
         pmp = darwin.lib.darwinSystem {
           inherit system;
-          specialArgs = { inherit inputs agenix secrets home-manager cmtnix u location; } // { hostname = "pmp"; profile = secrets.profile.per; };
+          specialArgs = { inherit system inputs agenix secrets home-manager u; } // { hostname = "pmp"; profile = u.recursiveMerge [ secrets.profile.work secrets.profile.per ]; };
           modules = [
             # Modules that are used
             agenix.darwinModules.default
             home-manager.darwinModules.home-manager
-            #cmtnix.darwinModules.cmt
+            snix.darwinModules.default
             ./shared/configuration.nix
             ./shared/configuration-per.nix
+            ./shared/configuration-ssai.nix
             ./darwin/configuration.nix
-            #./darwin/configuration-cmt.nix
             ./darwin/configuration-per.nix
+            ./darwin/configuration-ssai.nix
           ];
         };
 
-        pmpcmt =
-          let
-            #cmtnix = builtins.getFlake "git+ssh://git@github.com/Censio/CMTNix";
-          in
-          darwin.lib.darwinSystem {
-            inherit system;
-            specialArgs = { inherit inputs agenix secrets home-manager cmtnix u location; } // { hostname = "pmp-cmt"; profile = secrets.profile.work; };
-            modules = [
-              # Modules that are used
-              agenix.darwinModules.default
-              home-manager.darwinModules.home-manager
-              cmtnix.darwinModules.cmtnix
-              ./shared/configuration.nix
-              ./darwin/configuration.nix
-              ./darwin/configuration-cmt.nix
-            ];
-          };
+        pm4 = darwin.lib.darwinSystem {
+          inherit system;
+          specialArgs = { inherit system inputs agenix secrets home-manager u; } // { hostname = "pm4"; profile = u.recursiveMerge [ secrets.profile.work secrets.profile.per ]; };
+          modules = [
+            # Modules that are used
+            agenix.darwinModules.default
+            home-manager.darwinModules.home-manager
+            snix.darwinModules.default
+            ./shared/configuration.nix
+            ./shared/configuration-per.nix
+            ./shared/configuration-ssai.nix
+            ./darwin/configuration.nix
+            ./darwin/configuration-per.nix
+            ./darwin/configuration-ssai.nix
+          ];
+        };
+
+
+
+        # pmpcmt =
+        #   let
+        #     #cmtnix = builtins.getFlake "git+ssh://git@github.com/Censio/CMTNix";
+        #   in
+        #   darwin.lib.darwinSystem {
+        #     inherit system;
+        #     specialArgs = { inherit inputs agenix secrets home-manager cmtnix u; } // { hostname = "pmp-cmt"; profile = secrets.profile.work; };
+        #     modules = [
+        #       # Modules that are used
+        #       agenix.darwinModules.default
+        #       home-manager.darwinModules.home-manager
+        #       cmtnix.darwinModules.cmtnix
+        #       ./shared/configuration.nix
+        #       ./darwin/configuration.nix
+        #       ./darwin/configuration-cmt.nix
+        #     ];
+        #   };
       });
 
       homeConfigurations = forAllSystems (system: {
@@ -269,11 +350,11 @@
           in
           home-manager.lib.homeManagerConfiguration {
             inherit pkgs;
-            extraSpecialArgs = { inherit inputs system pkgs agenix secrets home-manager profile location; };
+            extraSpecialArgs = { inherit inputs system pkgs agenix secrets home-manager profile; };
             modules = [
               agenix.homeManagerModules.default
               ./linux/minimal-home.nix
-            ] ++ (if cmtcfg != null then [ cmtnix.homeManagerModules.cmtaws { cmt = cmtcfg; } ] else [ ]);
+            ];
           };
 
         ${secrets.profile.per.user} =
@@ -286,7 +367,7 @@
           in
           home-manager.lib.homeManagerConfiguration {
             inherit pkgs;
-            extraSpecialArgs = { inherit inputs system pkgs agenix secrets home-manager profile location; };
+            extraSpecialArgs = { inherit inputs system pkgs agenix secrets home-manager profile; };
             modules = [
               agenix.homeManagerModules.default
               ./linux/minimal-home.nix

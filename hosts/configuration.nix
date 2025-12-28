@@ -11,8 +11,7 @@
 #           └─ default.nix
 #
 
-{ config, lib, pkgs, inputs, agenix, system, profile, location, u, hostname, ... }:
-
+{ config, lib, pkgs, inputs, agenix, system, profile, u, ... }:
 {
   imports = [
     #../modules/editors/emacs/doom-emacs          # Native doom emacs instead of nix-community flake
@@ -55,11 +54,6 @@
   #  };
   #};
 
-
-  networking = {
-    #computerName = "${hostname}";             # Host name
-    hostName = "${hostname}";
-  };
 
   environment = {
     variables = {
@@ -149,7 +143,7 @@
     useGlobalPkgs = true;
     useUserPackages = true;
     extraSpecialArgs = { inherit profile u; };
-    users.${profile.user}.imports = builtins.trace "activating the home nix" [
+    users.${profile.user}.imports = [
       ../shared/home.nix
       ./vm/home.nix
     ];
@@ -161,9 +155,9 @@
     autoUpgrade = {
       # Allow auto update (not useful in flakes)
       enable = true;
-      channel = "https://nixos.org/channels/nixos-unstable";
+      channel = "https://nixos.org/channels/nixos-23.11";
     };
-    stateVersion = "23.05";
+    stateVersion = "23.11";
   };
 
 }

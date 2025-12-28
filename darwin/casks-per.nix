@@ -1,4 +1,4 @@
-{}:
+_:
 
 [
   "nextcloud"
@@ -6,7 +6,9 @@
   "keepassxc"
   "krita"
   "tuxguitar"
-  "logi-options-plus"
+  #"logi-options-plus"
   "zotero"
-  "blender"
+  #"blender"
+  #"gnucash"
+  "vlc"
 ]

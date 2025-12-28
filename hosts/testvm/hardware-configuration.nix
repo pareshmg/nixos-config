@@ -14,19 +14,19 @@
 
 { config, lib, pkgs, profile, u, vmid, hostname, modulesPath, ... }:
 
-let
-
-in
 {
   imports =
     [
       (modulesPath + "/profiles/qemu-guest.nix")
     ];
 
-  boot.initrd.availableKernelModules = [ "ata_piix" "uhci_hcd" "virtio_pci" "virtio_scsi" "sd_mod" "sr_mod" ];
-  boot.initrd.kernelModules = [ ];
-  boot.kernelModules = [ ];
-  boot.extraModulePackages = [ ];
+  boot = {
+    initrd = {
+      availableKernelModules = [ "ata_piix" "uhci_hcd" "virtio_pci" "virtio_scsi" "sd_mod" "sr_mod" ];
+      kernelModules = [ ];
+    };
+    extraModulePackages = [ ];
+  };
 
   # to avoid logrotate failure https://discourse.nixos.org/t/logrotate-config-fails-due-to-missing-group-30000/28501/5
   services.logrotate.checkConfig = false;
@@ -68,21 +68,21 @@ in
 
 
   #networking.useDHCP = lib.mkDefault true;
-  networking = u.recursiveMerge [
-    {
-      useDHCP = false; # Deprecated
-      hostId = profile.macAddress;
-      interfaces = {
-        ens18 = {
-          ipv4.addresses = [{
-            address = profile.ip;
-            prefixLength = 16;
-          }];
-        };
-      };
-    }
-    (u.getOrDefault profile "networking" { })
-  ];
+  # networking = u.recursiveMerge [
+  #   {
+  #     useDHCP = false; # Deprecated
+  #     hostId = profile.macAddress;
+  #     interfaces = {
+  #       ens18 = {
+  #         ipv4.addresses = [{
+  #           address = profile.ip;
+  #           prefixLength = 16;
+  #         }];
+  #       };
+  #     };
+  #   }
+  #   (u.getOrDefault profile "networking" { })
+  # ];
 
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
   #hardware.cpu.intel.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;

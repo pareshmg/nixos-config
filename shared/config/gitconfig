@@ -16,6 +16,8 @@
   done = !bash -c \"git commit -a -m \\\"update commit by `git config user.email` at `date`.\\nStatus:  `git status -s | grep -v \\\"^?\\\"` \\\" && git push\"
   lgall = log --graph --all --simplify-by-decoration --format=format:'%C(bold blue)%h%C(reset) - %C(bold cyan)%aD%C(reset) %C(bold green)(%ar)%C(reset)%C(bold yellow)%d%C(reset)%n''          %C(white)%s%C(reset) %C(bold white)— %an%C(reset)' --abbrev-commit
 
+[rerere]
+  enabled = true
 
 [color]
   diff = auto

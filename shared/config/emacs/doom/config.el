@@ -219,11 +219,13 @@
 (global-subword-mode 1) ; 1 for on, 0 for off
 
 ;; load paths
-(defvar me-emacs-dir "~/.config/doom/personal")
+(defvar me-emacs-dir "~/.config/emacs-me")
+(defvar per-emacs-dir "~/.config/doom/personal")
 (add-to-list 'load-path me-emacs-dir)
+(add-to-list 'load-path per-emacs-dir)
 (require 'me)
 
-(load (concat (file-name-as-directory me-emacs-dir) "myFuns.el"))
+(load (concat (file-name-as-directory per-emacs-dir) "myFuns.el"))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -233,16 +235,16 @@
 ;;   :mode (("\\.org$" . org-mode))
 ;;   :ensure org-plus-contrib
 ;;   :config
-;;   (load (concat (file-name-as-directory me-emacs-dir) "org-config.el")))
+;;   (load (concat (file-name-as-directory per-emacs-dir) "org-config.el")))
 (after! org
-  (load (concat (file-name-as-directory me-emacs-dir) "org-config.el")))
+  (load (concat (file-name-as-directory per-emacs-dir) "org-config.el")))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; basic configs
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(setq-default fill-column 85)
+(setq-default fill-column 120)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;Doom overrides
@@ -296,6 +298,320 @@
     (message (concat "autosaved workspace to " fname))))
 
 (run-with-idle-timer 300 t #'doom-save-session-no-message)
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; ellama
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;; (use-package! ellama
+;;   :init
+;;   :config
+;;   ;; setup key bindings
+;;   (setopt ellama-keymap-prefix "C-c e")
+;;   (setopt ellama-provider
+;; 		  (make-llm-ollama
+;; 		   :chat-model "llama2" :embedding-model "llama2")))
+
+
+
+(after! git-commit
+  (setq git-commit-summary-max-length 72))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; aider ai pair programmer
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(use-package aidermacs
+  :config
+  (global-set-key (kbd "M-m g") 'aidermacs-transient-menu)
+  :custom
+  ;; (aidermacs-default-model "ollama_chat/llama3.1:8b")
+  (aidermacs-default-model "ollama_chat/qwen2.5-coder:32b")
+  (aidermacs-show-diff-after-change t)
+  (aidermacs-auto-commits nil)
+  (aidermacs-default-model "ollama_chat/qwen2.5-coder:32b")
+  ;;(aidermacs-weak-model "ollama_chat/llama3.1:8b")
+  (aidermacs-extra-args '("--edit-format" "diff" "--editor-edit-format" "diff")))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; nix
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+
+(use-package nix-mode
+  :hook
+  (nix-mode . (lambda () (add-hook 'before-save-hook 'nix-format-before-save 'local)))
+  (nix-mode . eglot-ensure)
+  :custom
+  (nix-nixfmt-bin "nixpkgs-fmt"))
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; eglot
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(use-package eglot
+  ;; :bind
+  ;; (:map eglot-mode-map
+  ;;       ("C-." . 'xref-find-definitions)
+  ;;       ("C-," . 'xref-go-back)
+  ;;       ("C-c ?" . 'eglot-help-at-point)
+  ;;       ("C-c C-c" . 'eglot-code-actions)
+  ;;       ("C-c C-r" . 'eglot-rename))
+  :config
+  )
+
+
+;; --------------------------------------------------------------------
+;; Silence some (based)pyright rules inside Eglot
+;; --------------------------------------------------------------------
+(after! eglot
+  (add-to-list 'eglot-server-programs
+               `((python-mode python-ts-mode)
+                 . ,(eglot-alternatives
+                     '(("basedpyright-langserver" "--stdio")
+                       ("pyright-langserver" "--stdio")
+                       "pylsp"
+                       "pyls"
+                       "jedi-language-server"
+                       ("ruff" "server")
+                       "ruff-lsp"))))
+  (setq-default
+   eglot-workspace-configuration
+   '(:basedpyright ( :typeCheckingMode "recommended" )
+     :basedpyright.analysis
+     ( :diagnosticSeverityOverrides
+       ( :reportUnusedCallResult "none"
+                                 :reportUnknownVariableType "none"
+                                 :reportUntypedBaseClass "none"
+                                 :reportUnknownArgumentType "none"
+                                 :reportUnknownParameterType "none"
+                                 :reportMissingParameterType "none"
+                                 :reportAny "none"
+                                 :reportUnknownMemberType "none")
+                              :inlayHints ( :callArgumentNames :json-false ) )))
+  )
+
+
+
+
+
+
+;; (setq project-vc-extra-root-markers '("pyproject.toml" "flake.nix"))
+;; (with-eval-after-load 'projectile
+;;   ;; Add pyproject.toml to the list of project root indicators
+;;   (add-to-list 'projectile-project-root-files "flake.nix")
+;;   (add-to-list 'projectile-project-root-files "pyproject.toml")
+;;   )
+
+;; ;; Doom-specific lsp-mode performance tuning
+;; (after! lsp-mode
+;;   ;; Register basedpyright as the LSP server
+;;   (lsp-register-client
+;;    (make-lsp-client
+;;     :new-connection (lsp-stdio-connection '("basedpyright-langserver" "--stdio"))
+;;     :major-modes '(python-mode)
+;;     :server-id 'basedpyright
+;;     :priority 2))  ;; Ensure it's preferred over pyright or pylsp
+
+;;   ;; Increase read buffer for LSP responses (default is 4k)
+;;   (setq read-process-output-max (* 1024 1024)) ; 1MB
+
+;;   ;; Delay before LSP triggers after typing
+;;   (setq lsp-idle-delay 0.5)
+
+;;   ;; Disable unnecessary features
+;;   ;; (setq
+;;   ;;  ;; lsp-enable-symbol-highlighting nil  ;; saves a lot of CPU
+;;   ;;  lsp-enable-on-type-formatting nil  ;; turn off format-on-type
+;;   ;;  lsp-log-io nil                          ;; turn off noisy LSP logs unless debugging
+;;   ;;  ;; lsp-modeline-diagnostics-enable nil   ;; less UI overhead
+;;   ;;  ;; lsp-modeline-code-actions-enable nil   ;; disable modeline code actions
+;;   ;;  lsp-headerline-breadcrumb-enable nil  ;; disable breadcrumb header
+;;   ;;  )
+;;   (setq
+;;    lsp-inlay-hint-enable t
+;;    )
+
+;;   ;; Optionally lazy-load LSP only when needed
+;;   (add-hook 'lsp-mode-hook #'lsp-inlay-hints-mode)
+;;   (add-hook 'python-mode-hook #'lsp-deferred)
+;;   (add-hook 'typescript-mode-hook #'lsp-deferred)
+;;   (add-hook 'tsx-mode-hook #'lsp-deferred)
+
+
+
+
+;;   )
+
+;; Optional: Disable lsp-ui for even leaner setup
+;; (after! lsp-ui
+;;   (setq lsp-ui-doc-enable nil
+;;         lsp-ui-sideline-enable nil))
+
+
+
+(reformatter-define ruff-sort-imports
+  :program "ruff"
+  :args '("check" "--select" "I" "--fix" "-")
+  :lighter " ruff(sort)")
+
+(reformatter-define ruff-format
+  :program "ruff"
+  :args '("format" "-")
+  :lighter " ruff")
+
+
+(add-hook 'python-mode-hook
+          (lambda ()
+            (setq-local lsp-disabled-clients '(pylsp pyright)) ;; explicitly disable others
+            (add-hook 'before-save-hook #'ruff-sort-imports-buffer nil t)
+            (add-hook 'before-save-hook #'ruff-format-buffer nil t)))
+
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; projectile
+
+(defvar my/project-subproj-files
+  '("pyproject.toml" "package.json" "setup.cfg" "flake.nix")
+  "Files that identify a sub-project root.")
+
+(defvar my/project-root-files
+  '(".git")
+  "Files that identify a sub-project root.")
+
+(defun my/find-custom-project-root ()
+  "Find the first parent directory with any of `my/project-root-files`."
+  (cl-some (lambda (file)
+             (locate-dominating-file default-directory file))
+           my/project-root-files))
+
+(defun my/projectile-project-root-advice (orig-fn &rest args)
+  "Advice to override `projectile-project-root` with custom logic."
+  (or (my/find-custom-project-root)
+      (apply orig-fn args)))
+
+
+(defun my/find-custom-subproj ()
+  "Find the first parent directory with any of `my/project-root-files`."
+  (cl-some (lambda (file)
+             (locate-dominating-file default-directory file))
+           my/project-subproj-files))
+
+(defun my/projectile-subproj-advice (orig-fn &rest args)
+  "Advice to override `projectile-project-root` with custom logic."
+  (message "projectile-project-root called with args: %S" args)
+  (or (my/find-custom-subproj)
+      (apply orig-fn args)))
+
+
+
+(defun my/projectile-projroot-search (&optional arg initial-query directory)
+  "Temporarily override `projectile-project-root` with our custom logic for this call."
+  (interactive "P")
+  (advice-add 'projectile-project-root :around #'my/projectile-project-root-advice)
+  (unwind-protect
+      (+vertico/project-search arg initial-query directory)
+    (advice-remove 'projectile-project-root #'my/projectile-project-root-advice)))
+
+
+(defun my/projectile-subproj-search (&optional arg initial-query directory)
+  "Temporarily override `projectile-project-root` with our custom logic for this call."
+  (interactive "P")
+  (advice-add 'projectile-project-root :around #'my/projectile-subproj-advice)
+  (unwind-protect
+      (+vertico/project-search arg initial-query directory)
+    (advice-remove 'projectile-project-root #'my/projectile-subproj-advice)))
+
+
+(defun my/projectile-subproj-run (arg)
+  "Temporarily override `projectile-project-root` with our custom logic for this call."
+  (interactive "P")
+  (advice-add 'projectile-project-root :around #'my/projectile-subproj-advice)
+  (unwind-protect
+      (projectile-compile-project arg)
+    (advice-remove 'projectile-project-root #'my/projectile-subproj-advice)))
+
+
+
+
+(defun my/projectile-projroot-find-file (&optional invalidate-cache)
+  "Temporarily override `projectile-project-root` with our custom logic for this call."
+  (interactive "P")
+  (advice-add 'projectile-project-root :around #'my/projectile-project-root-advice)
+  (unwind-protect
+      (projectile-find-file invalidate-cache)
+    (advice-remove 'projectile-project-root #'my/projectile-project-root-advice)))
+
+
+(defun my/projectile-subproj-find-file (&optional invalidate-cache)
+  "Temporarily override `projectile-project-root` with our custom logic for this call."
+  (interactive "P")
+  (advice-add 'projectile-project-root :around #'my/projectile-subproj-advice)
+  (unwind-protect
+      (projectile-find-file invalidate-cache)
+    (advice-remove 'projectile-project-root #'my/projectile-subproj-advice)))
+
+
+
+(map! (:leader
+      (:prefix ("s" . "search")
+       :desc "Search project root" "p" #'my/projectile-projroot-search
+       :desc "Search sub-project" "C-p" #'my/projectile-subproj-search))
+      (:map global-map
+       :desc "Find file project root" "C-c c" #'my/projectile-subproj-run
+       :desc "Find file project root" "C-c p f" #'my/projectile-projroot-find-file
+       :desc "Find file sub project" "C-c p C-f" #'my/projectile-subproj-find-file))
+
+
+
+  
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; magit clean merged branches
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defun my-magit/delete-merged-branches ()
+  (interactive)
+  (magit-fetch-all-prune)
+  (let* ((default-branch
+           (read-string "Default branch: " (magit-get-current-branch)))
+         (merged-branches
+          (magit-git-lines "branch"
+                           "--format" "%(refname:short)"
+                           "--merged"
+                           default-branch))
+         (branches-to-delete
+          (remove default-branch merged-branches)))
+    (if branches-to-delete
+        (if (yes-or-no-p (concat "Delete branches? ["
+                                 (mapconcat 'identity branches-to-delete ", ") "]"))
+            (magit-branch-delete branches-to-delete))
+      (message "Nothing to delete"))))
+
+
+;;(transient-append-suffix 'magit-branch "C"
+;;    '("K" "delete all merged" my-magit/delete-merged-branches))
+
+(after! magit
+  (transient-append-suffix 'magit-branch "C"
+    '("K" "Delete all merged branches" my-magit/delete-merged-branches)))
+
+
+
+(defun open-current-buffer-in-vscode ()
+  "Opens the current buffer's file in VS Code."
+  (interactive)
+  (let ((file-path (buffer-file-name)))
+    (if file-path
+        (shell-command (format "open -a \"Visual Studio Code\" \"%s\"" file-path))
+      (message "Buffer is not associated with a file."))))
+
+(global-set-key (kbd "M-m c v") 'open-current-buffer-in-vscode)
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Done

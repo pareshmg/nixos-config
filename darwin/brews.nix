@@ -1,4 +1,4 @@
-{}:
+_:
 
 [
   "wireguard-tools"

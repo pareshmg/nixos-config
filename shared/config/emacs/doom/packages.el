@@ -51,6 +51,16 @@
 (package! diminish)
 (package! rainbow-identifiers)
 (package! pbcopy)
-(package! dockerfile-mode)
-(package! terraform-mode)
 (package! jenkinsfile-mode)
+(package! ellama)
+(package! klondike)
+(package! jtsx)
+(package! reformatter)
+(package! aidermacs
+  :recipe (
+           :host github :repo "MatthewZMD/aidermacs" :files ( "aidermacs.el"
+                                                              "aidermacs-output.el"
+                                                              "aidermacs-models.el"
+                                                              "aidermacs-backends.el"
+                                                              "aidermacs-backend-vterm.el"
+                                                              "aidermacs-backend-comint.el" )))

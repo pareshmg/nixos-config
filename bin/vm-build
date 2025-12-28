@@ -8,9 +8,34 @@ SCRIPT_DIR=$(dirname "$0")
 
 #PATH=$PATH:~/.nix-profile/bin
 
+# Default values
+TARGET_HOST="pve"
 
-FLAKE="$1"
-shift # remove flake
+# Parse command line options
+while getopts ":i:f:h:" opt; do
+  case ${opt} in
+    i )
+      VMID=$OPTARG
+      ;;
+    f )
+      FLAKE=$OPTARG
+      ;;
+    h )
+      TARGET_HOST=$OPTARG
+      ;;
+    \? )
+      echo "Invalid option: $OPTARG" 1>&2
+      ;;
+    : )
+      echo "Invalid option: $OPTARG requires an argument" 1>&2
+      exit 1
+      ;;
+  esac
+done
+
+
+# Shift off the options and their arguments processed by getopts
+shift "$((OPTIND-1))"
 
 
 # mkdir /tmp/OVERRIDE_ME_PLEASE || true
@@ -18,7 +43,7 @@ shift # remove flake
 # git init /tmp/OVERRIDE_ME_PLEASE
 # git -C /tmp/OVERRIDE_ME_PLEASE add flake.nix
 
-SECRETS_DIR="$HOME/.nix-secrets"
+SECRETS_DIR="$HOME/.config/nix-secrets"
 if [ -e "$HOME/cmt/CMTNix" ]; then
     CMTNIX="git+file://${HOME}/cmt/CMTNix"
 else
@@ -58,13 +83,13 @@ echo "${GREEN}Cleaning up...${CLEAR}"
 echo "${GREEN}Installing VM...${CLEAR}"
 #./result/activate
 
-VMID=111
 VMFILE=$(ls --color='never' result/*.zst)
 VMFILEDEST="vzdump-qemu-nixos-${FLAKE}-${VMID}.vma.zst"
 
-scp $VMFILE root@pve:/var/lib/vz/dump/${VMFILEDEST}
 
-${SCRIPT_DIR}/vm-reset ${VMID} ${VMFILEDEST}
+scp $VMFILE root@${TARGET_HOST}:/var/lib/vz/dump/${VMFILEDEST}
+
+${SCRIPT_DIR}/vm-reset -i ${VMID} -f ${VMFILEDEST} -h ${TARGET_HOST}
 
 
 echo "${GREEN}Done${CLEAR}"
