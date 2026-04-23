@@ -5,7 +5,7 @@
 { config, lib, pkgs, user, ... }:
 
 {
-  config = lib.mkIf (config.services.xserver.enable) {
+  config = lib.mkIf config.services.xserver.enable {
     # Only evaluate code if using X11
     networking.firewall.allowedTCPPorts = [ 5900 ]; # Since x11vpn defaults to port 5900. Open this port in firewall
 

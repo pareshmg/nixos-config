@@ -1,17 +1,9 @@
-#
-#  Shell
-#
-#  flake.nix
-#   ├─ ./hosts
-#   │   └─ home.nix
-#   └─ ./modules
-#       └─ ./shell
-#           └─ default.nix *
-#               └─ ...
-#
+{ lib, config, pkgs, profile, ... }:
+{
+  imports = [
+    ./git.nix
+    ./zsh.nix
+    # ./direnv.nix
+  ];
 
-[
-  ./git.nix
-  ./zsh.nix
-  # ./direnv.nix
-]
+}

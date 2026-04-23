@@ -8,9 +8,37 @@ SCRIPT_DIR=$(dirname "$0")
 
 #PATH=$PATH:~/.nix-profile/bin
 
+# Default values
+TARGET_HOST="pve"
 
-FLAKE="$1"
-shift # remove flake
+# Parse command line options
+while getopts ":i:f:h:n:" opt; do
+  case ${opt} in
+    i )
+      VMID=$OPTARG
+      ;;
+    f )
+      FLAKE=$OPTARG
+      ;;
+    h )
+      TARGET_HOST=$OPTARG
+      ;;
+    n )
+      MACHINE_NAME=$OPTARG
+      ;;
+    \? )
+      echo "Invalid option: $OPTARG" 1>&2
+      ;;
+    : )
+      echo "Invalid option: $OPTARG requires an argument" 1>&2
+      exit 1
+      ;;
+  esac
+done
+
+
+# Shift off the options and their arguments processed by getopts
+shift "$((OPTIND-1))"
 
 
 # mkdir /tmp/OVERRIDE_ME_PLEASE || true
@@ -18,12 +46,7 @@ shift # remove flake
 # git init /tmp/OVERRIDE_ME_PLEASE
 # git -C /tmp/OVERRIDE_ME_PLEASE add flake.nix
 
-SECRETS_DIR="$HOME/.nix-secrets"
-if [ -e "$HOME/cmt/CMTNix" ]; then
-    CMTNIX="git+file://${HOME}/cmt/CMTNix"
-else
-    CMTNIX="git+file://${SECRETS_DIR}"
-fi
+SECRETS_DIR="$HOME/.config/nix-secrets"
 
 
 # Navigate to the directory of this script
@@ -34,10 +57,6 @@ echo "${GREEN}Starting build vm ${FLAKE}...${CLEAR}"
 
 # mv -f flake.nix.orig flake.nix || true
 
-# mv flake.lock flake.lock.orig || true
-# cat flake.nix | \
-#     sed "s|secrets.url = .*|secrets.url = \"git+file://${SECRETS_DIR}\";|g" | \
-#     sed "s|cmtnix.url = .*|cmtnix.url = \"${CMTNIX}\";|g" > flake2.nix
 
 # mv flake.nix flake.nix.orig
 # mv flake2.nix flake.nix
@@ -45,7 +64,13 @@ echo "${GREEN}Starting build vm ${FLAKE}...${CLEAR}"
 #nix --experimental-features 'nix-command flakes' build --debugger .#$SYSTEM $@ --override-input secrets "git+file://${SECRETS_DIR}"
 
 #cmdout=$(nix --experimental-features 'nix-command flakes' run  -- github:nix-community/nixos-generators  --format proxmox -c ./flake.nix --flake .#${FLAKE} $@)
-nix build .#${FLAKE} --override-input secrets "git+file://${SECRETS_DIR}" --override-input cmtnix "${CMTNIX}" $@
+
+
+SSH_HOST_KEY=$(cat ~/.ssh/nixbuild_id_ed25519)
+export SSH_HOST_KEY
+
+# we need impure to get the ssh key in so that we can add the ssh key in
+nix build .#${FLAKE} --override-input secrets "git+file://${SECRETS_DIR}" --impure -o "results-${FLAKE}" $@
 
 
 echo "${GREEN}Cleaning up...${CLEAR}"
@@ -58,13 +83,13 @@ echo "${GREEN}Cleaning up...${CLEAR}"
 echo "${GREEN}Installing VM...${CLEAR}"
 #./result/activate
 
-VMID=111
-VMFILE=$(ls --color='never' result/*.zst)
+VMFILE=$(ls --color='never' "results-${FLAKE}"/*.zst)
 VMFILEDEST="vzdump-qemu-nixos-${FLAKE}-${VMID}.vma.zst"
 
-scp $VMFILE root@pve:/var/lib/vz/dump/${VMFILEDEST}
 
-${SCRIPT_DIR}/vm-reset ${VMID} ${VMFILEDEST}
+scp "$VMFILE" root@"${TARGET_HOST}":"/var/lib/vz/dump/${VMFILEDEST}"
+
+${SCRIPT_DIR}/vm-reset -i "${VMID}" -f "${VMFILEDEST}" -h "${TARGET_HOST}" -n "${MACHINE_NAME}"
 
 
 echo "${GREEN}Done${CLEAR}"

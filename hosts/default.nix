@@ -31,7 +31,7 @@ let
   #   config.allowUnfree = true;                              # Allow proprietary software
   # };
 
-  lib = nixpkgs.lib;
+  inherit (nixpkgs) lib;
 in
 {
   # desktop = lib.nixosSystem {                               # Desktop profile
@@ -155,9 +155,9 @@ in
   #   });
 
 
-  guivm = (
+  guivm =
     let
-      user = profile.user;
+      inherit (profile) user;
     in
     lib.nixosSystem {
       # VM profile
@@ -176,23 +176,24 @@ in
 
         home-manager.nixosModules.home-manager
         {
-          home-manager.useGlobalPkgs = true;
-          home-manager.useUserPackages = true;
-          home-manager.extraSpecialArgs = {
-            inherit unstable user;
-            host = {
-              hostName = "guivm";
-              mainMonitor = "Virtual-1";
-              secondMonitor = "Virtual-2";
-            };
+          home-manager = {
+            useGlobalPkgs = true;
+            useUserPackages = true;
+            extraSpecialArgs = {
+              inherit unstable user;
+              host = {
+                hostName = "guivm";
+                mainMonitor = "Virtual-1";
+                secondMonitor = "Virtual-2";
+              };
 
-          };
-          home-manager.users.${user} = {
-            imports = [ (import ./home.nix) ] ++ [ (import ./guivm/home.nix) ];
+            };
+            users.${user} = {
+              imports = [ (import ./home.nix) ] ++ [ (import ./guivm/home.nix) ];
+            };
           };
         }
       ];
-    }
-  );
+    };
 
 }

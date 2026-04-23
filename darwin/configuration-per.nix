@@ -15,11 +15,17 @@ let
   #   #!/bin/sh
   #   emacsclient -c -n &
   # '';
-  user = profile.user;
+  inherit (profile) user;
   mm = (u.getOrDefault secrets "utils.mm" (_: "")) pkgs;
 in
 {
+  imports = [
+    ./modules/yabai.nix
+    ./modules/skhd.nix
+  ];
+
   environment.systemPackages = [ mm ];
+
   homebrew = {
     # Declare Homebrew using Nix-Darwin
     casks = (pkgs.callPackage ./casks.nix { }) ++ (pkgs.callPackage ./casks-per.nix { });
@@ -42,4 +48,11 @@ in
     };
   };
 
+  # launchd.daemons."limit.maxfiles" = {
+  #   # enable = true;
+  #   serviceConfig = {
+  #     ProgramArguments = [ "launchctl" "limit" "maxfiles" "65536" "65536" ];
+  #     RunAtLoad = true;
+  #   };
+  # };  
 }

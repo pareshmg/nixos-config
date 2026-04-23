@@ -44,8 +44,8 @@
   environment = {
     systemPackages = with pkgs.libsForQt5; [
       # Packages installed
-      packagekit-qt
-      bismuth
+      #packagekit-qt
+      #bismuth
     ];
     plasma5 = {
       excludePackages = with pkgs.libsForQt5; [

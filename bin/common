@@ -5,7 +5,7 @@ elif [ -f ~/.nix-profile/etc/profile.d/nix.sh ]; then
   . ~/.nix-profile/etc/profile.d/nix.sh
 fi
 
-export SECRETS_DIR="$HOME/.nix-secrets"
+export SECRETS_DIR="$HOME/.config/nix-secrets"
 
 export VERSION=1.0
 export GREEN='\033[1;32m'

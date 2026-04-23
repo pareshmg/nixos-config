@@ -156,7 +156,7 @@
     #   #package = pkgs.catppuccin-cursors.mochaDark;
     #   size = 16;
     # };
-    stateVersion = "23.05";
+    stateVersion = "23.11";
   };
 
   programs = {

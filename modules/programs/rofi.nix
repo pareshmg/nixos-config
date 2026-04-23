@@ -9,7 +9,7 @@ let
   colors = import ../themes/colors.nix;
 in
 {
-  config = lib.mkIf (config.xsession.enable) {
+  config = lib.mkIf config.xsession.enable {
     home = {
       packages = with pkgs; [
         rofi-power-menu

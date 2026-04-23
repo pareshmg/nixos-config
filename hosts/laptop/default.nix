@@ -99,26 +99,28 @@
     };
   };
 
-  #temporary bluetooth fix
-  systemd.tmpfiles.rules = [
-    "d /var/lib/bluetooth 700 root root - -"
-  ];
-  systemd.targets."bluetooth".after = [ "systemd-tmpfiles-setup.service" ];
+  systemd = {
+    #temporary bluetooth fix
+    tmpfiles.rules = [
+      "d /var/lib/bluetooth 700 root root - -"
+    ];
+    targets."bluetooth".after = [ "systemd-tmpfiles-setup.service" ];
 
-
+    # disable coredump that could be exploited later
+    # and also slow down the system when something crash
+    coredump.enable = false;
+  };
 
   ##################################################
   ### Hardening
   ### https://dataswamp.org/~solene/2022-01-13-nixos-hardened.html
 
   # enable firewall and block all ports
-  networking.firewall.enable = true;
-  networking.firewall.allowedTCPPorts = [ ];
-  networking.firewall.allowedUDPPorts = [ ];
-
-  # disable coredump that could be exploited later
-  # and also slow down the system when something crash
-  systemd.coredump.enable = false;
+  networking.firewall = {
+    enable = true;
+    allowedTCPPorts = [ ];
+    allowedUDPPorts = [ ];
+  };
 
   # required to run chromium
   security.chromiumSuidSandbox.enable = true;

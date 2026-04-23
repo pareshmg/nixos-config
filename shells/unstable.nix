@@ -1,5 +1,5 @@
 let
-  unstableTarball = fetchTarball https://github.com/NixOS/nixpkgs/archive/nixos-unstable.tar.gz;
+  unstableTarball = fetchTarball "https://github.com/NixOS/nixpkgs/archive/nixos-unstable.tar.gz";
   stable = import <nixpkgs> { };
   unstable = import unstableTarball { };
 in

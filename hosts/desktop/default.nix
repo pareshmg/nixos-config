@@ -59,7 +59,7 @@
         rocm-opencl-icd # AMD
         rocm-opencl-runtime
       ];
-      driSupport = true;
+      #driSupport = true;
       driSupport32Bit = true;
     };
   };

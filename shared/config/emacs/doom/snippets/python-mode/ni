@@ -1,0 +1,5 @@
+# contributor: Paresh Malalur
+# name: raise NotImplementedError
+# key: ni
+# --
+raise NotImplementedError("TODO")$0

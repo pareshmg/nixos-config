@@ -14,13 +14,11 @@
 
 { config, pkgs, profile, vmid, ... }:
 
-let
-
-in
 {
   imports =
     [ (import ./hardware-configuration.nix) ] ++ # Current system hardware config
-    [ ];
+    [ (import ../../modules/desktop/i3/default.nix) ];
+
 
   boot = {
     # Boot options
@@ -36,15 +34,7 @@ in
   };
   environment = {
     # Packages installed system wide
-    systemPackages = with pkgs; [
-      # This is because some options need to be configured.
-      #discord
-      #plex
-      #simple-scan
-      #x11vnc
-      #wacomtablet
-      #clinfo
-    ]; #++ (profile.additionalPackages { pkgs = pkgs;});
+    systemPackages = with pkgs; (profile.additionalPackages { inherit pkgs; });
     #variables = {
     #  LIBVA_DRIVER_NAME = "i965";
     #};
@@ -58,17 +48,10 @@ in
       # essential configs
       boot = "order=virtio0";
       scsihw = "virtio-scsi-pci";
-      virtio0 = "local-lvm:vm-${vmid}-disk-0";
       net0 = "virtio=66:f8:21:f9:08:d4,bridge=vmbr0,firewall=1";
-      ostype = "l26";
-      cores = 4;
-      memory = 8192;
       bios = "seabios";
 
       # optional configs
-      additionalSpace = "2048M";
-      diskSize = "auto";
-      agent = true;
     };
   };
 
@@ -77,14 +60,14 @@ in
     network.enable = true;
   };
 
-  users.users.${profile.user} = {
-    isNormalUser = true;
-    extraGroups = [ "wheel" "video" "audio" "camera" "networkmanager" "lp" "scanner" ];
-    shell = pkgs.zsh;
-    uid = 1001;
-    hashedPassword = profile.hashedPassword;
-  };
-  security.sudo.wheelNeedsPassword = true; # User does not need to give password when using sudo.
 
+
+  home-manager = {
+    extraSpecialArgs = { inherit profile; };
+    users.${profile.user}.imports = [
+      ./home.nix
+      ../../modules/desktop/i3/home.nix
+    ];
+  };
 
 }

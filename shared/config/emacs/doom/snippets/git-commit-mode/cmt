@@ -3,4 +3,4 @@
 # contributor: Paresh Malalur
 # key: cmt
 # --
-${1:feat}: ${0:fixed it} [${2:RES-156}]
+${1:feat}: ${0:fixed it} [${2:#1234}]

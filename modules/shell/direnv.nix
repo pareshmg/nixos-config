@@ -11,7 +11,7 @@
 { config, lib, pkgs, ... }:
 
 {
-  programs = lib.mkIf (config.programs.zsh.enable) {
+  programs = lib.mkIf config.programs.zsh.enable {
     zsh = {
       shellInit = ''
         emulate zsh -c "$(direnv hook zsh)"

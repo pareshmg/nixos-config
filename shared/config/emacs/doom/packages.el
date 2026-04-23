@@ -51,6 +51,26 @@
 (package! diminish)
 (package! rainbow-identifiers)
 (package! pbcopy)
-(package! dockerfile-mode)
-(package! terraform-mode)
 (package! jenkinsfile-mode)
+(package! ellama)
+(package! klondike)
+(package! jtsx)
+(package! reformatter)
+(package! aidermacs
+  :recipe (
+           :host github :repo "MatthewZMD/aidermacs" :files ( "aidermacs.el"
+                                                              "aidermacs-output.el"
+                                                              "aidermacs-models.el"
+                                                              "aidermacs-backends.el"
+                                                              "aidermacs-backend-vterm.el"
+                                                              "aidermacs-backend-comint.el" )))
+
+(package! copilot
+  :recipe (:host github :repo "copilot-emacs/copilot.el" :files ("*.el")))
+(package! ai-code
+  :recipe (:host github :repo "tninja/ai-code-interface.el"))
+(package! claude-code-ide
+  :recipe (:host github :repo "manzaltu/claude-code-ide.el"))
+(package! breadcrumb
+  :recipe (:host github :repo "joaotavora/breadcrumb" :files ("*.el")))
+(package! vterm :built-in 't)

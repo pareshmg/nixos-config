@@ -7,9 +7,11 @@ with pkgs; [
   git
   killall
   tmux
-
+  nixos-generators
+  
   # emacs for all
-  emacs29-nox
+  my-emacs
+  
   fd
   ripgrep
   coreutils

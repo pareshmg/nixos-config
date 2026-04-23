@@ -16,7 +16,7 @@
 {
   services.emacs = {
     defaultEditor = true;
-    package = pkgs.emacs29-nox;
+    package = pkgs.my-emacs;
     enable = true;
     install = true;
   };

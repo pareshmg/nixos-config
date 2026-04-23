@@ -10,11 +10,11 @@
 #           └─ ./alacritty.nix
 #
 
-{ lib, config, pkgs, agenix, home-manager, secrets, specialArgs, location, ... }:
+{ lib, config, pkgs, agenix, home-manager, secrets, specialArgs, ... }:
 
 let
-  inherit (specialArgs) profile u;
-  sharedFiles = import ../shared/files.nix { inherit config pkgs profile u; };
+  inherit (specialArgs) profile u location;
+  sharedFiles = import ../shared/files.nix { inherit config pkgs profile u location; };
 in
 {
 
@@ -23,7 +23,7 @@ in
     username = "${profile.user}";
     homeDirectory = "/home/${profile.user}";
     packages = (pkgs.callPackage ./packages.nix { }) ++ (pkgs.callPackage ../shared/system-packages.nix { }) ++ (pkgs.callPackage ../shared/packages.nix { });
-    stateVersion = "23.05";
+    stateVersion = "23.11";
     enableNixpkgsReleaseCheck = false;
     file = lib.mkMerge [
       sharedFiles
@@ -38,7 +38,7 @@ in
       enable = true;
       # syntaxHighlighting.enable = true;
       enableCompletion = false;
-      initExtra = ''                            # Zsh theme
+      initContent = ''                            # Zsh theme
           if [ -f ~/.profile_personal ]; then
               source ~/.profile_personal
           fi

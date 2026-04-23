@@ -14,19 +14,24 @@
 
 { config, lib, pkgs, profile, u, vmid, hostname, modulesPath, ... }:
 
-let
-
-in
 {
   imports =
     [
       (modulesPath + "/profiles/qemu-guest.nix")
     ];
 
-  boot.initrd.availableKernelModules = [ "ata_piix" "uhci_hcd" "virtio_pci" "virtio_scsi" "sd_mod" "sr_mod" ];
-  boot.initrd.kernelModules = [ ];
-  boot.kernelModules = [ ];
-  boot.extraModulePackages = [ ];
+  boot = {
+    # loader.grub = {
+    #   enable = true;
+    #   devices = ["/dev/vda"];
+    # };
+    
+    initrd = {
+      availableKernelModules = [ "ata_piix" "uhci_hcd" "virtio_pci" "virtio_scsi" "sd_mod" "sr_mod" "virtio_blk" ];
+      kernelModules = [ ];
+    };
+    extraModulePackages = [ ];
+  };
 
   # zfs
   # boot.supportedFilesystems = [ "zfs" ];
@@ -64,22 +69,39 @@ in
   swapDevices = [ ];
 
 
-  networking = u.recursiveMerge [
-    {
-      useDHCP = true; # Deprecated
-      hostId = profile.macAddress;
-      interfaces = {
-        ens18 = {
-          ipv4.addresses = [{
-            address = profile.ip;
-            prefixLength = 16;
-          }];
-        };
-      };
-    }
-    (u.getOrDefault profile "networking" { })
-  ];
+  # services.resolved = {
+  #   enable = true;
+  #   #dnssec = "true";
+  #   domains = [ "~." ];
+  #   fallbackDns = [ "10.28.1.1" ];
+  #   #dnsovertls = "true";
+  # };
 
+
+  systemd.network = {
+    enable = true;
+    networks = {
+      "10-ens18" = {
+        # match the interface by name
+        matchConfig.Name = "ens18";
+        address = [
+          # configure addresses including subnet mask
+          (profile.ip + "/16")
+        ];
+        routes = [
+          { Gateway = "10.28.1.1"; }
+        ];
+        dns = ["10.28.1.1" "1.1.1.1"];
+        # make the routes on this interface a dependency for network-online.target
+        linkConfig.RequiredForOnline = "routable";
+      };
+    };
+  };
+  networking = {
+      hostName = u.getOrDefault profile "networking.hostName" "nixos";
+      useDHCP = false; # Deprecated
+      useNetworkd = true;
+  };
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
   #hardware.cpu.intel.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
   #virtualisation.virtualbox.guest.enable = true;     #currently disabled because package is broken

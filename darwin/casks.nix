@@ -1,4 +1,4 @@
-{}:
+_:
 
 [
   # Development Tools
@@ -8,10 +8,11 @@
   #"postico"
   #"visual-studio-code"
   "android-platform-tools"
-  "android-sdk"
+  #"android-sdk"
   "android-studio"
   "texmacs"
   "iterm2"
+  "rancher"
 
   # Communication Tools
   #"discord"
@@ -24,8 +25,8 @@
   # Utility Tools
   #"appcleaner"
   #"syncthing"
-  "rectangle"
-  "karabiner-elements"
+  #"rectangle"
+  #"karabiner-elements"
   "google-drive"
 
   # Entertainment Tools
@@ -35,6 +36,7 @@
   # Productivity Tools
   #"raycast"
   #"asana"
+  #"maccy"
 
   # Browsers
   #"google-chrome"
@@ -44,5 +46,6 @@
   #"diffusionbee"
 
   "zoom"
+
 
 ]

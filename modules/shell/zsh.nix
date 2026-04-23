@@ -41,7 +41,7 @@
   };
   home-manager.users.${profile.user} = { pkgs, ... }: {
     programs = {
-      zsh = (import ./zsh-home.nix { inherit config lib pkgs; });
+      zsh = import ./zsh-home.nix { inherit config lib pkgs; };
     };
   };
 }

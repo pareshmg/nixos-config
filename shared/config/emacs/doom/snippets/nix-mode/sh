@@ -1,0 +1,81 @@
+# -*- mode: snippet -*-
+# name: sh
+# key: trigger-key
+# condition: t
+# --
+
+{
+  description = "";
+
+  inputs = {
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-23.11";
+    systems.url = "github:nix-systems/default";
+  };
+
+  outputs = { self, nixpkgs, systems }:
+    let
+      forAllSystems = nixpkgs.lib.genAttrs (import systems);
+      defaultPython = "python311";
+    in
+      {
+        packages = forAllSystems (system:
+          let
+            pkgs = nixpkgs.legacyPackages.\${system};
+            python = pkgs.\${defaultPython};
+            # x = python.pkgs.callPackage ./x.nix {python3 = python;};
+            # pyx = python.pkgs.callPackage ./pyx.nix { inherit x ins_ufuncs; python3 = python; };
+            # xpy = import ./xpy.nix {inherit pkgs;};
+            # x-cross-aarch64-linux = build-x pkgs.pkgsCross.aarch64-multiplatform;
+            # x-cross-aarch64-darwin = build-x pkgs.pkgsCross.aarch64-multiplatform;
+            # x-cross-x86_64-linux = build-x pkgs.pkgsCross.x86_64-linux;
+            # x-docker =  pkgs.dockerTools.buildImage {
+            #   name = "mapmatch";
+            #   tag = "latest";
+            #   copyToRoot = [ x ];
+            #   config = {
+            #     Cmd = [ "\${x}/bin/smart-mapmatch" "-h" ];
+            #   };
+            # };
+          in rec {
+            # stdenv = pkgs.clangStdenv;
+            # inherit x x-docker pyx;
+            # default = x;
+          });
+
+
+        overlays = forAllSystems (system:
+          {
+            default = final: prev: {
+              # x = self.packages.\${system}.x;
+            };
+          }
+        );
+
+        devShells = forAllSystems (system:
+          let
+            pkgs = nixpkgs.legacyPackages.\${system};
+            python = pkgs.\${defaultPython};
+            # x = self.packages.\${system}.x;
+            # env = (python.withPackages (ps: x.propagatedBuildInputs ++ x.propagatedCheckInputs ++ [x ps.ipython])).env;
+            env = (python.withPackages (ps: [ps.ipython])).env;
+
+            # Packages you want available in development shells, beyond the dependencies of cmtaws.
+            #
+            # For example,
+            #
+            # extraDevTools = with pkgs; [
+            #   jq
+            #   curl
+            # ];
+            extraDevTools = with pkgs; [
+
+            ];
+          in
+            {
+              default = (env.overrideAttrs { buildInputs = env.buildInputs ++ extraDevTools; });
+            }
+        );
+
+
+      };
+}

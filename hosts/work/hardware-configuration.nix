@@ -19,31 +19,35 @@
     [
       (modulesPath + "/installer/scan/not-detected.nix")
     ];
-
-  boot.initrd.availableKernelModules = [ "xhci_pci" "nvme" "usb_storage" "sd_mod" "rtsx_pci_sdmmc" ];
-  boot.initrd.kernelModules = [ ];
-  boot.kernelModules = [ "kvm-intel" ];
-  boot.extraModulePackages = [ ];
-
-  fileSystems."/" =
-    {
-      device = "/dev/disk/by-uuid/c44a8f5c-1b8e-4c0d-aa63-755a95bd5a50";
-      fsType = "ext4";
+  boot = {
+    initrd = {
+      availableKernelModules = [ "xhci_pci" "nvme" "usb_storage" "sd_mod" "rtsx_pci_sdmmc" ];
+      kernelModules = [ "kvm-intel" ];
     };
+    extraModulePackages = [ ];
+  };
 
-  fileSystems."/boot/efi" =
-    {
-      device = "/dev/disk/by-uuid/A101-6404";
-      fsType = "vfat";
-    };
 
-  fileSystems."/windows" =
-    {
-      device = "/dev/disk/by-uuid/01D9316EDB06F490";
-      fsType = "ntfs";
-      options = [ "nofail" "uid=1000" "gid=100" ];
-    };
+  fileSystems = {
+    "/" =
+      {
+        device = "/dev/disk/by-uuid/c44a8f5c-1b8e-4c0d-aa63-755a95bd5a50";
+        fsType = "ext4";
+      };
 
+    "/boot/efi" =
+      {
+        device = "/dev/disk/by-uuid/A101-6404";
+        fsType = "vfat";
+      };
+
+    "/windows" =
+      {
+        device = "/dev/disk/by-uuid/01D9316EDB06F490";
+        fsType = "ntfs";
+        options = [ "nofail" "uid=1000" "gid=100" ];
+      };
+  };
   swapDevices = [ ];
 
   networking = {

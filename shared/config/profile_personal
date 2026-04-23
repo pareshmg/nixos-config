@@ -30,13 +30,13 @@ DISABLE_AUTO_UPDATE="true"
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 plugins=(git
-         history-substring-search
-         screen
+         #history-substring-search
+         #screen
          tmux
-         per-directory-history
+         #per-directory-history
          #zsh-syntax-highlighting
          #colored-man
-         cabal
+         #cabal
          aws
          #autojump
          docker
@@ -132,6 +132,7 @@ source ~/.aliases
 ##################################################
 
 export EDITOR="emacs -nw -Q"
+export VISUAL="emacs -nw -Q"
 export ALTERNATE_EDITOR="emacs -nw -Q"
 
 

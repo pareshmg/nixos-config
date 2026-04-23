@@ -12,16 +12,13 @@
 #               └─ bspwm.nix
 #
 
-{ config, pkgs, profile, vmid, ... }:
+{ config, lib, pkgs, profile, vmid, ... }:
 
-let
-
-in
 {
   services.logrotate.checkConfig = false;
-  # imports =
-  #   [ (import ./hardware-configuration.nix) ] ++ # Current system hardware config
-  #   [ ];
+  imports = [
+    ./hardware-configuration.nix
+  ];
 
   # boot = {
   #   # Boot options
@@ -54,14 +51,33 @@ in
   programs.zsh.enable = true;
 
 
+  # user configuration
   users.users.${profile.user} = {
     isNormalUser = true;
-    extraGroups = [ "video" "audio" "networkmanager" "lp" "kvm" "libvirtd" ];
+    extraGroups = [
+      "video"
+      "audio"
+      "networkmanager"
+      "lp"
+      "kvm"
+      "libvirtd"
+      "docker"
+      "dialout" # for zwave ttyACM0
+    ];
     shell = pkgs.zsh;
-    uid = 1001;
-    hashedPassword = profile.hashedPassword;
+    #uid = 1001;
+    inherit (profile) hashedPassword;
   };
-  security.sudo.wheelNeedsPassword = true; # User does not need to give password when using sudo.
+  security.sudo.wheelNeedsPassword = lib.mkDefault true; # User does not need to give password when using sudo.
 
 
+  nix.settings = {
+    experimental-features = [ "nix-command" "flakes" ];
+    # Allow the k3s user and anyone in the wheel group to push binaries
+    trusted-users = [ "root" "@wheel" ];
+    
+    # Optional: ensure the VM can talk back to the binary cache
+    substituters = [ "https://cache.nixos.org/" ];
+    trusted-public-keys = [ "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY=" ];
+  };
 }

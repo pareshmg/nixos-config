@@ -1,9 +1,12 @@
-{ pkgs }:
+{ lib, pkgs }:
 
 with pkgs;
 [
   ansible
   sshpass # for ansible
-  terraform
+  # terraform
   git-lfs
+  #(lib.hiPrio (ollama-master.override {acceleration="cuda";}))
+  #ollama-master
+  # ollama-unstable
 ]

@@ -12,20 +12,22 @@
 #
 
 { config, lib, pkgs, hostname, system, nixpkgs, modulesPath, ... }:
-let
-  # exec = with host; if hostName == "work" then "exec nvidia-offload Hyprland" else "exec Hyprland"; # Starting Hyprland with nvidia (bit laggy so disabling)
-  #exec = "exec Hyprland";
-in
+#let
+# exec = with host; if hostName == "work" then "exec nvidia-offload Hyprland" else "exec Hyprland"; # Starting Hyprland with nvidia (bit laggy so disabling)
+#exec = "exec Hyprland";
+#in
 {
   #imports = [ ../../programs/waybar.nix ];
   #imports = [ "${nixpkgs}/nixos/modules/virtualisation/qemu-vm.nix" ];
   # imports = [ ../virtualisation/qemu.nix ];
   imports = [
     # We need to import that to make it work.
-    "${modulesPath}/virtualisation/qemu-vm.nix"
+    #"${modulesPath}/virtualisation/qemu-vm.nix"
   ];
 
   #virtualisation.qemu.options = [ "-vga none" "-device virtio-vga-gl" "-display sdl,gl=on,show-cursor=off" ];
+
+  hardware.opengl.enable = true;
 
   environment = {
     #   loginShellInit = ''
